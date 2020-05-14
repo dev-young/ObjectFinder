@@ -5,11 +5,19 @@
     <string name="nav_header_title" translatable="false">Android Studio</string>
     <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
     <string name="nav_header_desc" translatable="false">Navigation header</string>
-    <string name="action_settings" translatable="false">Settings</string>
+    <string name="action_settings">Settings</string>
 
     <string name="menu_home" translatable="false">Home</string>
     <string name="menu_gallery" translatable="false">Gallery</string>
     <string name="menu_slideshow" translatable="false">Slideshow</string>
 
     <string name="home_second" translatable="false">Home Second</string>
+    <string name="search">Search</string>
+
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+
+    <string name="position_list">위치 목록</string>
+    <string name="position_detail">위치 상세</string>
+    <string name="title_search">물건 찾기</string>
+    <string name="please_input_word">검색어를 입력해주세요.</string>
 </resources>

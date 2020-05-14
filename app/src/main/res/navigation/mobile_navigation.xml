@@ -3,26 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/navPositionList">
+
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="io.ymsoft.objectfinder.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home">
+        android:id="@+id/navPositionList"
+        android:name="io.ymsoft.objectfinder.ui.main.PositionListFragment"
+        android:label="@string/position_list"
+        tools:layout="@layout/fragment_position_list" >
+        <action
+            android:id="@+id/action_navPositionList_to_navPositionDetail"
+            app:destination="@id/navPositionDetail"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navPositionDetail" />
 
     </fragment>
-
-
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="io.ymsoft.objectfinder.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
+        android:id="@+id/navPositionDetail"
+        android:name="io.ymsoft.objectfinder.ui.main.PositionDetailFragment"
+        android:label="@string/position_detail"
+        tools:layout="@layout/fragment_position_detail" />
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="io.ymsoft.objectfinder.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/navSearch"
+        android:name="io.ymsoft.objectfinder.ui.main.SearchFragment"
+        android:label="@string/title_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navSearch_to_navPositionDetail"
+            app:destination="@id/navPositionDetail"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navPositionDetail" />
+    </fragment>
 </navigation>
