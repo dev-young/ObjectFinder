@@ -32,7 +32,7 @@ class SearchFragment : Fragment() {
             sv.requestFocus()
             showKeyBoard(sv)
 
-            sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     return false
                 }
@@ -41,6 +41,7 @@ class SearchFragment : Fragment() {
                     binding.text.text = newText
                     return false
                 }
+
             })
         }
 

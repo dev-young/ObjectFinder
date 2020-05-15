@@ -1,33 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-    <LinearLayout
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.main.PositionListFragment">
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.PositionListFragment"
-        android:orientation="vertical"
-        android:gravity="center"
         >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="위치와 해당 위치에 있는 물건들 보여주는 리스트 \n각 아이템을 클릭시 해당 위치의 자세한 정보를 확인할 수 있다."
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:clipToPadding="true"
+            tools:listitem="@layout/item_position"
             />
 
-        <Button
-            android:id="@+id/btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="위치"
-            android:layout_gravity="center"
-            />
 
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:id="@+id/emptyMessage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
 
-    </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="@string/empty_msg_position_list"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/empty_msg_size"
+                android:layout_weight="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="160dp"
+                android:text="@string/please_click_add_btn"
+                android:textSize="@dimen/empty_msg_size2"
+                android:textColor="@android:color/black"
+                />
+
+        </LinearLayout>
+    </FrameLayout>
 </layout>

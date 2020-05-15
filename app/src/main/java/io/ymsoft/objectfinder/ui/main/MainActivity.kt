@@ -2,9 +2,13 @@ package io.ymsoft.objectfinder.ui.main
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -23,16 +27,13 @@ class MainActivity : AppCompatActivity(){
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    var searchViewItem : MenuItem? = null
     lateinit var searchView : SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,
-            R.layout.activity_main
-        )
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setSupportActionBar(binding.toolbar)
-
+        searchView = binding.searchView
         navController = findNavController(R.id.nav_host_fragment)
         appBarConfiguration = AppBarConfiguration(setOf(
             R.id.navPositionList,
@@ -50,21 +51,10 @@ class MainActivity : AppCompatActivity(){
             }
 
             if(destination.id == R.id.navSearch){
-                if(searchViewItem == null){
-                    val menuItem = binding.toolbar.menu.add(R.string.search)
-//                    menuItem.setIcon(R.drawable.ic_search_24dp)
-                    menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                    searchView = SearchView(this)
-                    menuItem.actionView = searchView
-                    searchView.queryHint = getString(R.string.please_input_word)
-                    menuItem.expandActionView()
-                    searchViewItem = menuItem
-                }
-                searchViewItem?.isVisible = true
+                searchView.visibility = View.VISIBLE
             }
             else {
-                searchViewItem?.isVisible = false
-
+                searchView.visibility = View.GONE
             }
 
 
@@ -79,12 +69,8 @@ class MainActivity : AppCompatActivity(){
 
     private fun setAppBarVisivle(top: Boolean, bottom: Boolean) {
         if(top){
-//            binding.abbBar.visibility = View.VISIBLE
-//            binding.toolbar.visibility = View.VISIBLE
             supportActionBar?.show()
         } else {
-//            binding.abbBar.visibility = View.GONE
-//            binding.toolbar.visibility = View.GONE
             supportActionBar?.hide()
         }
 
@@ -95,6 +81,7 @@ class MainActivity : AppCompatActivity(){
             binding.bottomAppBar.performHide()
             binding.fab.hide()
         }
+
     }
 
     private fun initBottomAppBar() {

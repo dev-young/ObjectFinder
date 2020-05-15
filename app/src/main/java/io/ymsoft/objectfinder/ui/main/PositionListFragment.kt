@@ -8,20 +8,29 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import io.ymsoft.objectfinder.OnItemClickListener
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.databinding.FragmentPositionListBinding
-import io.ymsoft.objectfinder.view_model.PositionListViewModel
+import io.ymsoft.objectfinder.view_model.PositionViewModel
 
 class PositionListFragment : Fragment() {
 
     private lateinit var binding : FragmentPositionListBinding
 
-    private lateinit var positionListViewModel : PositionListViewModel
+    private lateinit var positionViewModel : PositionViewModel
+    private val positionListAdapter = PositionListAdapter().apply {
+        clickListener = object : OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                positionViewModel.setSelectedPosition(currentList[position])
+                showDetail()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        positionListViewModel = ViewModelProvider(this).get(PositionListViewModel::class.java)
+        positionViewModel = ViewModelProvider(this).get(PositionViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -31,16 +40,22 @@ class PositionListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentPositionListBinding.bind(view)
+        binding.recyclerView.adapter = positionListAdapter
 
-        binding.btn.setOnClickListener {
-            findNavController().navigate(R.id.action_navPositionList_to_navPositionDetail)
-        }
-
-        positionListViewModel.positionList.observe(viewLifecycleOwner, Observer {
-            binding.text.text = it.toString()
+        positionViewModel.positionList.observe(viewLifecycleOwner, Observer {
+            if (it.isEmpty()){
+                binding.emptyMessage.visibility = View.VISIBLE
+            } else {
+                binding.emptyMessage.visibility = View.GONE
+                positionListAdapter.submitList(it)
+            }
         })
 
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun showDetail() {
+        findNavController().navigate(R.id.action_navPositionList_to_navPositionDetail)
     }
 
 

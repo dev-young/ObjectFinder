@@ -18,11 +18,7 @@
             app:popUpTo="@id/navPositionDetail" />
 
     </fragment>
-    <fragment
-        android:id="@+id/navPositionDetail"
-        android:name="io.ymsoft.objectfinder.ui.main.PositionDetailFragment"
-        android:label="@string/position_detail"
-        tools:layout="@layout/fragment_position_detail" />
+
     <fragment
         android:id="@+id/navSearch"
         android:name="io.ymsoft.objectfinder.ui.main.SearchFragment"
@@ -34,4 +30,11 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/navPositionDetail" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navPositionDetail"
+        android:name="io.ymsoft.objectfinder.ui.main.PositionDetailFragment"
+        android:label="@string/position_detail"
+        tools:layout="@layout/fragment_position_detail" />
+
 </navigation>

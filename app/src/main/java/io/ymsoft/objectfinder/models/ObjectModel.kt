@@ -1,4 +1,20 @@
 package io.ymsoft.objectfinder.models
 
-class ObjectModel(private var imgUrl: String, private var x:Int, private var y:Int, private var name: String) {
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import java.util.*
+
+@Entity(tableName =  "objects")
+data class ObjectModel(
+    @PrimaryKey(autoGenerate = true)
+    val id : Long?,
+    var positionId: Long?,
+    var objName: String,
+    var memo : String? = null
+) {
+
+    var date = Date()
+
+
+
 }

@@ -7,4 +7,10 @@
     <string name="position_detail">위치 상세</string>
     <string name="title_search">물건 찾기</string>
     <string name="please_input_word">검색어를 입력해주세요.</string>
+    <string name="empty_msg_position_list">저장된 물건이 없습니다!</string>
+    <string name="please_click_add_btn">하단의 + 버튼을 눌러 물건을 추가해보세요!</string>
+    <string name="title_add_object">물건 추가하기</string>
+    <string name="hint_position_name">장소 이름을 입력해주세요.</string>
+    <string name="hint_object_name">저장할 물건을 입력해주세요.</string>
+    <string name="save">저장</string>
 </resources>
