@@ -13,7 +13,7 @@ class PositionListAdapter : ListAdapter<PositionModel, PositionViewHolder>(objec
     }
 
     override fun areContentsTheSame(oldItem: PositionModel, newItem: PositionModel): Boolean {
-        return oldItem == newItem
+        return oldItem.objString == newItem.objString
     }
 
 }) {

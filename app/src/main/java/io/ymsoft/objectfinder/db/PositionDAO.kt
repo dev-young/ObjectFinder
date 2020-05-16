@@ -14,11 +14,11 @@ interface PositionDAO {
     fun getPosition(id:Long) : PositionModel
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    fun insert(obj:PositionModel) : Long
+    fun insert(model:PositionModel) : Long
 
     @Update
-    fun update(obj:PositionModel)
+    fun update(model:PositionModel)
 
     @Delete
-    fun delete(obj:PositionModel)
+    fun delete(model:PositionModel)
 }

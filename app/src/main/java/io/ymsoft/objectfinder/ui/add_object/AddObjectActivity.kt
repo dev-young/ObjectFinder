@@ -2,6 +2,7 @@ package io.ymsoft.objectfinder.ui.add_object
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import io.ymsoft.objectfinder.R
@@ -24,6 +25,7 @@ class AddObjectActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_object)
         setHomeBtn(binding.toolbar)
+
 
 
         positionViewModel = ViewModelProvider(this).get(PositionViewModel::class.java)

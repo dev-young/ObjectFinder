@@ -2,7 +2,6 @@ package io.ymsoft.objectfinder.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import java.util.*
 
@@ -26,19 +25,35 @@ data class PositionModel(
     var updatedDate = Date()
     @ColumnInfo(name = "objects_text")
     var objString : String? = null
-    @Ignore
-    val objList = arrayListOf<ObjectModel>()
+//    @Ignore
+//    val objList = arrayListOf<ObjectModel>()
 
-    fun add(obj: ObjectModel) {
+
+    /**objString에 새롭게 추가할 물건의 이름을 추가한다.*/
+    fun addObjectName(name: String) {
         if(objString.isNullOrBlank()){
-            objString = obj.objName
-        } else objString += (", " + obj.objName)
+            objString = name
+        } else objString += (", $name")
     }
 
-    fun remove(obj: ObjectModel) {
-        if(objString.isNullOrBlank()){
-            objString = obj.objName
-        } else objString += (", " + obj.objName)
+
+    /**list의 내용들을 바탕으로 objString 작성
+     * @param excludeName 리시트에서 제외시킬 이름 (여러개가 있을경우 하나만 제외된다)*/
+    fun setObjString(list: List<ObjectModel>, excludeName:String) {
+        var exCount = 0
+        objString = ""
+        if(list.isNotEmpty()){
+            list.forEach {
+                if(exCount == 0 && excludeName == it.objName){
+                    exCount++
+                } else {
+                    objString += (", " + it.objName)
+                }
+            }
+            objString?.isNotEmpty().let {
+                objString = objString?.substring(2)
+            }
+        }
     }
 
 

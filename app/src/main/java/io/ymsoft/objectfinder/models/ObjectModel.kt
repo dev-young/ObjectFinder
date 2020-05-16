@@ -7,8 +7,8 @@ import java.util.*
 @Entity(tableName =  "objects")
 data class ObjectModel(
     @PrimaryKey(autoGenerate = true)
-    val id : Long?,
-    var positionId: Long?,
+    val id : Long? = null,
+    var positionId: Long? = null,
     var objName: String,
     var memo : String? = null
 ) {

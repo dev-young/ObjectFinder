@@ -1,6 +1,7 @@
 package io.ymsoft.objectfinder.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -43,6 +44,7 @@ class PositionListFragment : Fragment() {
         binding.recyclerView.adapter = positionListAdapter
 
         positionViewModel.positionList.observe(viewLifecycleOwner, Observer {
+            Log.i("", "PositionList Changed!")
             if (it.isEmpty()){
                 binding.emptyMessage.visibility = View.VISIBLE
             } else {
