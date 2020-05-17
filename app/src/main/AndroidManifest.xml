@@ -16,7 +16,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ui.add.AddPositionActivity"></activity>
         <activity
             android:name=".ui.add.AddObjectActivity"
             android:label="@string/title_add_object" />
