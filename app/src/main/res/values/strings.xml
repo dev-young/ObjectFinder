@@ -27,4 +27,15 @@
     <string name="hint_object_name">저장할 물건을 입력해주세요.</string>
     <string name="save">저장</string>
     <string name="add">추가</string>
+    <string name="select_photo">이미지를 골라주세요.</string>
+    <string name="camera_cannot_be_used">카메라를 사용할 수 없습니다.</string>
+    <string name="permission_denied_explanation">If you refuse, you will be restricted.\nHowever, you can grant permissions in [Settings] > [Permissions].</string>
+    <string name="permission_rationale_storage">You need to have access to a repository to use this feature.</string>
+    <string name="permission_rationale_camera">You need to have access to a camera to use this feature.</string>
+    <string name="please_input_name_or_photo">사진 혹은 이름을 입력해주세요.</string>
+    <string name="title_add_position">장소 추가하기</string>
+    <string name="hint_position_memo">메모</string>
+    <string name="please_input_position">사진에 정확한 위치를 표시해주세요!</string>
+    <string name="take_photo">촬영하기</string>
+    <string name="pick_from_album">앨범에서 불러오기</string>
 </resources>

@@ -2,13 +2,10 @@ package io.ymsoft.objectfinder.ui.main
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -17,8 +14,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import io.ymsoft.objectfinder.R
-import io.ymsoft.objectfinder.ui.add_object.AddObjectActivity
+import io.ymsoft.objectfinder.ui.add.AddObjectActivity
 import io.ymsoft.objectfinder.databinding.ActivityMainBinding
+import io.ymsoft.objectfinder.ui.add.AddPositionActivity
 import io.ymsoft.objectfinder.utils.ActivityUtil
 
 class MainActivity : AppCompatActivity(){
@@ -38,6 +36,7 @@ class MainActivity : AppCompatActivity(){
         appBarConfiguration = AppBarConfiguration(setOf(
             R.id.navPositionList,
             R.id.navSearch,
+            R.id.navAddPosition,
             R.id.navPositionDetail
         ))
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -47,6 +46,7 @@ class MainActivity : AppCompatActivity(){
             when(destination.id){
 //                R.id.positionDetailFragment -> setAppBarVisivle(top = false, bottom = false)
                 R.id.navSearch -> setAppBarVisivle(top = true, bottom = false)
+                R.id.navAddPosition -> setAppBarVisivle(top = true, bottom = false)
                 else -> setAppBarVisivle(top = true, bottom = true)
             }
 
@@ -61,7 +61,10 @@ class MainActivity : AppCompatActivity(){
 
         }
 
-        binding.fab.setOnClickListener { ActivityUtil.start(this, AddObjectActivity::class.java) }
+        binding.fab.setOnClickListener {
+//            ActivityUtil.start(this, AddPositionActivity::class.java)
+            navController.navigate(R.id.navAddPosition)
+        }
 
         initBottomAppBar()
 

@@ -23,13 +23,28 @@
                 android:orientation="vertical"
                 >
 
-                <io.ymsoft.objectfinder.ui.custom.SquareImageView
-                    android:id="@+id/imgView"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"/>
+                    android:layout_height="wrap_content">
+
+                    <io.ymsoft.objectfinder.ui.custom.SquareImageView
+                        android:id="@+id/imgView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"/>
+
+                    <ImageView
+                        android:id="@+id/pointer"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/ic_target"
+                        android:visibility="invisible"
+                        tools:visibility="visible"
+                        />
+                </FrameLayout>
+
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/chipGroup"
@@ -83,14 +98,6 @@
                         />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="bottom"
-                    android:paddingVertical="@dimen/activity_vertical_margin"
-                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                    />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

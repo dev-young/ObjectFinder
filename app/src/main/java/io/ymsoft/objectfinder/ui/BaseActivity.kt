@@ -17,7 +17,7 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == android.R.id.home)
-            finish()
+            onBackPressed()
 
         return super.onOptionsItemSelected(item)
     }

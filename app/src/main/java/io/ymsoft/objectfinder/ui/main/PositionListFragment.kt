@@ -12,17 +12,18 @@ import androidx.navigation.fragment.findNavController
 import io.ymsoft.objectfinder.OnItemClickListener
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.databinding.FragmentPositionListBinding
+import io.ymsoft.objectfinder.makeToast
 import io.ymsoft.objectfinder.view_model.PositionViewModel
 
 class PositionListFragment : Fragment() {
 
     private lateinit var binding : FragmentPositionListBinding
 
-    private lateinit var positionViewModel : PositionViewModel
+    private lateinit var viewModel : PositionViewModel
     private val positionListAdapter = PositionListAdapter().apply {
         clickListener = object : OnItemClickListener {
             override fun onItemClick(position: Int) {
-                positionViewModel.setSelectedPosition(currentList[position])
+                viewModel.setSelectedPosition(currentList[position])
                 showDetail()
             }
         }
@@ -31,7 +32,8 @@ class PositionListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        positionViewModel = ViewModelProvider(this).get(PositionViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(PositionViewModel::class.java)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +45,7 @@ class PositionListFragment : Fragment() {
         binding = FragmentPositionListBinding.bind(view)
         binding.recyclerView.adapter = positionListAdapter
 
-        positionViewModel.positionList.observe(viewLifecycleOwner, Observer {
+        viewModel.positionList.observe(viewLifecycleOwner, Observer {
             Log.i("", "PositionList Changed!")
             if (it.isEmpty()){
                 binding.emptyMessage.visibility = View.VISIBLE
@@ -52,6 +54,8 @@ class PositionListFragment : Fragment() {
                 positionListAdapter.submitList(it)
             }
         })
+
+        viewModel.toastMsg.observe(viewLifecycleOwner, Observer(context::makeToast))
 
         super.onViewCreated(view, savedInstanceState)
     }

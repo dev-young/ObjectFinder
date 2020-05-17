@@ -36,5 +36,14 @@
         android:name="io.ymsoft.objectfinder.ui.main.PositionDetailFragment"
         android:label="@string/position_detail"
         tools:layout="@layout/fragment_position_detail" />
+    <fragment
+        android:id="@+id/navAddPosition"
+        android:name="io.ymsoft.objectfinder.ui.main.AddPositionFragment"
+        android:label="@string/title_add_position" >
+        <action
+            android:id="@+id/action_navAddPosition_to_navPositionDetail"
+            app:destination="@id/navPositionDetail"
+            app:launchSingleTop="true" />
+    </fragment>
 
 </navigation>

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.TaskListener
 import io.ymsoft.objectfinder.models.ObjectModel
 import io.ymsoft.objectfinder.models.PositionModel
@@ -14,6 +15,7 @@ class PositionViewModel(application: Application) : AndroidViewModel(application
     private val objectRepo = ObjectRepository
     val positionList = objectRepo.getPositionList()
     val isWorking = objectRepo.isWorking  //백그라운드 작업중인지 여부
+    val toastMsg = MutableLiveData<@androidx.annotation.StringRes Int>()
     fun getSelectedPosition(): MutableLiveData<PositionModel> {
         return objectRepo.selectedPosition
     }
@@ -27,13 +29,9 @@ class PositionViewModel(application: Application) : AndroidViewModel(application
     }
 
 
-
-
-
-
     fun addNew(positionModel:PositionModel? = null, objectModel: ObjectModel, listener: TaskListener<Nothing>){
         objectRepo.add(positionModel, objectModel, listener)
-
+        toastMsg.postValue(R.string.add)
     }
 
     /**selectedPosition에 새로운 오브젝트를 추가한다.*/
@@ -42,6 +40,7 @@ class PositionViewModel(application: Application) : AndroidViewModel(application
             val obj = ObjectModel(positionId = id, objName = name)
             objectRepo.add(obj = obj)
         }
+        toastMsg.postValue(R.string.add)
     }
 
     fun onObjectLongClicked(model: ObjectModel) {

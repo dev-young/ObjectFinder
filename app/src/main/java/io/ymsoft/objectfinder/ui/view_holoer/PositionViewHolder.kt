@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.ymsoft.objectfinder.OnItemClickListener
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.databinding.ItemPositionBinding
+import io.ymsoft.objectfinder.loadFilePath
 import io.ymsoft.objectfinder.models.ObjectModel
 import io.ymsoft.objectfinder.models.PositionModel
 
@@ -26,6 +27,7 @@ class PositionViewHolder(itemView: View, clickListener: OnItemClickListener?) : 
             binding.imgView.visibility = GONE
         } else {
             binding.imgView.visibility = VISIBLE
+            binding.imgView.loadFilePath(model.imgUrl)
         }
 
         if(model.name.isNullOrBlank()){

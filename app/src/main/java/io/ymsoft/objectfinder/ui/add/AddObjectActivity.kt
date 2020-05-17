@@ -1,17 +1,16 @@
-package io.ymsoft.objectfinder.ui.add_object
+package io.ymsoft.objectfinder.ui.add
 
 import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.TaskListener
 import io.ymsoft.objectfinder.databinding.ActivityAddObjectBinding
+import io.ymsoft.objectfinder.makeToast
 import io.ymsoft.objectfinder.models.ObjectModel
 import io.ymsoft.objectfinder.models.PositionModel
 import io.ymsoft.objectfinder.ui.BaseActivity
-import io.ymsoft.objectfinder.utils.ToastUtil
 import io.ymsoft.objectfinder.view_model.PositionViewModel
 
 class AddObjectActivity : BaseActivity() {
@@ -26,14 +25,9 @@ class AddObjectActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_object)
         setHomeBtn(binding.toolbar)
 
-
-
-        positionViewModel = ViewModelProvider(this).get(PositionViewModel::class.java)
-
-
         binding.content.saveBtn.setOnClickListener {saveObject()}
 
-
+        positionViewModel = ViewModelProvider(this).get(PositionViewModel::class.java)
 
 
 
@@ -48,7 +42,7 @@ class AddObjectActivity : BaseActivity() {
             if(it.isSuccessful){
                 finish()
             } else {
-                ToastUtil.s(this, it.message)
+                makeToast(it.message)
             }
         })
     }

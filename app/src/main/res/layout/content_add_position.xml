@@ -12,6 +12,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
 
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -29,15 +30,33 @@
                     app:cardCornerRadius="@dimen/default_item_radius"
                     app:cardUseCompatPadding="true">
 
-                    <io.ymsoft.objectfinder.ui.custom.SquareImageView
-                        android:id="@+id/imgView"
+
+                    <io.ymsoft.objectfinder.ui.custom.SquareFrameLayout
+                        android:id="@+id/pointLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/ic_add_a_photo_black_24dp"
-                        android:backgroundTint="@android:color/black"
-                        android:foreground="?attr/selectableItemBackground"
                         android:clickable="true"
-                        android:focusable="true"/>
+                        android:focusable="true"
+                        >
+
+                        <io.ymsoft.objectfinder.ui.custom.SquareImageView
+                            android:id="@+id/imgView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:backgroundTint="@android:color/black"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"/>
+
+                        <ImageView
+                            android:id="@+id/pointer"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_target"
+                            />
+
+
+                    </io.ymsoft.objectfinder.ui.custom.SquareFrameLayout>
 
                 </androidx.cardview.widget.CardView>
 
@@ -55,19 +74,6 @@
                         android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_item_spacing">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/objectName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/hint_object_name"
-                        android:singleLine="true"/>
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/saveBtn"
@@ -75,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_item_spacing"
                     android:layout_gravity="end"
-                    android:text="@string/save"
+                    android:text="@string/add"
                     />
 
 

@@ -8,13 +8,13 @@ import java.util.*
 @Entity(tableName =  "positions")
 data class PositionModel(
     @PrimaryKey(autoGenerate = true)
-    var id : Long?,
+    var id : Long? = null,
     @ColumnInfo(name = "img_url")
     var imgUrl: String? = null,
     @ColumnInfo(name = "pos_x")
-    var x:Int? = null,  //픽셸 좌표 x
+    var x:Float? = null,  //상대 좌표 x
     @ColumnInfo(name = "pos_y")
-    var y:Int? = null,  //픽셸 좌표 y
+    var y:Float? = null,  //상대 좌표 y
     @ColumnInfo(name = "name")
     var name:String? = null,
     var memo : String? = null
@@ -50,7 +50,7 @@ data class PositionModel(
                     objString += (", " + it.objName)
                 }
             }
-            objString?.isNotEmpty().let {
+            if(objString!!.isNotEmpty()){
                 objString = objString?.substring(2)
             }
         }

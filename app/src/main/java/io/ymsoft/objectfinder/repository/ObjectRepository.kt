@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.ymsoft.objectfinder.TaskListener
 import io.ymsoft.objectfinder.db.AppDatabase
@@ -43,6 +44,31 @@ object ObjectRepository {
     fun getObjList(id:Long): LiveData<List<ObjectModel>> {
         objectList = objectDao.getObjectList(id)
         return objectList
+    }
+
+    /**새로운 PositionModel 추가*/
+    fun add(pos: PositionModel, listener: TaskListener<PositionModel>? = null) {
+        startTask()
+        Log.e("", Thread.currentThread().name + " : add 수행");
+        Observable.just(pos)
+            .subscribeOn(Schedulers.io())
+            .map {
+                Log.e("", Thread.currentThread().name + " : map 수행");
+                Pair(positionDAO.insert(it), it)
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe{ pair ->
+                Log.e("", Thread.currentThread().name + " : subscribe 수행");
+                if(pair.first >= 0) {
+                    pair.second.id = pair.first
+                    selectedPosition.postValue(pair.second)
+                    listener?.onComplete(TaskListener.Task(pair.second))
+                } else {
+                    listener?.onComplete(TaskListener.Task(false, "PositionModel 추가 실패"))
+                }
+
+                endTask()
+            }
     }
 
     /**1. PositionModel 와 ObjectModel 을 동시에 추가하는 경우
