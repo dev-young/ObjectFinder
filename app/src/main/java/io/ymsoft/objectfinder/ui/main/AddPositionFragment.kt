@@ -1,7 +1,6 @@
 package io.ymsoft.objectfinder.ui.main
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
@@ -32,7 +30,7 @@ import java.util.concurrent.TimeUnit
  */
 class AddPositionFragment : Fragment() {
     private lateinit var binding : FragmentAddPositionBinding
-    private val pickPhotoUtil = PickPhotoHelper()
+    private val pickPhotoHelper = PickPhotoHelper()
     
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,15 +50,49 @@ class AddPositionFragment : Fragment() {
         return binding.root
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == AppCompatActivity.RESULT_OK) {
+            var isPhotoLoaded = false
+            if (requestCode == PICK_FROM_ALBUM) {
+                data?.data?.let {uri ->
+                    binding.imgView.loadUri(uri)
+                    context?.let { pickPhotoHelper.makePhotoFromUri(it, uri) }
+
+                    isPhotoLoaded = true
+                }
+            } else if (requestCode == REQUEST_TAKE_PHOTO) {
+                /*저해상도
+                val bm = data?.extras?.get("data") as Bitmap?
+                binding.imgView.loadBitmap(bm)
+                */
+
+                pickPhotoHelper.photoUri?.let {
+                    binding.imgView.loadUri(it)
+                    isPhotoLoaded = true
+                }
+            }
+
+            if(isPhotoLoaded)
+                setPointLayoutEnabled(isPhotoLoaded)
+        } else {
+            logE("사진 불러오기 취소")
+            pickPhotoHelper.clear()
+
+        }
+    }
+
     /**현재 고른 사진을 지운다 */
     private fun clearPhoto() {
-        pickPhotoUtil.deletePickedPhoto()
+        pickPhotoHelper.deletePickedPhoto()
         setPointLayoutEnabled(false)
         binding.imgView.setImageDrawable(null)
     }
 
+
     private fun save() {
-        var photoUrl = pickPhotoUtil.currentPhotoPath
+        val photoUrl = pickPhotoHelper.currentPhotoPath
         val name = binding.positionName.text.toString()
         val point = getRelativeCoordinate()
         val memo = binding.positionMemo.text.toString()
@@ -80,7 +112,7 @@ class AddPositionFragment : Fragment() {
             memo = memo)
         ObjectRepository.add(model, TaskListener {
             if(it.isSuccessful){
-                pickPhotoUtil.clear()
+                pickPhotoHelper.clear()
                 it.result?.let { positionModel ->
                     //추가된 PositionModel에 대한 PositionDetailFragment으로 이동
                     findNavController().navigate(R.id.action_navAddPosition_to_navPositionDetail)
@@ -107,44 +139,15 @@ class AddPositionFragment : Fragment() {
         return Pair(x/w, y/h)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == AppCompatActivity.RESULT_OK) {
-            var isPhotoLoaded = false
-            if (requestCode == PICK_FROM_ALBUM) {
-                data?.data?.let {uri ->
-                    binding.imgView.loadUri(uri)
-                    context?.let { pickPhotoUtil.makePhotoFromUri(it, uri) }
-
-                    isPhotoLoaded = true
-                }
-            } else if (requestCode == REQUEST_TAKE_PHOTO) {
-                /*저해상도
-                val bm = data?.extras?.get("data") as Bitmap?
-                binding.imgView.loadBitmap(bm)
-                */
-
-                pickPhotoUtil.photoUri?.let {
-                    binding.imgView.loadUri(it)
-                    isPhotoLoaded = true
-                }
-            }
-
-            if(isPhotoLoaded)
-                setPointLayoutEnabled(isPhotoLoaded)
-        }
-    }
-
-
 
     private fun pickFromAlbum(){
-        pickPhotoUtil.startPickFromAlbumActivity(fragment = this)
+        pickPhotoHelper.startPickFromAlbumActivity(fragment = this)
     }
 
+
     private fun takePhoto(){
-        pickPhotoUtil.deletePickedPhoto()
-        pickPhotoUtil.dispatchTakePictureIntentIfAvailable(fragment = this)
+        pickPhotoHelper.deletePickedPhoto()
+        pickPhotoHelper.dispatchTakePictureIntentIfAvailable(fragment = this)
     }
 
 
@@ -185,8 +188,9 @@ class AddPositionFragment : Fragment() {
 
     }
 
+
     override fun onDestroy() {
-        pickPhotoUtil.deletePickedPhoto()
+        pickPhotoHelper.deletePickedPhoto()
         super.onDestroy()
     }
 }

@@ -10,6 +10,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.ymsoft.objectfinder.TaskListener
 import io.ymsoft.objectfinder.db.AppDatabase
+import io.ymsoft.objectfinder.logE
+import io.ymsoft.objectfinder.logI
 import io.ymsoft.objectfinder.models.ObjectModel
 import io.ymsoft.objectfinder.models.PositionModel
 
@@ -23,7 +25,7 @@ object ObjectRepository {
     private lateinit var objectList : LiveData<List<ObjectModel>>   //selectedPosition 의 오브젝트 리스트
 
     private var taskCount = 0   // INSERT, UPDATE, DELETE 진행중인 작업 수
-    val isWorking = MutableLiveData<Boolean>()  //백그라운드 작업중인지 여부
+    val isWorking = MutableLiveData<Boolean>()  //taskCount > 0 이면 true 아니면 false
 
     fun setContext(application: Application){
         db = AppDatabase.getInstance(application)
@@ -46,19 +48,31 @@ object ObjectRepository {
         return objectList
     }
 
+    /**INSERT, DELETE, UPDATE 수행시 호출*/
+    private fun startTask(){
+        taskCount++
+        if(taskCount == 1) isWorking.postValue(true)
+    }
+
+    /**INSERT, DELETE, UPDATE 완료시 호출*/
+    private fun endTask(){
+        taskCount--
+        if(taskCount == 0) isWorking.postValue(false)
+    }
+
     /**새로운 PositionModel 추가*/
     fun add(pos: PositionModel, listener: TaskListener<PositionModel>? = null) {
         startTask()
-        Log.e("", Thread.currentThread().name + " : add 수행");
+        Log.e("", Thread.currentThread().name + " : add 수행")
         Observable.just(pos)
             .subscribeOn(Schedulers.io())
             .map {
-                Log.e("", Thread.currentThread().name + " : map 수행");
+                Log.e("", Thread.currentThread().name + " : map 수행")
                 Pair(positionDAO.insert(it), it)
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe{ pair ->
-                Log.e("", Thread.currentThread().name + " : subscribe 수행");
+                Log.e("", Thread.currentThread().name + " : subscribe 수행")
                 if(pair.first >= 0) {
                     pair.second.id = pair.first
                     selectedPosition.postValue(pair.second)
@@ -106,15 +120,9 @@ object ObjectRepository {
             }
     }
 
-    private fun startTask(){
-        taskCount++
-        if(taskCount == 1) isWorking.postValue(true)
-    }
-    private fun endTask(){
-        taskCount--
-        if(taskCount == 0) isWorking.postValue(false)
-    }
 
+
+    /**ObjectModel 삭제 후 해당 오브젝트를 가지고있던 PositionModel의 정보도 수정하여 업데이트*/
     fun remove(objectModel: ObjectModel) {
         startTask()
         Observable.just(objectModel)
@@ -129,6 +137,7 @@ object ObjectRepository {
                     positionDAO.update(position)
                 } else {
                     // TODO: 오류처리
+                    logE("삭제 실패 -> $model")
                 }
 
                 endTask()
@@ -137,6 +146,22 @@ object ObjectRepository {
 
     fun remove(vararg models: ObjectModel) {
 
+    }
+
+    fun removePosition(positionModel: PositionModel) {
+        Observable.just(positionModel)
+            .subscribeOn(Schedulers.io())
+            .subscribe{ model ->
+                val r = positionDAO.delete(model)
+                if(r == 1){
+                    logI("삭제 완료 -> $model")
+                } else {
+                    // TODO: 오류처리
+                    logE("삭제 실패 -> $model")
+                }
+
+                endTask()
+            }
     }
 
 }

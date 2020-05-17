@@ -48,4 +48,8 @@ class PositionViewModel(application: Application) : AndroidViewModel(application
         objectRepo.remove(model)
     }
 
+    fun itemlongClicked(model: PositionModel) {
+        objectRepo.removePosition(model)
+    }
+
 }

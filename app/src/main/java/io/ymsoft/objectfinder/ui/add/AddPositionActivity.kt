@@ -23,7 +23,7 @@ import io.ymsoft.objectfinder.utils.PickPhotoHelper
 import io.ymsoft.objectfinder.view_model.AddPositionViewModel
 import java.util.concurrent.TimeUnit
 
-
+@Deprecated("Fragment 사용으로 대체")
 class AddPositionActivity : BaseActivity() {
 
     private lateinit var binding: ActivityAddPositionBinding
@@ -52,7 +52,7 @@ class AddPositionActivity : BaseActivity() {
     }
 
     private fun save() {
-        var photoUrl = pickPhotoHelper.currentPhotoPath
+        val photoUrl = pickPhotoHelper.currentPhotoPath
         val name = binding.content.positionName.text.toString()
         
         //유효성 검사

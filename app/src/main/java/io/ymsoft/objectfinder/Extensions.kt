@@ -1,19 +1,17 @@
 package io.ymsoft.objectfinder
 
-import android.R
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import io.ymsoft.objectfinder.utils.FileUtil
-import java.io.File
 
 fun ImageView.loadBitmap(image: Bitmap?) {
     Glide.with(this).load(image).apply(RequestOptions.centerCropTransform()).into(this)
@@ -47,4 +45,12 @@ fun Context?.makeToast(@StringRes id: Int?) {
 
 fun Context?.makeToast(text: String?) {
     Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+}
+
+fun logI(message: String){
+    Log.i("", message)
+}
+
+fun logE(message: String){
+    Log.e("", message)
 }

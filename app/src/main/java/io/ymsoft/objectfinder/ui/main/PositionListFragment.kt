@@ -26,6 +26,10 @@ class PositionListFragment : Fragment() {
                 viewModel.setSelectedPosition(currentList[position])
                 showDetail()
             }
+
+            override fun onItemLongClick(position: Int) {
+                viewModel.itemlongClicked(currentList[position])
+            }
         }
     }
 

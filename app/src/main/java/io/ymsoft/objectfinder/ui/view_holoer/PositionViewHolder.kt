@@ -20,6 +20,10 @@ class PositionViewHolder(itemView: View, clickListener: OnItemClickListener?) : 
 
     init {
         binding.clickableLayout.setOnClickListener { clickListener?.onItemClick(adapterPosition) }
+        binding.clickableLayout.setOnLongClickListener {
+            clickListener?.onItemLongClick(adapterPosition)
+            false
+        }
     }
 
     fun onBind(model: PositionModel) {

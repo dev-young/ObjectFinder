@@ -20,5 +20,5 @@ interface PositionDAO {
     fun update(model:PositionModel)
 
     @Delete
-    fun delete(model:PositionModel)
+    fun delete(model:PositionModel) : Int
 }
