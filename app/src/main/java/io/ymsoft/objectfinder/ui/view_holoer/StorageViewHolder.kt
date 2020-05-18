@@ -10,6 +10,7 @@ import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.databinding.ItemStorageBinding
 import io.ymsoft.objectfinder.loadFilePath
 import io.ymsoft.objectfinder.models.StorageModel
+import io.ymsoft.objectfinder.utils.PointerUtil
 
 class StorageViewHolder(itemView: View, clickListener: OnItemClickListener?) : RecyclerView.ViewHolder(itemView) {
     constructor(parent:ViewGroup, clickListener: OnItemClickListener?):
@@ -28,9 +29,11 @@ class StorageViewHolder(itemView: View, clickListener: OnItemClickListener?) : R
     fun onBind(model: StorageModel) {
         if (model.imgUrl.isNullOrBlank()){
             binding.imgView.visibility = GONE
+            binding.pointer.visibility = GONE
         } else {
             binding.imgView.visibility = VISIBLE
             binding.imgView.loadFilePath(model.imgUrl)
+            PointerUtil.movePointerByRelative(binding.pointer, binding.imgView, model.x, model.y)
         }
 
         if(model.name.isNullOrBlank()){
@@ -39,6 +42,7 @@ class StorageViewHolder(itemView: View, clickListener: OnItemClickListener?) : R
             binding.title.text = model.name
             binding.title.visibility = VISIBLE
         }
+
         binding.objects.text = model.objString
     }
 }

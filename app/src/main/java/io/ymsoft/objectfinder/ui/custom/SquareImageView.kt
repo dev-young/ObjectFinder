@@ -15,12 +15,22 @@ class SquareImageView : androidx.appcompat.widget.AppCompatImageView {
         context: Context?,
         attrs: AttributeSet?,
         defStyleAttr: Int
-    ) : super(context, attrs, defStyleAttr) {
+    ) : super(context, attrs, defStyleAttr)
+
+    private var measureListener : OnMeasureListener? = null
+    fun setOnMeasureListener(measureListener: OnMeasureListener){
+        this.measureListener = measureListener
     }
+
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val width = measuredWidth
         setMeasuredDimension(width, width)
+        measureListener?.measured(width, width)
+    }
+
+    interface OnMeasureListener{
+        fun measured(width:Int, height:Int)
     }
 }

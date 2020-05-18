@@ -19,6 +19,7 @@ import io.ymsoft.objectfinder.loadFilePath
 import io.ymsoft.objectfinder.makeToast
 import io.ymsoft.objectfinder.models.ObjectModel
 import io.ymsoft.objectfinder.models.StorageModel
+import io.ymsoft.objectfinder.ui.custom.SquareImageView
 import io.ymsoft.objectfinder.utils.PointerUtil
 import io.ymsoft.objectfinder.view_model.StorageViewModel
 import java.util.concurrent.TimeUnit
@@ -76,20 +77,12 @@ class StorageDetailFragment : Fragment() {
                 (activity as AppCompatActivity).supportActionBar?.title = this
         }
 
-        if(storageModel.x != null && storageModel.y != null){
-            // TODO: 2020-05-17 딜레이를 사용하는 방식이 아니라 뷰가 그려진 후 포인터를 그리도록 수정해야함
-            Observable.just(Pair(storageModel.x!!, storageModel.y!!))
-                .delay(50, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{
-                    PointerUtil.movePointerByRelative(binding.pointer, binding.imgView, it.first, it.second)
-                    binding.pointer.visibility = View.VISIBLE
-                }
+        binding.imgView.setOnMeasureListener(object : SquareImageView.OnMeasureListener{
+            override fun measured(width: Int, height: Int) {
+                PointerUtil.movePointerByRelative(binding.pointer, width, height, storageModel.x, storageModel.y)
+            }
+        })
 
-        } else {
-            binding.pointer.visibility = View.INVISIBLE
-        }
 
 
     }
