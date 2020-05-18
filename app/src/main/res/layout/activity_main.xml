@@ -49,9 +49,9 @@
             app:navigationIcon="@drawable/ic_menu_24dp"
             app:backgroundTint="@color/colorPrimary"
             app:fabAlignmentMode="center"
-            app:fabCradleMargin="8dp"
+            app:fabCradleMargin="10dp"
             app:fabAnimationMode="slide"
-            app:fabCradleRoundedCornerRadius="5dp"
+            app:fabCradleRoundedCornerRadius="8dp"
             android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"
             app:hideOnScroll="true"
@@ -60,12 +60,15 @@
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
             android:id="@+id/fab"
             app:layout_anchor="@id/bottomAppBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_add_24dp"
-
+            app:backgroundTint="@color/colorAccent"
+            android:src="@drawable/ic_add_drawer"
+            app:tint="@android:color/white"
+            app:maxImageSize="36dp"
             />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

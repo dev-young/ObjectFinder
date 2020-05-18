@@ -3,7 +3,6 @@ package io.ymsoft.objectfinder.ui.main
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
@@ -15,10 +14,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import io.ymsoft.objectfinder.R
-import io.ymsoft.objectfinder.ui.add.AddObjectActivity
 import io.ymsoft.objectfinder.databinding.ActivityMainBinding
-import io.ymsoft.objectfinder.ui.add.AddPositionActivity
-import io.ymsoft.objectfinder.utils.ActivityUtil
+import io.ymsoft.objectfinder.hideKeyboard
+import io.ymsoft.objectfinder.showKeyboard
 
 class MainActivity : AppCompatActivity(){
 
@@ -42,13 +40,15 @@ class MainActivity : AppCompatActivity(){
         ))
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.toolbar.setupWithNavController(navController)
+//        binding.bottomAppBar.setupWithNavController(navController)
+
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            hideKeyboard()
             setAppBarByDestination(destination)
         }
 
         binding.fab.setOnClickListener {
-//            ActivityUtil.start(this, AddPositionActivity::class.java)
             navController.navigate(R.id.navAddPosition)
         }
 
@@ -58,12 +58,25 @@ class MainActivity : AppCompatActivity(){
 
     /**NavDestination의 값에 따라 툴바와 바텀앱바의 구성을 변경한다.*/
     private fun setAppBarByDestination(destination: NavDestination) {
+
         when(destination.id){
-//                R.id.positionDetailFragment -> setAppBarVisivle(top = false, bottom = false)
-            R.id.navSearch -> setAppBarVisivle(top = true, bottom = false)
-            R.id.navAddPosition -> setAppBarVisivle(top = true, bottom = false)
-            else -> setAppBarVisivle(top = true, bottom = true)
+            R.id.navPositionDetail -> {
+                setAppBarVisivle(top = true, bottom = true)
+                binding.fab.hide()
+            }
+            R.id.navSearch -> {
+                setAppBarVisivle(top = true, bottom = false)
+                binding.searchView.requestFocus()
+                showKeyboard()
+            }
+            R.id.navAddPosition -> {
+                setAppBarVisivle(top = true, bottom = false)
+            }
+            else -> {
+                setAppBarVisivle(top = true, bottom = true)
+            }
         }
+
 
         if(destination.id == R.id.navSearch){
             searchView.visibility = View.VISIBLE
@@ -105,6 +118,10 @@ class MainActivity : AppCompatActivity(){
 
             false
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 
     override fun onSupportNavigateUp(): Boolean {

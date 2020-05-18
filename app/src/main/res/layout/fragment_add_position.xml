@@ -52,33 +52,44 @@
                                 android:id="@+id/imgView"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="@drawable/ic_menu_camera"
                                 android:backgroundTint="@android:color/darker_gray"
                                 />
 
                             <LinearLayout
                                 android:id="@+id/addPhotoBtnGroup"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:orientation="vertical"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 >
-                                <Button
+                                <ImageView
                                     android:id="@+id/takePhoto"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
                                     android:text="@string/take_photo"
-                                    android:textStyle="bold"
-                                    android:layout_margin="@dimen/default_item_spacing"
+                                    android:src="@drawable/ic_menu_camera"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:foreground="?attr/selectableItemBackground"
+                                    android:background="@color/colorAccent"
+                                    android:tint="@android:color/white"
+                                    android:alpha="0.75"
                                     />
-                                <Button
+                                <ImageView
                                     android:id="@+id/pickFromAlbum"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
                                     android:text="@string/pick_from_album"
-                                    android:textStyle="bold"
-                                    android:layout_margin="@dimen/default_item_spacing"
+                                    android:src="@drawable/ic_menu_gallery"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:tint="@color/colorAccent"
+                                    android:foreground="?attr/selectableItemBackground"
+
+                                    android:alpha="0.75"
                                     />
                             </LinearLayout>
 

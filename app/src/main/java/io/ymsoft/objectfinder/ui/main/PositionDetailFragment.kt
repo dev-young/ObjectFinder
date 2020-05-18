@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.chip.Chip
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -94,8 +95,8 @@ class PositionDetailFragment : Fragment() {
 
     }
 
+    @SuppressLint("CheckResult")
     private fun setChipGroups(objList : List<ObjectModel>) {
-        binding.chipGroup.removeAllViews()
         val clickListener = View.OnClickListener {
 
         }
@@ -105,15 +106,57 @@ class PositionDetailFragment : Fragment() {
             viewModel.onObjectLongClicked(model)
             false
         }
-        objList.forEach {
-            val chip = Chip(context)
-            chip.text = it.objName
-            chip.tag = it
-//            chip.isCheckable = true
-            chip.setOnClickListener(clickListener)
-            chip.setOnLongClickListener(longClickListener)
-            binding.chipGroup.addView(chip)
-        }
+
+//        Observable.just(objList)
+//            .flatMap { Observable.fromIterable(it) }
+//            .map {
+//                val chip = Chip(context)
+//                chip.text = it.objName
+//                chip.tag = it
+//                chip.setOnClickListener(clickListener)
+//                chip.setOnLongClickListener(longClickListener)
+//
+//                chip
+//            }
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe {
+//                binding.chipGroup.addView(it)
+//            }
+
+        Observable.just(objList)
+            .map {
+                val chipList = arrayListOf<Chip>()
+                objList.forEach {
+                    val chip = Chip(context)
+                    chip.text = it.objName
+                    chip.tag = it
+//                    chip.isCheckable = true
+                    chip.setOnClickListener(clickListener)
+                    chip.setOnLongClickListener(longClickListener)
+                    chipList.add(chip)
+                }
+                chipList
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {list ->
+                // TODO: 뷰가 갱신될때마다 한번 다 지우고 다시 넣는게 많은 작업을 필요로 한다는 생각이 든다
+                // TODO: 리싸이클러 뷰를 사용해 칩을 넣던가 뷰모델에서 LiveData 가 아닌 Single 이나 일반 리스트를 사용해 로딩을 한 뒤 삭제 추가되는 Object를 LiveData 로 관리하자
+                binding.chipGroup.removeAllViews()
+                list.forEach {
+                    binding.chipGroup.addView(it)
+                }
+            }
+//        objList.forEach {
+//            val chip = Chip(context)
+//            chip.text = it.objName
+//            chip.tag = it
+////            chip.isCheckable = true
+//            chip.setOnClickListener(clickListener)
+//            chip.setOnLongClickListener(longClickListener)
+//            binding.chipGroup.addView(chip)
+//        }
 
     }
 

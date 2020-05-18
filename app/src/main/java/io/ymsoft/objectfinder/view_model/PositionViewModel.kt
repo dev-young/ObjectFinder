@@ -1,6 +1,7 @@
 package io.ymsoft.objectfinder.view_model
 
 import android.app.Application
+import android.text.Html
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -31,7 +32,7 @@ class PositionViewModel(application: Application) : AndroidViewModel(application
 
     fun addNew(positionModel:PositionModel? = null, objectModel: ObjectModel, listener: TaskListener<Nothing>){
         objectRepo.add(positionModel, objectModel, listener)
-        toastMsg.postValue(R.string.add)
+//        toastMsg.postValue(R.string.add)
     }
 
     /**selectedPosition에 새로운 오브젝트를 추가한다.*/
@@ -40,7 +41,7 @@ class PositionViewModel(application: Application) : AndroidViewModel(application
             val obj = ObjectModel(positionId = id, objName = name)
             objectRepo.add(obj = obj)
         }
-        toastMsg.postValue(R.string.add)
+//        toastMsg.postValue(R.string.add)
     }
 
     fun onObjectLongClicked(model: ObjectModel) {

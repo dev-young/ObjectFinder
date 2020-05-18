@@ -1,14 +1,17 @@
 package io.ymsoft.objectfinder
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import io.ymsoft.objectfinder.utils.FileUtil
@@ -53,4 +56,33 @@ fun logI(message: String){
 
 fun logE(message: String){
     Log.e("", message)
+}
+
+fun Activity?.showKeyboard() {
+    val imm : InputMethodManager = this?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS)
+}
+
+fun Activity?.hideKeyboard() {
+    val inputMethodManager =
+        this?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+    // Check if no view has focus
+    val currentFocusedView = currentFocus
+    currentFocusedView?.let {
+        inputMethodManager.hideSoftInputFromWindow(
+            currentFocusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+    }
+}
+
+fun Fragment.hideKeyboard() {
+    val inputMethodManager =
+        this?.activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+    // Check if no view has focus
+    val currentFocusedView = this?.activity?.currentFocus
+    currentFocusedView?.let {
+        inputMethodManager.hideSoftInputFromWindow(
+            currentFocusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+    }
 }

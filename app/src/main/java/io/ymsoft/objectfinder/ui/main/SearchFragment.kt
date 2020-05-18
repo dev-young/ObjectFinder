@@ -26,12 +26,10 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentSearchBinding.bind(view)
 
-        // TODO: 이런식으로 메인 엑티비티를 가져와서 하지 말고 ViewModel에 넣어서 사용해보는건 어떨까?
+        // TODO: 이런식으로 메인 엑티비티를 가져와서 하지 말고 변경된 텍스트를 ViewModel에 넣어서 사용해보는건 어떨까?
+        
         if(activity is MainActivity){
             val sv = (activity as MainActivity).searchView
-
-            sv.requestFocus()
-            showKeyBoard(sv)
 
             sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -51,13 +49,6 @@ class SearchFragment : Fragment() {
         }
 
         super.onViewCreated(view, savedInstanceState)
-    }
-
-
-
-    private fun showKeyBoard(v : View) {
-        val imm : InputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
 }
