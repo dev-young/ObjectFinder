@@ -3,17 +3,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/navPositionList"
+            android:id="@+id/navStorageList"
             android:icon="@drawable/ic_drawers"
-            android:title="@string/position_list" />
+            android:title="@string/storage_list" />
         <item
             android:id="@+id/navSearch"
             android:icon="@drawable/ic_search_24dp"
             android:title="@string/title_search" />
 
         <item
-            android:id="@+id/navAddPosition"
+            android:id="@+id/navAddStorage"
             android:icon="@drawable/ic_add_drawer"
-            android:title="@string/title_add_position" />
+            android:title="@string/title_add_storage" />
     </group>
 </menu>

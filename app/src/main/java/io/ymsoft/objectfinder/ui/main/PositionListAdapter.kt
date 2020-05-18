@@ -4,15 +4,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import io.ymsoft.objectfinder.OnItemClickListener
-import io.ymsoft.objectfinder.models.PositionModel
-import io.ymsoft.objectfinder.ui.view_holoer.PositionViewHolder
+import io.ymsoft.objectfinder.models.StorageModel
+import io.ymsoft.objectfinder.ui.view_holoer.StorageViewHolder
 
-class PositionListAdapter : ListAdapter<PositionModel, PositionViewHolder>(object : DiffUtil.ItemCallback<PositionModel>(){
-    override fun areItemsTheSame(oldItem: PositionModel, newItem: PositionModel): Boolean {
+class StorageListAdapter : ListAdapter<StorageModel, StorageViewHolder>(object : DiffUtil.ItemCallback<StorageModel>(){
+    override fun areItemsTheSame(oldItem: StorageModel, newItem: StorageModel): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: PositionModel, newItem: PositionModel): Boolean {
+    override fun areContentsTheSame(oldItem: StorageModel, newItem: StorageModel): Boolean {
         return oldItem.objString == newItem.objString
     }
 
@@ -21,12 +21,12 @@ class PositionListAdapter : ListAdapter<PositionModel, PositionViewHolder>(objec
     var clickListener : OnItemClickListener? = null
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PositionViewHolder {
-        return PositionViewHolder(parent, clickListener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StorageViewHolder {
+        return StorageViewHolder(parent, clickListener)
     }
 
-    override fun onBindViewHolder(holder: PositionViewHolder, position: Int) {
-        holder.onBind(getItem(position))
+    override fun onBindViewHolder(holder: StorageViewHolder, storage: Int) {
+        holder.onBind(getItem(storage))
     }
 
 }

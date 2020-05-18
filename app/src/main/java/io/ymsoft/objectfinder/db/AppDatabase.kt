@@ -6,13 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import io.ymsoft.objectfinder.models.ObjectModel
-import io.ymsoft.objectfinder.models.PositionModel
+import io.ymsoft.objectfinder.models.StorageModel
 
-@Database(entities = [ObjectModel::class, PositionModel::class], version = 1)
+@Database(entities = [ObjectModel::class, StorageModel::class], version = 1)
 @TypeConverters(TypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun objectDao() : ObjectDAO
-    abstract fun positionDao() : PositionDAO
+    abstract fun storageDao() : StorageDAO
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null

@@ -5,8 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity(tableName =  "positions")
-data class PositionModel(
+@Entity(tableName =  "storage")
+data class StorageModel(
     @PrimaryKey(autoGenerate = true)
     var id : Long? = null,
     @ColumnInfo(name = "img_url")

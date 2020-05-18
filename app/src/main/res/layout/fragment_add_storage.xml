@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.main.AddPositionFragment"
+    tools:context=".ui.main.AddStorageFragment"
     tools:ignore="ContentDescription">
 
     <LinearLayout
@@ -111,7 +111,7 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="@string/please_input_position"
+                                android:text="@string/please_input_storage"
                                 android:layout_weight="1"
                                 android:layout_gravity="center"
                                 android:paddingHorizontal="@dimen/default_item_spacing"
@@ -143,10 +143,10 @@
                     android:layout_marginTop="@dimen/default_item_spacing">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/positionName"
+                        android:id="@+id/storageName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_position_name"
+                        android:hint="@string/hint_storage_name"
                         android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -159,10 +159,10 @@
                     android:layout_marginTop="@dimen/default_item_spacing">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/positionMemo"
+                        android:id="@+id/storageMemo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_position_memo" />
+                        android:hint="@string/hint_storage_memo" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button

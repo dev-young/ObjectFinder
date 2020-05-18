@@ -7,16 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.ymsoft.objectfinder.OnItemClickListener
 import io.ymsoft.objectfinder.R
-import io.ymsoft.objectfinder.databinding.ItemPositionBinding
+import io.ymsoft.objectfinder.databinding.ItemStorageBinding
 import io.ymsoft.objectfinder.loadFilePath
-import io.ymsoft.objectfinder.models.ObjectModel
-import io.ymsoft.objectfinder.models.PositionModel
+import io.ymsoft.objectfinder.models.StorageModel
 
-class PositionViewHolder(itemView: View, clickListener: OnItemClickListener?) : RecyclerView.ViewHolder(itemView) {
+class StorageViewHolder(itemView: View, clickListener: OnItemClickListener?) : RecyclerView.ViewHolder(itemView) {
     constructor(parent:ViewGroup, clickListener: OnItemClickListener?):
-            this(LayoutInflater.from(parent.context).inflate(R.layout.item_position, parent, false), clickListener)
+            this(LayoutInflater.from(parent.context).inflate(R.layout.item_storage, parent, false), clickListener)
 
-    private val binding : ItemPositionBinding by lazy {ItemPositionBinding.bind(itemView)}
+    private val binding : ItemStorageBinding by lazy {ItemStorageBinding.bind(itemView)}
 
     init {
         binding.clickableLayout.setOnClickListener { clickListener?.onItemClick(adapterPosition) }
@@ -26,7 +25,7 @@ class PositionViewHolder(itemView: View, clickListener: OnItemClickListener?) : 
         }
     }
 
-    fun onBind(model: PositionModel) {
+    fun onBind(model: StorageModel) {
         if (model.imgUrl.isNullOrBlank()){
             binding.imgView.visibility = GONE
         } else {

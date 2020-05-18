@@ -14,29 +14,29 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.ymsoft.objectfinder.*
-import io.ymsoft.objectfinder.databinding.ActivityAddPositionBinding
-import io.ymsoft.objectfinder.models.PositionModel
+import io.ymsoft.objectfinder.databinding.ActivityAddStorageBinding
+import io.ymsoft.objectfinder.models.StorageModel
 import io.ymsoft.objectfinder.repository.ObjectRepository
 import io.ymsoft.objectfinder.ui.BaseActivity
 import io.ymsoft.objectfinder.utils.*
 import io.ymsoft.objectfinder.utils.PickPhotoHelper
-import io.ymsoft.objectfinder.view_model.AddPositionViewModel
+import io.ymsoft.objectfinder.view_model.AddStorageViewModel
 import java.util.concurrent.TimeUnit
 
 @Deprecated("Fragment 사용으로 대체")
-class AddPositionActivity : BaseActivity() {
+class AddStorageActivity : BaseActivity() {
 
-    private lateinit var binding: ActivityAddPositionBinding
+    private lateinit var binding: ActivityAddStorageBinding
     
-    private lateinit var viewModel: AddPositionViewModel
+    private lateinit var viewModel: AddStorageViewModel
     private val pickPhotoHelper = PickPhotoHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_add_position)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_add_storage)
         setHomeBtn(binding.toolbar)
         
-        viewModel = ViewModelProvider(this).get(AddPositionViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(AddStorageViewModel::class.java)
         
 
         binding.content.imgView.setOnClickListener{
@@ -53,7 +53,7 @@ class AddPositionActivity : BaseActivity() {
 
     private fun save() {
         val photoUrl = pickPhotoHelper.currentPhotoPath
-        val name = binding.content.positionName.text.toString()
+        val name = binding.content.storageName.text.toString()
         
         //유효성 검사
         if(photoUrl.isNullOrBlank() && name.isBlank()){
@@ -61,11 +61,11 @@ class AddPositionActivity : BaseActivity() {
             return
         }
         
-        val model = PositionModel(id = null, imgUrl = photoUrl, name = name)
+        val model = StorageModel(id = null, imgUrl = photoUrl, name = name)
         ObjectRepository.add(model, TaskListener { 
             if(it.isSuccessful){
                 it.result?.let {
-                    // TODO: 추가된 PositionModel에 대한 PositionDetailFragment으로 이동
+                    // TODO: 추가된 StorageModel에 대한 StorageDetailFragment으로 이동
                 }
                 pickPhotoHelper.clear()
                 finish()

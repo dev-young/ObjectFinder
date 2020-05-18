@@ -13,16 +13,17 @@ import io.ymsoft.objectfinder.db.AppDatabase
 import io.ymsoft.objectfinder.logE
 import io.ymsoft.objectfinder.logI
 import io.ymsoft.objectfinder.models.ObjectModel
-import io.ymsoft.objectfinder.models.PositionModel
+import io.ymsoft.objectfinder.models.StorageModel
 
 @SuppressLint("CheckResult")
 object ObjectRepository {
 
     private lateinit var db: AppDatabase
     private val objectDao by lazy { db.objectDao() }
-    private val positionDAO by lazy { db.positionDao() }
-    val selectedPosition = MutableLiveData<PositionModel>()
-    private lateinit var objectList : LiveData<List<ObjectModel>>   //selectedPosition 의 오브젝트 리스트
+    private val storageDAO by lazy { db.storageDao() }
+    val selectedStorage = MutableLiveData<StorageModel>()
+    val storageList by lazy { storageDAO.getAllStorages() }
+    private lateinit var objectList : LiveData<List<ObjectModel>>   //selectedStorage 의 오브젝트 리스트
 
     private var taskCount = 0   // INSERT, UPDATE, DELETE 진행중인 작업 수
     val isWorking = MutableLiveData<Boolean>()  //taskCount > 0 이면 true 아니면 false
@@ -31,14 +32,16 @@ object ObjectRepository {
         db = AppDatabase.getInstance(application)
     }
 
-    fun getPositionList(): LiveData<List<PositionModel>> {
-        return positionDAO.getAllPositions()
+
+
+    fun getStorageList(query: String): List<StorageModel> {
+        return storageDAO.getStorageListContain(query)
     }
 
-    /**selectedPosition 에 아이디를 통해 Object 리스트 반환 */
+    /**selectedStorage 에 아이디를 통해 Object 리스트 반환 */
     fun getObjList(): LiveData<List<ObjectModel>> {
         var searchId = -1L
-        selectedPosition.value?.id?.let { searchId = it }
+        selectedStorage.value?.id?.let { searchId = it }
         objectList = objectDao.getObjectList(searchId)
         return objectList
     }
@@ -60,56 +63,56 @@ object ObjectRepository {
         if(taskCount == 0) isWorking.postValue(false)
     }
 
-    /**새로운 PositionModel 추가*/
-    fun add(pos: PositionModel, listener: TaskListener<PositionModel>? = null) {
+    /**새로운 StorageModel 추가*/
+    fun add(pos: StorageModel, listener: TaskListener<StorageModel>? = null) {
         startTask()
         Log.e("", Thread.currentThread().name + " : add 수행")
         Observable.just(pos)
             .subscribeOn(Schedulers.io())
             .map {
                 Log.e("", Thread.currentThread().name + " : map 수행")
-                Pair(positionDAO.insert(it), it)
+                Pair(storageDAO.insert(it), it)
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe{ pair ->
                 Log.e("", Thread.currentThread().name + " : subscribe 수행")
                 if(pair.first >= 0) {
                     pair.second.id = pair.first
-                    selectedPosition.postValue(pair.second)
+                    selectedStorage.postValue(pair.second)
                     listener?.onComplete(TaskListener.Task(pair.second))
                 } else {
-                    listener?.onComplete(TaskListener.Task(false, "PositionModel 추가 실패"))
+                    listener?.onComplete(TaskListener.Task(false, "StorageModel 추가 실패"))
                 }
 
                 endTask()
             }
     }
 
-    /**1. PositionModel 와 ObjectModel 을 동시에 추가하는 경우
+    /**1. StorageModel 와 ObjectModel 을 동시에 추가하는 경우
      * 2. ObjectModel 만 추가하는 경우
      * */
-    fun add(pos: PositionModel? = null, obj: ObjectModel, listener: TaskListener<Nothing>? = null) {
+    fun add(pos: StorageModel? = null, obj: ObjectModel, listener: TaskListener<Nothing>? = null) {
         startTask()
         Observable.just(Pair(pos, obj))
             .subscribeOn(Schedulers.io())
             .subscribe{ pair ->
-                var positionId = pair.second.positionId
-                if(positionId == null){
+                var storageId = pair.second.storageId
+                if(storageId == null){
                     pair.first?.let {p->
-                        positionId = positionDAO.insert(p)
+                        storageId = storageDAO.insert(p)
                     }
 
-                    pair.second.positionId = positionId
+                    pair.second.storageId = storageId
                 }
 
                 val result = objectDao.insert(pair.second)
                 if(result >= 0) {
                     var p = pair.first
-                    if(p == null) p = positionDAO.getPosition(positionId!!)
+                    if(p == null) p = storageDAO.getStorage(storageId!!)
                     p.addObjectName(pair.second.objName)
-                    p.id = positionId
-                    val r = positionDAO.update(p)
-                    Log.i("positionDAO.update", r.toString())
+                    p.id = storageId
+                    val r = storageDAO.update(p)
+                    Log.i("storageDAO.update", r.toString())
                     listener?.onComplete(TaskListener.Task(true))
                 } else {
                     // TODO: 오류처리
@@ -122,7 +125,7 @@ object ObjectRepository {
 
 
 
-    /**ObjectModel 삭제 후 해당 오브젝트를 가지고있던 PositionModel의 정보도 수정하여 업데이트*/
+    /**ObjectModel 삭제 후 해당 오브젝트를 가지고있던 StorageModel의 정보도 수정하여 업데이트*/
     fun remove(objectModel: ObjectModel) {
         startTask()
         Observable.just(objectModel)
@@ -130,11 +133,11 @@ object ObjectRepository {
             .subscribe{ model ->
                 val r = objectDao.delete(model)
                 if(r == 1){
-                    val position = positionDAO.getPosition(model.positionId!!)
+                    val storage = storageDAO.getStorage(model.storageId!!)
                     objectList.value?.let {
-                        position.setObjString(it, objectModel.objName)
+                        storage.setObjString(it, objectModel.objName)
                     }
-                    positionDAO.update(position)
+                    storageDAO.update(storage)
                 } else {
                     // TODO: 오류처리
                     logE("삭제 실패 -> $model")
@@ -148,11 +151,11 @@ object ObjectRepository {
 
     }
 
-    fun removePosition(positionModel: PositionModel) {
-        Observable.just(positionModel)
+    fun removeStorage(storageModel: StorageModel) {
+        Observable.just(storageModel)
             .subscribeOn(Schedulers.io())
             .subscribe{ model ->
-                val r = positionDAO.delete(model)
+                val r = storageDAO.delete(model)
                 if(r == 1){
                     logI("삭제 완료 -> $model")
                 } else {

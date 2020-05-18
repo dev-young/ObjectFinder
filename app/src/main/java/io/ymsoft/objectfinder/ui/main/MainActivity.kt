@@ -33,10 +33,10 @@ class MainActivity : AppCompatActivity(){
         searchView = binding.searchView
         navController = findNavController(R.id.nav_host_fragment)
         appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.navPositionList,
+            R.id.navStorageList,
             R.id.navSearch,
-            R.id.navAddPosition,
-            R.id.navPositionDetail
+            R.id.navAddStorage,
+            R.id.navStorageDetail
         ))
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.toolbar.setupWithNavController(navController)
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(){
         }
 
         binding.fab.setOnClickListener {
-            navController.navigate(R.id.navAddPosition)
+            navController.navigate(R.id.navAddStorage)
         }
 
         initBottomAppBar()
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(){
     private fun setAppBarByDestination(destination: NavDestination) {
 
         when(destination.id){
-            R.id.navPositionDetail -> {
+            R.id.navStorageDetail -> {
                 setAppBarVisivle(top = true, bottom = true)
                 binding.fab.hide()
             }
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(){
                 binding.searchView.requestFocus()
                 showKeyboard()
             }
-            R.id.navAddPosition -> {
+            R.id.navAddStorage -> {
                 setAppBarVisivle(top = true, bottom = false)
             }
             else -> {

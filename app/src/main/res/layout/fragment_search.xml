@@ -8,19 +8,44 @@
         android:orientation="vertical"
         tools:context=".ui.main.SearchFragment">
 
-        <TextView
-            android:id="@+id/text"
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="검색 " />
+            android:layout_height="match_parent"
+            >
 
-        <Button
-            android:id="@+id/btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:clipToPadding="false"
+                android:paddingBottom="?actionBarSize"
+                tools:listitem="@layout/item_storage"
+                />
 
+
+            <LinearLayout
+                android:id="@+id/emptyMessage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:text="@string/empty_msg_search_result"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/empty_msg_size"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    />
+
+            </LinearLayout>
+        </FrameLayout>
 
 
     </LinearLayout>

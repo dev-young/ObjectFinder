@@ -67,10 +67,10 @@
                     android:layout_marginTop="@dimen/default_item_spacing">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/positionName"
+                        android:id="@+id/storageName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_position_name"
+                        android:hint="@string/hint_storage_name"
                         android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
 

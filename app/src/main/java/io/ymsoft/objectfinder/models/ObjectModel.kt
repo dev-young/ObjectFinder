@@ -8,7 +8,7 @@ import java.util.*
 data class ObjectModel(
     @PrimaryKey(autoGenerate = true)
     val id : Long? = null,
-    var positionId: Long? = null,
+    var storageId: Long? = null,
     var objName: String,
     var memo : String? = null
 ) {

@@ -13,7 +13,7 @@ interface ObjectDAO {
     @Query("SELECT * from objects")
     fun getAllObjects() : LiveData<List<ObjectModel>>
 
-    @Query("SELECT * FROM objects WHERE positionId = :id")
+    @Query("SELECT * FROM objects WHERE storageId = :id")
     fun getObjectList(id:Long) : LiveData<List<ObjectModel>>
 
     @Insert

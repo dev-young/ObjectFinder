@@ -12,44 +12,44 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import io.ymsoft.objectfinder.OnItemClickListener
 import io.ymsoft.objectfinder.R
-import io.ymsoft.objectfinder.databinding.FragmentPositionListBinding
+import io.ymsoft.objectfinder.databinding.FragmentStorageListBinding
 import io.ymsoft.objectfinder.makeToast
-import io.ymsoft.objectfinder.view_model.PositionViewModel
+import io.ymsoft.objectfinder.view_model.StorageViewModel
 
-class PositionListFragment : Fragment() {
+class StorageListFragment : Fragment() {
 
-    private lateinit var binding : FragmentPositionListBinding
-    private val viewModel : PositionViewModel by viewModels()
+    private lateinit var binding : FragmentStorageListBinding
+    private val viewModel : StorageViewModel by viewModels()
 
-    private val positionListAdapter = PositionListAdapter().apply {
+    private val storageListAdapter = StorageListAdapter().apply {
         clickListener = object : OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                viewModel.setSelectedPosition(currentList[position])
+            override fun onItemClick(storage: Int) {
+                viewModel.setSelectedStorage(currentList[storage])
                 showDetail()
             }
 
-            override fun onItemLongClick(position: Int) {
-                viewModel.itemlongClicked(currentList[position])
+            override fun onItemLongClick(storage: Int) {
+                viewModel.itemlongClicked(currentList[storage])
             }
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_position_list, container, false)
+        return inflater.inflate(R.layout.fragment_storage_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding = FragmentPositionListBinding.bind(view)
-        binding.recyclerView.adapter = positionListAdapter
+        binding = FragmentStorageListBinding.bind(view)
+        binding.recyclerView.adapter = storageListAdapter
 
-        viewModel.positionList.observe(viewLifecycleOwner, Observer {
-            Log.i("", "PositionList Changed!")
+        viewModel.storageList.observe(viewLifecycleOwner, Observer {
+            Log.i("", "StorageList Changed!")
             if (it.isEmpty()){
                 binding.emptyMessage.visibility = View.VISIBLE
             } else {
                 binding.emptyMessage.visibility = View.GONE
-                positionListAdapter.submitList(it)
+                storageListAdapter.submitList(it)
             }
         })
 
@@ -59,7 +59,7 @@ class PositionListFragment : Fragment() {
     }
 
     private fun showDetail() {
-        findNavController().navigate(R.id.action_navPositionList_to_navPositionDetail)
+        findNavController().navigate(R.id.action_navStorageList_to_navStorageDetail)
     }
 
 

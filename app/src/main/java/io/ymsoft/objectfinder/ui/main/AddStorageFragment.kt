@@ -16,8 +16,8 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.ymsoft.objectfinder.*
-import io.ymsoft.objectfinder.databinding.FragmentAddPositionBinding
-import io.ymsoft.objectfinder.models.PositionModel
+import io.ymsoft.objectfinder.databinding.FragmentAddStorageBinding
+import io.ymsoft.objectfinder.models.StorageModel
 import io.ymsoft.objectfinder.repository.ObjectRepository
 import io.ymsoft.objectfinder.utils.PICK_FROM_ALBUM
 import io.ymsoft.objectfinder.utils.PickPhotoHelper
@@ -28,8 +28,8 @@ import java.util.concurrent.TimeUnit
 /**
  * A simple [Fragment] subclass.
  */
-class AddPositionFragment : Fragment() {
-    private lateinit var binding : FragmentAddPositionBinding
+class AddStorageFragment : Fragment() {
+    private lateinit var binding : FragmentAddStorageBinding
     private val pickPhotoHelper = PickPhotoHelper()
     
     override fun onCreateView(
@@ -37,7 +37,7 @@ class AddPositionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_position, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_storage, container, false)
 
         binding.takePhoto.setOnClickListener { takePhoto() }
         binding.pickFromAlbum.setOnClickListener { pickFromAlbum() }
@@ -93,9 +93,9 @@ class AddPositionFragment : Fragment() {
 
     private fun save() {
         val photoUrl = pickPhotoHelper.currentPhotoPath
-        val name = binding.positionName.text.toString()
+        val name = binding.storageName.text.toString()
         val point = getRelativeCoordinate()
-        val memo = binding.positionMemo.text.toString()
+        val memo = binding.storageMemo.text.toString()
 
         //유효성 검사
         if(photoUrl.isNullOrBlank() && name.isBlank()){
@@ -103,8 +103,8 @@ class AddPositionFragment : Fragment() {
             return
         }
 
-        //PositionModel 생성
-        val model = PositionModel(
+        //StorageModel 생성
+        val model = StorageModel(
             imgUrl = photoUrl,
             name = name,
             x = point?.first,
@@ -113,9 +113,9 @@ class AddPositionFragment : Fragment() {
         ObjectRepository.add(model, TaskListener {
             if(it.isSuccessful){
                 pickPhotoHelper.clear()
-                it.result?.let { positionModel ->
-                    //추가된 PositionModel에 대한 PositionDetailFragment으로 이동
-                    findNavController().navigate(R.id.action_navAddPosition_to_navPositionDetail)
+                it.result?.let { storageModel ->
+                    //추가된 StorageModel에 대한 StorageDetailFragment으로 이동
+                    findNavController().navigate(R.id.action_navAddStorage_to_navStorageDetail)
                 }
 
 

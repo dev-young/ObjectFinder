@@ -10,44 +10,43 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.chip.Chip
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.ymsoft.objectfinder.R
-import io.ymsoft.objectfinder.databinding.FragmentPositionDetailBinding
+import io.ymsoft.objectfinder.databinding.FragmentStorageDetailBinding
 import io.ymsoft.objectfinder.loadFilePath
 import io.ymsoft.objectfinder.makeToast
 import io.ymsoft.objectfinder.models.ObjectModel
-import io.ymsoft.objectfinder.models.PositionModel
+import io.ymsoft.objectfinder.models.StorageModel
 import io.ymsoft.objectfinder.utils.PointerUtil
-import io.ymsoft.objectfinder.view_model.PositionViewModel
+import io.ymsoft.objectfinder.view_model.StorageViewModel
 import java.util.concurrent.TimeUnit
 
-class PositionDetailFragment : Fragment() {
+class StorageDetailFragment : Fragment() {
 
-    private lateinit var viewModel: PositionViewModel
-    private lateinit var binding: FragmentPositionDetailBinding
+    private lateinit var viewModel: StorageViewModel
+    private lateinit var binding: FragmentStorageDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(PositionViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(StorageViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_position_detail, container, false)
+        return inflater.inflate(R.layout.fragment_storage_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding = FragmentPositionDetailBinding.bind(view)
+        binding = FragmentStorageDetailBinding.bind(view)
 
         binding.addBtn.setOnClickListener { addObject() }
 
-        viewModel.getSelectedPosition().observe(viewLifecycleOwner, Observer(this::updateUI))
+        viewModel.getSelectedStorage().observe(viewLifecycleOwner, Observer(this::updateUI))
         viewModel.getObjectList().observe(viewLifecycleOwner, Observer(this::setChipGroups))
         viewModel.toastMsg.observe(viewLifecycleOwner, Observer(context::makeToast))
 
@@ -62,24 +61,24 @@ class PositionDetailFragment : Fragment() {
     }
 
     @SuppressLint("CheckResult")
-    private fun updateUI(positionModel: PositionModel) {
-//        binding.text.text = positionModel.toString()
+    private fun updateUI(storageModel: StorageModel) {
+//        binding.text.text = storageModel.toString()
 
-        if (positionModel.imgUrl.isNullOrBlank()){
+        if (storageModel.imgUrl.isNullOrBlank()){
             binding.imgView.visibility = View.GONE
         } else {
             binding.imgView.visibility = View.VISIBLE
-            binding.imgView.loadFilePath(positionModel.imgUrl)
+            binding.imgView.loadFilePath(storageModel.imgUrl)
         }
 
-        positionModel.name.apply {
+        storageModel.name.apply {
             if(!isNullOrBlank())
                 (activity as AppCompatActivity).supportActionBar?.title = this
         }
 
-        if(positionModel.x != null && positionModel.y != null){
+        if(storageModel.x != null && storageModel.y != null){
             // TODO: 2020-05-17 딜레이를 사용하는 방식이 아니라 뷰가 그려진 후 포인터를 그리도록 수정해야함
-            Observable.just(Pair(positionModel.x!!, positionModel.y!!))
+            Observable.just(Pair(storageModel.x!!, storageModel.y!!))
                 .delay(50, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

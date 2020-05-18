@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="false"
-        tools:context=".ui.add.AddPositionActivity">
+        tools:context=".ui.add.AddStorageActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/abbBar"
@@ -30,7 +30,7 @@
 
         <include
             android:id="@+id/content"
-            layout="@layout/content_add_position" />
+            layout="@layout/content_add_storage" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
