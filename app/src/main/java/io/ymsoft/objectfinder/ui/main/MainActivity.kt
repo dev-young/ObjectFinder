@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -42,23 +43,8 @@ class MainActivity : AppCompatActivity(){
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.toolbar.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            when(destination.id){
-//                R.id.positionDetailFragment -> setAppBarVisivle(top = false, bottom = false)
-                R.id.navSearch -> setAppBarVisivle(top = true, bottom = false)
-                R.id.navAddPosition -> setAppBarVisivle(top = true, bottom = false)
-                else -> setAppBarVisivle(top = true, bottom = true)
-            }
-
-            if(destination.id == R.id.navSearch){
-                searchView.visibility = View.VISIBLE
-            }
-            else {
-                searchView.visibility = View.GONE
-            }
-
-
-
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            setAppBarByDestination(destination)
         }
 
         binding.fab.setOnClickListener {
@@ -68,6 +54,23 @@ class MainActivity : AppCompatActivity(){
 
         initBottomAppBar()
 
+    }
+
+    /**NavDestination의 값에 따라 툴바와 바텀앱바의 구성을 변경한다.*/
+    private fun setAppBarByDestination(destination: NavDestination) {
+        when(destination.id){
+//                R.id.positionDetailFragment -> setAppBarVisivle(top = false, bottom = false)
+            R.id.navSearch -> setAppBarVisivle(top = true, bottom = false)
+            R.id.navAddPosition -> setAppBarVisivle(top = true, bottom = false)
+            else -> setAppBarVisivle(top = true, bottom = true)
+        }
+
+        if(destination.id == R.id.navSearch){
+            searchView.visibility = View.VISIBLE
+        }
+        else {
+            searchView.visibility = View.GONE
+        }
     }
 
     private fun setAppBarVisivle(top: Boolean, bottom: Boolean) {

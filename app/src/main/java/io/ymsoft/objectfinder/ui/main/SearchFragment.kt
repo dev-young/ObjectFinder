@@ -26,6 +26,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentSearchBinding.bind(view)
 
+        // TODO: 이런식으로 메인 엑티비티를 가져와서 하지 말고 ViewModel에 넣어서 사용해보는건 어떨까?
         if(activity is MainActivity){
             val sv = (activity as MainActivity).searchView
 
