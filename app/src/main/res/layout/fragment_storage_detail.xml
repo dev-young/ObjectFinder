@@ -10,6 +10,7 @@
         >
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -24,6 +25,7 @@
                 >
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/imageLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
@@ -70,13 +72,25 @@
                     android:id="@+id/chipGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_item_spacing"
+                    android:layout_marginVertical="@dimen/default_item_spacing"
                     android:clipToPadding="false"
                     android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                    app:chipSpacingHorizontal="@dimen/default_item_spacing"
+                    app:chipSpacingVertical="@dimen/default_item_spacing"
                     >
 
-
                 </com.google.android.material.chip.ChipGroup>
+
+                <TextView
+                    android:id="@+id/emptyMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_item_spacing"
+                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                    android:text="@string/empty_msg_storage"
+                    android:textAppearance="@style/AppTheme.TextAppearance.Chip"
+                    android:textColor="@android:color/darker_gray"
+                    />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

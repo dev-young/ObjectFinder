@@ -43,6 +43,13 @@ class StorageViewHolder(itemView: View, clickListener: OnItemClickListener?) : R
             binding.title.visibility = VISIBLE
         }
 
-        binding.objects.text = model.objString
+        val c = binding.root.context
+        if(model.objString.isNullOrBlank()){
+            binding.objects.text = c.getString(R.string.empty_msg_storage)
+            binding.objects.setTextColor(c.resources.getColor(android.R.color.darker_gray, null))
+        } else{
+            binding.objects.text = model.objString
+            binding.objects.setTextColor(c.resources.getColor(R.color.colorAccent, null))
+        }
     }
 }

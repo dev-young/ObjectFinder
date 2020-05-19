@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.ymsoft.objectfinder.*
@@ -22,7 +24,7 @@ import io.ymsoft.objectfinder.view_model.StorageViewModel
 
 class StorageDetailFragment : Fragment() {
 
-    private lateinit var viewModel: StorageViewModel
+    private val viewModel: StorageViewModel by viewModels()
     private lateinit var binding: FragmentStorageDetailBinding
 
     private val chipGroupHelper by lazy {
@@ -56,12 +58,6 @@ class StorageDetailFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(StorageViewModel::class.java)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -83,24 +79,18 @@ class StorageDetailFragment : Fragment() {
         binding.cancelBtn.setOnClickListener { chipGroupHelper.setCheckable(false) }
 
         viewModel.getSelectedStorage().observe(viewLifecycleOwner, Observer(this::updateUI))
-        viewModel.getObjectList().observe(viewLifecycleOwner, Observer(chipGroupHelper::setChipGroups))
+        viewModel.getObjectList().observe(viewLifecycleOwner, Observer(this::updateObectList))
         viewModel.toastMsg.observe(viewLifecycleOwner, Observer(context::makeToast))
 
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun addObject() {
-        viewModel.addNewObject(binding.inputObject.text.toString())
-        binding.inputObject.setText("")
-    }
-
-    @SuppressLint("CheckResult")
     private fun updateUI(storageModel: StorageModel) {
 
         if (storageModel.imgUrl.isNullOrBlank()){
-            binding.imgView.visibility = View.GONE
+            binding.imageLayout.visibility = View.GONE
         } else {
-            binding.imgView.visibility = View.VISIBLE
+            binding.imageLayout.visibility = View.VISIBLE
             binding.imgView.loadFilePath(storageModel.imgUrl)
         }
 
@@ -117,6 +107,21 @@ class StorageDetailFragment : Fragment() {
 
         changeChipGroupCheckMode(false)
 
+    }
+
+    private fun updateObectList(list : List<ObjectModel>){
+        chipGroupHelper.setChipGroups(list)
+        if(binding.chipGroup.childCount != 0)
+            binding.scrollView.apply { post { this.fullScroll(ScrollView.FOCUS_DOWN) } }
+
+        if(list.isEmpty()) binding.emptyMessage.visibility = View.VISIBLE
+        else binding.emptyMessage.visibility = View.GONE
+    }
+
+    private fun addObject() {
+        viewModel.addNewObject(binding.inputObject.text.toString())
+        binding.inputObject.setText("")
+        binding.scrollView.apply { post { this.fullScroll(ScrollView.FOCUS_DOWN) } }
     }
 
     /**체크모드에 따라 하단의 메뉴를 변경한다. */
