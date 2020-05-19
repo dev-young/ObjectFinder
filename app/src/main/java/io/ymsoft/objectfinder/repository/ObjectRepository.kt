@@ -23,15 +23,14 @@ object ObjectRepository {
     private val storageDAO by lazy { db.storageDao() }
     val selectedStorage = MutableLiveData<StorageModel>()
     val storageList by lazy { storageDAO.getAllStorages() }
-    private lateinit var objectList : LiveData<List<ObjectModel>>   //selectedStorage 의 오브젝트 리스트
+    private lateinit var objectList: LiveData<List<ObjectModel>>   //selectedStorage 의 오브젝트 리스트
 
     private var taskCount = 0   // INSERT, UPDATE, DELETE 진행중인 작업 수
     val isWorking = MutableLiveData<Boolean>()  //taskCount > 0 이면 true 아니면 false
 
-    fun setContext(application: Application){
+    fun setContext(application: Application) {
         db = AppDatabase.getInstance(application)
     }
-
 
 
     fun getStorageList(query: String): List<StorageModel> {
@@ -46,7 +45,7 @@ object ObjectRepository {
         return objectList
     }
 
-    fun getObjList(id:Long): LiveData<List<ObjectModel>> {
+    fun getObjList(id: Long): LiveData<List<ObjectModel>> {
         objectList = objectDao.getObjectList(id)
         return objectList
     }
@@ -54,13 +53,13 @@ object ObjectRepository {
     /**INSERT, DELETE, UPDATE 수행시 호출*/
     private fun startTask(){
         taskCount++
-        if(taskCount == 1) isWorking.postValue(true)
+        if (taskCount == 1) isWorking.postValue(true)
     }
 
     /**INSERT, DELETE, UPDATE 완료시 호출*/
-    private fun endTask(){
+    private fun endTask() {
         taskCount--
-        if(taskCount == 0) isWorking.postValue(false)
+        if (taskCount == 0) isWorking.postValue(false)
     }
 
     /**새로운 StorageModel 추가*/
@@ -74,9 +73,9 @@ object ObjectRepository {
                 Pair(storageDAO.insert(it), it)
             }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{ pair ->
+            .subscribe { pair ->
                 Log.e("", Thread.currentThread().name + " : subscribe 수행")
-                if(pair.first >= 0) {
+                if (pair.first >= 0) {
                     pair.second.id = pair.first
                     selectedStorage.postValue(pair.second)
                     listener?.onComplete(TaskListener.Task(pair.second))
@@ -95,10 +94,10 @@ object ObjectRepository {
         startTask()
         Observable.just(Pair(pos, obj))
             .subscribeOn(Schedulers.io())
-            .subscribe{ pair ->
+            .subscribe { pair ->
                 var storageId = pair.second.storageId
-                if(storageId == null){
-                    pair.first?.let {p->
+                if (storageId == null) {
+                    pair.first?.let { p ->
                         storageId = storageDAO.insert(p)
                     }
 
@@ -106,9 +105,9 @@ object ObjectRepository {
                 }
 
                 val result = objectDao.insert(pair.second)
-                if(result >= 0) {
+                if (result >= 0) {
                     var p = pair.first
-                    if(p == null) p = storageDAO.getStorage(storageId!!)
+                    if (p == null) p = storageDAO.getStorage(storageId!!)
                     p.addObjectName(pair.second.objName)
                     p.id = storageId
                     val r = storageDAO.update(p)
@@ -124,20 +123,20 @@ object ObjectRepository {
     }
 
 
-
     /**ObjectModel 삭제 후 해당 오브젝트를 가지고있던 StorageModel의 정보도 수정하여 업데이트*/
     fun remove(objectModel: ObjectModel) {
         startTask()
         Observable.just(objectModel)
             .subscribeOn(Schedulers.io())
-            .subscribe{ model ->
+            .subscribe { model ->
                 val r = objectDao.delete(model)
-                if(r == 1){
+                if (r == 1) {
                     val storage = storageDAO.getStorage(model.storageId!!)
                     objectList.value?.let {
                         storage.setObjString(it, objectModel.objName)
                     }
                     storageDAO.update(storage)
+                    logI("삭제 완료 -> $model")
                 } else {
                     // TODO: 오류처리
                     logE("삭제 실패 -> $model")
@@ -147,16 +146,56 @@ object ObjectRepository {
             }
     }
 
-    fun remove(vararg models: ObjectModel) {
+    fun removeObjects(models: List<ObjectModel>) {
+        if (models.isNullOrEmpty()) {
+            logE("제거 대상이 없습니다.")
+            return
+        }
 
+        if (models.size == 1) {
+            remove(models[0])
+            return
+        }
+
+        //지울 모델이 2개 이상인 경우부터 밑에 코드 실행
+        startTask()
+        Observable.just(models)
+            .subscribeOn(Schedulers.io())
+            .map {
+                arrayListOf<Long>().apply {
+                    it.forEach {
+                        it.id?.let { it -> add(it) }
+                    }
+                }
+            }
+            .subscribe { idList ->
+                val r = objectDao.delete(idList)
+                if (r != 0) {
+                    //성공시
+                    val storageId = models[0].storageId!!
+                    val nameList = objectDao.getObectNames(storageId)
+                    var objNames: String? = null
+                    if (nameList.isNotEmpty()) {
+                        objNames = nameList[0]
+                        for (i in 1 until nameList.size) {
+                            objNames += ", ${nameList[i]}"
+                        }
+                    }
+                    storageDAO.update(storageId, objNames)
+                    logI("삭제 완료 -> $r 개 제거")
+                } else {
+                    logE("삭제 실패 -> $idList")
+                }
+                endTask()
+            }
     }
 
     fun removeStorage(storageModel: StorageModel) {
         Observable.just(storageModel)
             .subscribeOn(Schedulers.io())
-            .subscribe{ model ->
+            .subscribe { model ->
                 val r = storageDAO.delete(model)
-                if(r == 1){
+                if (r == 1) {
                     logI("삭제 완료 -> $model")
                 } else {
                     // TODO: 오류처리

@@ -16,13 +16,18 @@ interface StorageDAO {
     @Query("SELECT * from storage WHERE objects_text LIKE '%' || :objectName || '%' ORDER BY created_date ASC")
     fun getStorageListContain(objectName: String): List<StorageModel>
 
+
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     fun insert(model:StorageModel) : Long
 
     @Update
     fun update(model:StorageModel)
 
+    @Query("UPDATE storage SET objects_text = :objNames WHERE id = :storageId")
+    fun update(storageId: Long, objNames: String?)
+
     @Delete
     fun delete(model:StorageModel) : Int
+
 
 }

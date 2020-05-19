@@ -24,12 +24,12 @@ class SearchFragment : Fragment() {
     private val storageViewModel : StorageViewModel by viewModels()
     private val adapter = StorageListAdapter().apply {
         clickListener = object : OnItemClickListener {
-            override fun onItemClick(storage: Int) {
-                storageViewModel.setSelectedStorage(currentList[storage])
+            override fun onItemClick(position: Int) {
+                storageViewModel.setSelectedStorage(currentList[position])
                 findNavController().navigate(R.id.action_navSearch_to_navStorageDetail)
             }
 
-            override fun onItemLongClick(storage: Int) {
+            override fun onItemLongClick(position: Int) {
 
             }
         }
@@ -52,7 +52,6 @@ class SearchFragment : Fragment() {
         })
 
         if(activity is MainActivity){
-            // TODO: 이런식으로 메인 엑티비티를 가져와서 하지 말고 변경된 텍스트를 ViewModel에 넣어서 사용해보는건 어떨까?
             val sv = (activity as MainActivity).searchView
 
             sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

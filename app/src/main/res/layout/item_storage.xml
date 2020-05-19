@@ -20,6 +20,7 @@
             android:background="?attr/selectableItemBackground"
             >
             <FrameLayout
+                android:id="@+id/photoLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 >
@@ -44,7 +45,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_margin="@dimen/default_item_spacing"
                 >
@@ -53,17 +54,21 @@
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Title"
-                    tools:text="123456"
+                    android:textColor="@color/colorPrimary"
+                    android:singleLine="true"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    tools:text="123456123456123456123456123456123456123456123456123456123456123456123456123456"
                     />
 
                 <TextView
                     android:id="@+id/objects"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="3dp"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    tools:text="123456"
+                    android:maxHeight="120dp"
+                    style="@style/TextAppearance.AppCompat.Menu"
+                    android:textColor="@color/colorAccent"
+                    tools:text="123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456123456"
                     />
 
 

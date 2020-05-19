@@ -18,7 +18,7 @@ class SquareImageView : androidx.appcompat.widget.AppCompatImageView {
     ) : super(context, attrs, defStyleAttr)
 
     private var measureListener : OnMeasureListener? = null
-    fun setOnMeasureListener(measureListener: OnMeasureListener){
+    fun setOnMeasureListener(measureListener: OnMeasureListener?){
         this.measureListener = measureListener
     }
 

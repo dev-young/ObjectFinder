@@ -78,12 +78,20 @@ object PointerUtil {
             return false
         }
 
-        if(pointer.pivotX > 0 && pointer.pivotY > 0){
-            val x = parentWidth * rx
-            val y = parentHeight * ry
+        val x = parentWidth * rx
+        val y = parentHeight * ry
+        var pivotX = pointer.pivotX
+        var pivotY = pointer.pivotY
 
-            pointer.x = x - (pointer.pivotX)
-            pointer.y = y - (pointer.pivotY)
+        if(pivotX == 0f || pivotX == 0f){
+            ViewUtil.measure(pointer)
+            pivotX = (pointer.measuredWidth/2).toFloat()
+            pivotY = (pointer.measuredHeight/2).toFloat()
+        }
+
+        if(pivotX > 0 && pivotX > 0){
+            pointer.x = x - (pivotX)
+            pointer.y = y - (pivotY)
             pointer.visibility = View.VISIBLE
 
         }

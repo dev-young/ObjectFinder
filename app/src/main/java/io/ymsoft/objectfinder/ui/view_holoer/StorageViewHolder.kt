@@ -2,7 +2,8 @@ package io.ymsoft.objectfinder.ui.view_holoer
 
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.ymsoft.objectfinder.OnItemClickListener
@@ -22,16 +23,15 @@ class StorageViewHolder(itemView: View, clickListener: OnItemClickListener?) : R
         binding.clickableLayout.setOnClickListener { clickListener?.onItemClick(adapterPosition) }
         binding.clickableLayout.setOnLongClickListener {
             clickListener?.onItemLongClick(adapterPosition)
-            false
+            true
         }
     }
 
     fun onBind(model: StorageModel) {
         if (model.imgUrl.isNullOrBlank()){
-            binding.imgView.visibility = GONE
-            binding.pointer.visibility = GONE
+            binding.photoLayout.visibility = GONE
         } else {
-            binding.imgView.visibility = VISIBLE
+            binding.photoLayout.visibility = VISIBLE
             binding.imgView.loadFilePath(model.imgUrl)
             PointerUtil.movePointerByRelative(binding.pointer, binding.imgView, model.x, model.y)
         }

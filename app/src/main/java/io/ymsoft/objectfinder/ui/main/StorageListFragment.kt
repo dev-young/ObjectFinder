@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import io.ymsoft.objectfinder.OnItemClickListener
 import io.ymsoft.objectfinder.R
@@ -23,13 +22,13 @@ class StorageListFragment : Fragment() {
 
     private val storageListAdapter = StorageListAdapter().apply {
         clickListener = object : OnItemClickListener {
-            override fun onItemClick(storage: Int) {
-                viewModel.setSelectedStorage(currentList[storage])
+            override fun onItemClick(position: Int) {
+                viewModel.setSelectedStorage(currentList[position])
                 showDetail()
             }
 
-            override fun onItemLongClick(storage: Int) {
-                viewModel.itemlongClicked(currentList[storage])
+            override fun onItemLongClick(position: Int) {
+                viewModel.itemlongClicked(currentList[position])
             }
         }
     }

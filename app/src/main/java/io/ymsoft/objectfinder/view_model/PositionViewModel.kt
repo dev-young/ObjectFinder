@@ -51,4 +51,8 @@ class StorageViewModel(application: Application) : AndroidViewModel(application)
         objectRepo.removeStorage(model)
     }
 
+    fun delete(checkedList: List<ObjectModel>) {
+        objectRepo.removeObjects(checkedList)
+    }
+
 }

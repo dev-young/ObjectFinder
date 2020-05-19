@@ -2,32 +2,59 @@ package io.ymsoft.objectfinder.ui.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.chip.Chip
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import io.ymsoft.objectfinder.R
+import io.ymsoft.objectfinder.*
 import io.ymsoft.objectfinder.databinding.FragmentStorageDetailBinding
-import io.ymsoft.objectfinder.loadFilePath
-import io.ymsoft.objectfinder.makeToast
 import io.ymsoft.objectfinder.models.ObjectModel
 import io.ymsoft.objectfinder.models.StorageModel
 import io.ymsoft.objectfinder.ui.custom.SquareImageView
+import io.ymsoft.objectfinder.utils.CheckableChipGroupHelper
+import io.ymsoft.objectfinder.utils.CheckableChipGroupHelper.OnCheckableChangeListener
+import io.ymsoft.objectfinder.utils.CheckableChipGroupHelper.OnCheckedCounterChangeListener
 import io.ymsoft.objectfinder.utils.PointerUtil
 import io.ymsoft.objectfinder.view_model.StorageViewModel
-import java.util.concurrent.TimeUnit
 
 class StorageDetailFragment : Fragment() {
 
     private lateinit var viewModel: StorageViewModel
     private lateinit var binding: FragmentStorageDetailBinding
+
+    private val chipGroupHelper by lazy {
+        CheckableChipGroupHelper<ObjectModel>(binding.chipGroup).apply {
+            chipClickListener = object : OnModelClickListener<ObjectModel> {
+                override fun onItemClick(model: ObjectModel) {
+                    binding.inputObject.setText(model.objName)
+                    binding.inputObject.setSelection(model.objName.length)
+                }
+            }
+
+            checkableChangeListener = object : OnCheckableChangeListener {
+                override fun onChanged(checkable: Boolean) {
+                    changeChipGroupCheckMode(checkable)
+                }
+            }
+
+            checkedCounterChangeListener = object : OnCheckedCounterChangeListener {
+                override fun onChanged(count: Int, total: Int) {
+                    binding.checkedCounter.text = count.toString()
+                    binding.checkAllCheckBox.isChecked = (count == total)
+                    if(count == 0){
+                        binding.cancelBtn.visibility = View.VISIBLE
+                        binding.deleteBtn.visibility = View.GONE
+                    } else {
+                        binding.cancelBtn.visibility = View.GONE
+                        binding.deleteBtn.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,25 +72,30 @@ class StorageDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentStorageDetailBinding.bind(view)
 
+        //버튼 리스너 추가
         binding.addBtn.setOnClickListener { addObject() }
+        binding.checkAllBtn.setOnClickListener {
+            binding.checkAllCheckBox.toggle()
+            chipGroupHelper.checkAllChips(binding.checkAllCheckBox.isChecked)
+        }
+        binding.moveBtn.setOnClickListener { context.makeToast(R.string.error_this_func_is_developing) }
+        binding.deleteBtn.setOnClickListener { viewModel.delete(chipGroupHelper.getCheckedList()) }
+        binding.cancelBtn.setOnClickListener { chipGroupHelper.setCheckable(false) }
 
         viewModel.getSelectedStorage().observe(viewLifecycleOwner, Observer(this::updateUI))
-        viewModel.getObjectList().observe(viewLifecycleOwner, Observer(this::setChipGroups))
+        viewModel.getObjectList().observe(viewLifecycleOwner, Observer(chipGroupHelper::setChipGroups))
         viewModel.toastMsg.observe(viewLifecycleOwner, Observer(context::makeToast))
-
-
-
 
         super.onViewCreated(view, savedInstanceState)
     }
 
     private fun addObject() {
         viewModel.addNewObject(binding.inputObject.text.toString())
+        binding.inputObject.setText("")
     }
 
     @SuppressLint("CheckResult")
     private fun updateUI(storageModel: StorageModel) {
-//        binding.text.text = storageModel.toString()
 
         if (storageModel.imgUrl.isNullOrBlank()){
             binding.imgView.visibility = View.GONE
@@ -83,73 +115,22 @@ class StorageDetailFragment : Fragment() {
             }
         })
 
-
+        changeChipGroupCheckMode(false)
 
     }
 
-    @SuppressLint("CheckResult")
-    private fun setChipGroups(objList : List<ObjectModel>) {
-        val clickListener = View.OnClickListener {
+    /**체크모드에 따라 하단의 메뉴를 변경한다. */
+    private fun changeChipGroupCheckMode(checkable: Boolean){
+        //체크모드 변경시 키보드를 숨긴다
+        hideKeyboard()
 
+        if (checkable) {
+            binding.addLayout.visibility = View.GONE
+            binding.checkActionMenu.visibility = View.VISIBLE
+        } else {
+            binding.addLayout.visibility = View.VISIBLE
+            binding.checkActionMenu.visibility = View.GONE
         }
-
-        val longClickListener = View.OnLongClickListener {
-            val model = it.tag as ObjectModel
-            viewModel.onObjectLongClicked(model)
-            false
-        }
-
-//        Observable.just(objList)
-//            .flatMap { Observable.fromIterable(it) }
-//            .map {
-//                val chip = Chip(context)
-//                chip.text = it.objName
-//                chip.tag = it
-//                chip.setOnClickListener(clickListener)
-//                chip.setOnLongClickListener(longClickListener)
-//
-//                chip
-//            }
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe {
-//                binding.chipGroup.addView(it)
-//            }
-
-        Observable.just(objList)
-            .map {
-                val chipList = arrayListOf<Chip>()
-                objList.forEach {
-                    val chip = Chip(context)
-                    chip.text = it.objName
-                    chip.tag = it
-//                    chip.isCheckable = true
-                    chip.setOnClickListener(clickListener)
-                    chip.setOnLongClickListener(longClickListener)
-                    chipList.add(chip)
-                }
-                chipList
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {list ->
-                // TODO: 뷰가 갱신될때마다 한번 다 지우고 다시 넣는게 많은 작업을 필요로 한다는 생각이 든다
-                // TODO: 리싸이클러 뷰를 사용해 칩을 넣던가 뷰모델에서 LiveData 가 아닌 Single 이나 일반 리스트를 사용해 로딩을 한 뒤 삭제 추가되는 Object를 LiveData 로 관리하자
-                binding.chipGroup.removeAllViews()
-                list.forEach {
-                    binding.chipGroup.addView(it)
-                }
-            }
-//        objList.forEach {
-//            val chip = Chip(context)
-//            chip.text = it.objName
-//            chip.tag = it
-////            chip.isCheckable = true
-//            chip.setOnClickListener(clickListener)
-//            chip.setOnLongClickListener(longClickListener)
-//            binding.chipGroup.addView(chip)
-//        }
-
     }
 
 }

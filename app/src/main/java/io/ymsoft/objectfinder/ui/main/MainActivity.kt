@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(){
 
         when(destination.id){
             R.id.navStorageDetail -> {
-                setAppBarVisivle(top = true, bottom = true)
+                setAppBarVisivle(top = true, bottom = false)
                 binding.fab.hide()
             }
             R.id.navSearch -> {
@@ -84,6 +84,9 @@ class MainActivity : AppCompatActivity(){
         else {
             searchView.visibility = View.GONE
         }
+
+        // 필요한 경우 destination 마다 다른 메뉴를 설정해 줄 수 있다.
+        binding.bottomAppBar.replaceMenu(R.menu.main)
     }
 
     private fun setAppBarVisivle(top: Boolean, bottom: Boolean) {
@@ -94,9 +97,11 @@ class MainActivity : AppCompatActivity(){
         }
 
         if(bottom){
+            binding.bottomAppBar.hideOnScroll = true
             binding.bottomAppBar.performShow()
             binding.fab.show()
         } else {
+            binding.bottomAppBar.hideOnScroll = false
             binding.bottomAppBar.performHide()
             binding.fab.hide()
         }
@@ -104,7 +109,6 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun initBottomAppBar() {
-        binding.bottomAppBar.replaceMenu(R.menu.main)
         binding.bottomAppBar.setNavigationOnClickListener { v ->
             val f = BottomNavigationDrawerFragment()
             f.show(supportFragmentManager, f.tag)

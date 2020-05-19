@@ -19,15 +19,13 @@ import io.ymsoft.objectfinder.*
 import io.ymsoft.objectfinder.databinding.FragmentAddStorageBinding
 import io.ymsoft.objectfinder.models.StorageModel
 import io.ymsoft.objectfinder.repository.ObjectRepository
+import io.ymsoft.objectfinder.ui.custom.SquareImageView
 import io.ymsoft.objectfinder.utils.PICK_FROM_ALBUM
 import io.ymsoft.objectfinder.utils.PickPhotoHelper
 import io.ymsoft.objectfinder.utils.PointerUtil
 import io.ymsoft.objectfinder.utils.REQUEST_TAKE_PHOTO
 import java.util.concurrent.TimeUnit
 
-/**
- * A simple [Fragment] subclass.
- */
 class AddStorageFragment : Fragment() {
     private lateinit var binding : FragmentAddStorageBinding
     private val pickPhotoHelper = PickPhotoHelper()
@@ -170,13 +168,12 @@ class AddStorageFragment : Fragment() {
 
                 v.onTouchEvent(event)
             }
-            Observable.just(0)
-                .delay(100, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    PointerUtil.movePointer(binding.pointer, binding.pointLayout, binding.pointLayout.pivotX, binding.pointLayout.pivotY)
+            binding.imgView.setOnMeasureListener( object : SquareImageView.OnMeasureListener {
+                override fun measured(width: Int, height: Int) {
+                    PointerUtil.movePointerByRelative(binding.pointer, width, height, 0.5f, 0.5f)
+                    binding.imgView.setOnMeasureListener(null)
                 }
+            })
 
         } else {
             binding.addPhotoBtnGroup.visibility = View.VISIBLE

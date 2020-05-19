@@ -1,6 +1,6 @@
 package io.ymsoft.objectfinder
 
 interface OnItemClickListener {
-    fun onItemClick(storage:Int)
-    fun onItemLongClick(storage:Int)
+    fun onItemClick(position:Int)
+    fun onItemLongClick(position:Int)
 }
