@@ -13,13 +13,10 @@ data class ObjectModel (
     var objName: String,
     var memo : String? = null
 ) : CheckableChipGroupHelper.ChipModel{
-    override fun getModelId(): Long {
-        return id!!
-    }
-
-    override fun getModelName(): String {
-        return objName
-    }
+    override val modelId: Long
+        get() = id!!
+    override val modelName: String
+        get() = objName
 
     var date = Date()
 

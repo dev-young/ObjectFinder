@@ -48,14 +48,14 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel>(private v
             //ObjectModel을 추가하여 새롭게 갱신할 리스트가 기존의 리스트보다 1개 많은 경우 전체를 갱신하지 않고 Chip을 하나만 추가한다.
             val model = list[list.lastIndex]
             val chip = Chip(context)
-            chip.text = model.getModelName()
+            chip.text = model.modelName
             chip.tag = model
             chip.isCheckable = false
             chip.setOnClickListener(clickListener)
             chip.setOnLongClickListener(chipLongClickListener)
             chip.setOnCheckedChangeListener(chipCheckedChangeListener)
             chipGroup.addView(chip)
-            logI("${model.getModelName()} 추가!")
+            logI("${model.modelName} 추가!")
             currentList = list
         } else {
             //ObjectModel을 1개 추가한 경우가 아닐때 : 삭제 혹은 최초 로딩
@@ -64,7 +64,7 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel>(private v
                     val chipList = arrayListOf<Chip>()
                     list.forEach {
                         val chip = Chip(context)
-                        chip.text = it.getModelName()
+                        chip.text = it.modelName
                         chip.tag = it
                         chip.isCheckable = isCheckable
 
@@ -111,7 +111,7 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel>(private v
                 chip.isChecked = checked
             }
             currentList.forEach {
-                checkedModelsMap[it.getModelId()] = it
+                checkedModelsMap[it.modelId] = it
             }
             setCheckedCount(chipCount)
         } else {
@@ -144,10 +144,10 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel>(private v
             val model = it.tag as T
 
             if (isChecked) {
-                checkedModelsMap[model.getModelId()] = model
+                checkedModelsMap[model.modelId] = model
                 addCheckedCount(1)
             } else {
-                checkedModelsMap.remove(model.getModelId())
+                checkedModelsMap.remove(model.modelId)
                 addCheckedCount(-1)
             }
         }
@@ -180,7 +180,7 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel>(private v
 
 
     interface ChipModel {
-        fun getModelId(): Long
-        fun getModelName(): String
+        val modelId : Long
+        val modelName : String
     }
 }

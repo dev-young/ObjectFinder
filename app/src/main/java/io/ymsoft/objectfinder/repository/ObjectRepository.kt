@@ -174,13 +174,7 @@ object ObjectRepository {
                     //성공시
                     val storageId = models[0].storageId!!
                     val nameList = objectDao.getObectNames(storageId)
-                    var objNames: String? = null
-                    if (nameList.isNotEmpty()) {
-                        objNames = nameList[0]
-                        for (i in 1 until nameList.size) {
-                            objNames += ", ${nameList[i]}"
-                        }
-                    }
+                    var objNames = nameList.joinToString()
                     storageDAO.update(storageId, objNames)
                     logI("삭제 완료 -> $r 개 제거")
                 } else {
