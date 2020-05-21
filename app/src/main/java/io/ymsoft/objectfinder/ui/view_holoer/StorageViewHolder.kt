@@ -6,12 +6,12 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import io.ymsoft.objectfinder.OnItemClickListener
+import io.ymsoft.objectfinder.common.OnItemClickListener
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.databinding.ItemStorageBinding
-import io.ymsoft.objectfinder.loadFilePath
-import io.ymsoft.objectfinder.models.StorageModel
-import io.ymsoft.objectfinder.utils.PointerUtil
+import io.ymsoft.objectfinder.util.loadFilePath
+import io.ymsoft.objectfinder.data.StorageModel
+import io.ymsoft.objectfinder.util.PointerUtil
 
 class StorageViewHolder(itemView: View, clickListener: OnItemClickListener?) : RecyclerView.ViewHolder(itemView) {
     constructor(parent:ViewGroup, clickListener: OnItemClickListener?):

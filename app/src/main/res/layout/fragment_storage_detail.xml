@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.main.StorageDetailFragment"
+        tools:context=".ui.detail.StorageDetailFragment"
         >
 
         <androidx.core.widget.NestedScrollView
@@ -37,7 +37,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <io.ymsoft.objectfinder.ui.custom.SquareImageView
+                        <io.ymsoft.objectfinder.view_custom.SquareImageView
                             android:id="@+id/imgView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

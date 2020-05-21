@@ -31,7 +31,7 @@
                     app:cardUseCompatPadding="true">
 
 
-                    <io.ymsoft.objectfinder.ui.custom.SquareFrameLayout
+                    <io.ymsoft.objectfinder.view_custom.SquareFrameLayout
                         android:id="@+id/pointLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                         android:focusable="true"
                         >
 
-                        <io.ymsoft.objectfinder.ui.custom.SquareImageView
+                        <io.ymsoft.objectfinder.view_custom.SquareImageView
                             android:id="@+id/imgView"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -56,7 +56,7 @@
                             />
 
 
-                    </io.ymsoft.objectfinder.ui.custom.SquareFrameLayout>
+                    </io.ymsoft.objectfinder.view_custom.SquareFrameLayout>
 
                 </androidx.cardview.widget.CardView>
 

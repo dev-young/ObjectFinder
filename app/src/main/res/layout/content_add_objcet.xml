@@ -29,7 +29,7 @@
                     app:cardCornerRadius="@dimen/default_item_radius"
                     app:cardUseCompatPadding="true">
 
-                    <io.ymsoft.objectfinder.ui.custom.SquareImageView
+                    <io.ymsoft.objectfinder.view_custom.SquareImageView
                         android:id="@+id/imgView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
