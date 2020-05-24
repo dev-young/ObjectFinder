@@ -1,65 +1,72 @@
 package io.ymsoft.objectfinder.ui.storage_list
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import io.ymsoft.objectfinder.common.OnItemClickListener
 import io.ymsoft.objectfinder.R
+import io.ymsoft.objectfinder.common.OnItemClickListener
+import io.ymsoft.objectfinder.common.OnItemLongClickListener
+import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.FragmentStorageListBinding
-import io.ymsoft.objectfinder.util.makeToast
+import io.ymsoft.objectfinder.ui.detail.StorageDetailFragment
+import io.ymsoft.objectfinder.ui.detail.StorageDetailFragmentArgs
+import timber.log.Timber
 
 class StorageListFragment : Fragment() {
 
     private lateinit var binding : FragmentStorageListBinding
-    private val listViewModel : StorageListViewModel by viewModels()
+    private val viewModel by viewModels<StorageModelsViewModel>()
 
     private val storageListAdapter = StorageListAdapter()
         .apply {
-        clickListener = object :
-            OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                listViewModel.setSelectedStorage(currentList[position])
-                showDetail()
+            clickListener = object : OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    showDetail(currentList[position])
+                }
             }
 
-            override fun onItemLongClick(position: Int) {
-                listViewModel.itemlongClicked(currentList[position])
+            longClickListener = object : OnItemLongClickListener {
+                override fun onItemLongClick(position: Int) {
+                    currentList[position].id?.let { viewModel.deleteStorageModel(it) }
+                }
+
             }
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_storage_list, container, false)
-    }
+        binding = FragmentStorageListBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding = FragmentStorageListBinding.bind(view)
         binding.recyclerView.adapter = storageListAdapter
 
-        listViewModel.storageList.observe(viewLifecycleOwner, Observer {
-            Log.i("", "StorageList Changed!")
-            if (it.isEmpty()){
+        viewModel.items.observe(viewLifecycleOwner, Observer {
+            Timber.i("StorageList Changed!")
+            storageListAdapter.submitList(it)
+        })
+
+        viewModel.isEmpty.observe(viewLifecycleOwner, Observer {
+            if (it){
+                Timber.e("비어있음")
                 binding.emptyMessage.visibility = View.VISIBLE
             } else {
+                Timber.i("보관함 갱신!")
                 binding.emptyMessage.visibility = View.GONE
-                storageListAdapter.submitList(it)
             }
         })
 
-        listViewModel.toastMsg.observe(viewLifecycleOwner, Observer(context::makeToast))
-
-        super.onViewCreated(view, savedInstanceState)
+        return binding.root
     }
 
-    private fun showDetail() {
-        findNavController().navigate(R.id.action_navStorageList_to_navStorageDetail)
+    private fun showDetail(model: StorageModel?) {
+        model?.let {
+            val direction = StorageListFragmentDirections.actionNavStorageListToNavStorageDetail(it)
+            findNavController().navigate(direction)
+        }
     }
 
 

@@ -9,21 +9,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import io.ymsoft.objectfinder.*
+import androidx.navigation.fragment.navArgs
+import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.common.OnModelClickListener
-import io.ymsoft.objectfinder.databinding.FragmentStorageDetailBinding
 import io.ymsoft.objectfinder.data.ObjectModel
 import io.ymsoft.objectfinder.data.StorageModel
-import io.ymsoft.objectfinder.view_custom.SquareImageView
+import io.ymsoft.objectfinder.databinding.FragmentStorageDetailBinding
 import io.ymsoft.objectfinder.util.*
 import io.ymsoft.objectfinder.util.CheckableChipGroupHelper.OnCheckableChangeListener
 import io.ymsoft.objectfinder.util.CheckableChipGroupHelper.OnCheckedCounterChangeListener
-import io.ymsoft.objectfinder.ui.storage_list.StorageListViewModel
+import io.ymsoft.objectfinder.view_custom.SquareImageView
 
 class StorageDetailFragment : Fragment() {
 
-    private val listViewModel: StorageListViewModel by viewModels()
+    private val viewModel: StorageDetailViewModel by viewModels()
     private lateinit var binding: FragmentStorageDetailBinding
+    private val args by navArgs<StorageDetailFragmentArgs>()
 
     private val chipGroupHelper by lazy {
         CheckableChipGroupHelper<ObjectModel>(binding.chipGroup).apply {
@@ -45,7 +46,7 @@ class StorageDetailFragment : Fragment() {
                 override fun onChanged(count: Int, total: Int) {
                     binding.checkedCounter.text = count.toString()
                     binding.checkAllCheckBox.isChecked = (count == total)
-                    if(count == 0){
+                    if (count == 0) {
                         binding.cancelBtn.visibility = View.VISIBLE
                         binding.deleteBtn.visibility = View.GONE
                     } else {
@@ -61,11 +62,7 @@ class StorageDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_storage_detail, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding = FragmentStorageDetailBinding.bind(view)
+        binding = FragmentStorageDetailBinding.inflate(inflater, container, false)
 
         //버튼 리스너 추가
         binding.addBtn.setOnClickListener { addObject() }
@@ -74,19 +71,29 @@ class StorageDetailFragment : Fragment() {
             chipGroupHelper.checkAllChips(binding.checkAllCheckBox.isChecked)
         }
         binding.moveBtn.setOnClickListener { context.makeToast(R.string.error_this_func_is_developing) }
-        binding.deleteBtn.setOnClickListener { listViewModel.delete(chipGroupHelper.getCheckedList()) }
+        binding.deleteBtn.setOnClickListener { viewModel.deleteObjects(chipGroupHelper.getCheckedList()) }
         binding.cancelBtn.setOnClickListener { chipGroupHelper.setCheckable(false) }
 
-        listViewModel.getSelectedStorage().observe(viewLifecycleOwner, Observer(this::updateUI))
-        listViewModel.getObjectList().observe(viewLifecycleOwner, Observer(this::updateObectList))
-        listViewModel.toastMsg.observe(viewLifecycleOwner, Observer(context::makeToast))
+        args.storageModel?.let {
+            updateUI(it)
+            it.id?.let { id ->
+                viewModel.startObserve(id)
+            }
+        }
 
-        super.onViewCreated(view, savedInstanceState)
+        viewModel.storageModel.observe(viewLifecycleOwner, Observer(this::updateUI))
+        viewModel.objectModels.observe(viewLifecycleOwner, Observer(this::updateObjectList))
+        viewModel.toastMessage.observe(viewLifecycleOwner, Observer(context::makeToast))
+
+        changeChipGroupCheckMode(false)
+
+        return binding.root
     }
 
-    private fun updateUI(storageModel: StorageModel) {
+    private fun updateUI(storageModel: StorageModel?) {
+        if (storageModel == null) return
 
-        if (storageModel.imgUrl.isNullOrBlank()){
+        if (storageModel.imgUrl.isNullOrBlank()) {
             binding.imageLayout.visibility = View.GONE
         } else {
             binding.imageLayout.visibility = View.VISIBLE
@@ -94,37 +101,43 @@ class StorageDetailFragment : Fragment() {
         }
 
         storageModel.name.apply {
-            if(!isNullOrBlank())
+            if (!isNullOrBlank())
                 (activity as AppCompatActivity).supportActionBar?.title = this
         }
 
-        binding.imgView.setOnMeasureListener(object : SquareImageView.OnMeasureListener{
+        binding.imgView.setOnMeasureListener(object : SquareImageView.OnMeasureListener {
             override fun measured(width: Int, height: Int) {
-                PointerUtil.movePointerByRelative(binding.pointer, width, height, storageModel.x, storageModel.y)
+                PointerUtil.movePointerByRelative(
+                    binding.pointer,
+                    width,
+                    height,
+                    storageModel.x,
+                    storageModel.y
+                )
             }
         })
 
-        changeChipGroupCheckMode(false)
-
     }
 
-    private fun updateObectList(list : List<ObjectModel>){
+    private fun updateObjectList(list: List<ObjectModel>?) {
+        if (list == null) return
+
         chipGroupHelper.setChipGroups(list)
-        if(binding.chipGroup.childCount != 0)
+        if (binding.chipGroup.childCount != 0)
             binding.scrollView.apply { post { this.fullScroll(ScrollView.FOCUS_DOWN) } }
 
-        if(list.isEmpty()) binding.emptyMessage.visibility = View.VISIBLE
+        if (list.isEmpty()) binding.emptyMessage.visibility = View.VISIBLE
         else binding.emptyMessage.visibility = View.GONE
     }
 
     private fun addObject() {
-        listViewModel.addNewObject(binding.inputObject.text.toString())
+        viewModel.addNewObject(binding.inputObject.text.toString())
         binding.inputObject.setText("")
         binding.scrollView.apply { post { this.fullScroll(ScrollView.FOCUS_DOWN) } }
     }
 
     /**체크모드에 따라 하단의 메뉴를 변경한다. */
-    private fun changeChipGroupCheckMode(checkable: Boolean){
+    private fun changeChipGroupCheckMode(checkable: Boolean) {
         //체크모드 변경시 키보드를 숨긴다
         hideKeyboard()
 

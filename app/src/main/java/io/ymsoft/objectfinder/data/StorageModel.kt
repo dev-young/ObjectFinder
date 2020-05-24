@@ -3,6 +3,7 @@ package io.ymsoft.objectfinder.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.*
 
 @Entity(tableName =  "storage")
@@ -18,7 +19,7 @@ data class StorageModel(
     @ColumnInfo(name = "name")
     var name:String? = null,
     var memo : String? = null
-) {
+) : Serializable{
     @ColumnInfo(name = "created_date")
     var createdDate = Date()
     @ColumnInfo(name = "updated_date")

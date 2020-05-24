@@ -12,30 +12,23 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import io.ymsoft.objectfinder.common.OnItemClickListener
 import io.ymsoft.objectfinder.R
+import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.FragmentSearchBinding
 import io.ymsoft.objectfinder.ui.MainActivity
 import io.ymsoft.objectfinder.ui.storage_list.StorageListAdapter
-import io.ymsoft.objectfinder.ui.storage_list.StorageListViewModel
 
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
 
     private val viewModel : SearchViewModel by viewModels()
-    private val storageListViewModel : StorageListViewModel by viewModels()
     private val adapter = StorageListAdapter()
         .apply {
-        clickListener = object :
-            OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                storageListViewModel.setSelectedStorage(currentList[position])
-                findNavController().navigate(R.id.action_navSearch_to_navStorageDetail)
+            clickListener = object : OnItemClickListener{
+                override fun onItemClick(position: Int) {
+                    showDetail(currentList[position])
+                }
             }
-
-            override fun onItemLongClick(position: Int) {
-
-            }
-        }
     }
 
     override fun onCreateView(
@@ -45,12 +38,20 @@ class SearchFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         binding.recyclerView.adapter = adapter
 
-        viewModel.getSearchResult().observe(viewLifecycleOwner, Observer {
+        viewModel.searchResult.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
             if(it.isNotEmpty()){
                 binding.emptyMessage.visibility = View.GONE
             } else {
                 binding.emptyMessage.visibility = View.VISIBLE
+            }
+        })
+
+        viewModel.isEmpty.observe(viewLifecycleOwner, Observer {isEmpty ->
+            if(isEmpty){
+                binding.emptyMessage.visibility = View.VISIBLE
+            } else {
+                binding.emptyMessage.visibility = View.GONE
             }
         })
 
@@ -71,6 +72,13 @@ class SearchFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun showDetail(model: StorageModel?) {
+        model?.let {
+            val direction = SearchFragmentDirections.actionNavSearchToNavStorageDetail(it)
+            findNavController().navigate(direction)
+        }
     }
 
 }

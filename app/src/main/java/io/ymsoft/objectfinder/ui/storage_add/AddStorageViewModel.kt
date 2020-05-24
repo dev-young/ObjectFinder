@@ -2,24 +2,29 @@ package io.ymsoft.objectfinder.ui.storage_add
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import io.ymsoft.objectfinder.common.TaskListener
-import io.ymsoft.objectfinder.data.ObjectModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import io.ymsoft.objectfinder.MyApp
 import io.ymsoft.objectfinder.data.StorageModel
-import io.ymsoft.objectfinder.data.source.ObjectRepository
+import kotlinx.coroutines.launch
 
-class AddStorageViewModel(application: Application) : AndroidViewModel(application) {
+class AddEditStorageViewModel(application: Application) : AndroidViewModel(application) {
+    private val repo = (application as MyApp).storageModelsRepository
 
-    private val objectRepo = ObjectRepository
-    val isWorking = objectRepo.isWorking  //백그라운드 작업중인지 여부
-
-
-
+    private val _isSaved = MutableLiveData<StorageModel?>()
+    val isSaved : LiveData<StorageModel?> = _isSaved
 
 
 
-    fun addNew(storageModel: StorageModel? = null, objectModel: ObjectModel, listener: TaskListener<Nothing>){
-        objectRepo.add(storageModel, objectModel, listener)
 
+    fun saveStorageModel(model: StorageModel) {
+        viewModelScope.launch {
+            val insertId = repo.saveStorageModel(model)
+            model.id = insertId
+            _isSaved.value = model
+        }
     }
+
 
 }

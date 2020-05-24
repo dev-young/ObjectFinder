@@ -17,7 +17,7 @@ interface ObjectDAO {
     fun getObjectList(id:Long) : LiveData<List<ObjectModel>>
 
     @Query("SELECT objName FROM objects WHERE storageId = :storageId")
-    fun getObectNames(storageId: Long) : List<String>
+    fun getObjectNames(storageId: Long) : List<String>
 
 
     @Insert

@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import io.ymsoft.objectfinder.R
+import timber.log.Timber
 
 fun ImageView.loadBitmap(image: Bitmap?) {
     Glide.with(this).load(image).apply(RequestOptions.centerCropTransform()).into(this)
@@ -51,11 +52,11 @@ fun Context?.makeToast(text: String?) {
 }
 
 fun logI(message: String){
-    Log.i("", message)
+    Timber.i(message)
 }
 
 fun logE(message: String){
-    Log.e("", message)
+    Timber.e(message)
 }
 
 fun Activity?.showKeyboard() {

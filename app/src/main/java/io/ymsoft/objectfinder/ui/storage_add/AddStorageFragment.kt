@@ -4,38 +4,46 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import io.ymsoft.objectfinder.*
-import io.ymsoft.objectfinder.common.TaskListener
-import io.ymsoft.objectfinder.databinding.FragmentAddStorageBinding
+import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.data.StorageModel
-import io.ymsoft.objectfinder.data.source.ObjectRepository
-import io.ymsoft.objectfinder.view_custom.SquareImageView
+import io.ymsoft.objectfinder.databinding.FragmentAddStorageBinding
 import io.ymsoft.objectfinder.util.*
+import io.ymsoft.objectfinder.view_custom.SquareImageView
 
 class AddStorageFragment : Fragment() {
     private lateinit var binding : FragmentAddStorageBinding
     private val pickPhotoHelper = PickPhotoHelper()
+    private val viewModel by viewModels<AddEditStorageViewModel>()
     
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_storage, container, false)
+        binding = FragmentAddStorageBinding.inflate(inflater, container, false)
 
         binding.takePhoto.setOnClickListener { takePhoto() }
         binding.pickFromAlbum.setOnClickListener { pickFromAlbum() }
 
         binding.saveBtn.setOnClickListener { save() }
         binding.removeBtn.setOnClickListener { clearPhoto() }
+
+        viewModel.isSaved.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                pickPhotoHelper.clear()
+                val direction = AddStorageFragmentDirections.actionNavAddStorageToNavStorageDetail(it)
+                findNavController().navigate(direction)
+            }
+        })
 
         setPointLayoutEnabled(false)
 
@@ -103,19 +111,8 @@ class AddStorageFragment : Fragment() {
             y = point?.second,
             memo = memo
         )
-        ObjectRepository.add(model, TaskListener {
-            if (it.isSuccessful) {
-                pickPhotoHelper.clear()
-                it.result?.let { storageModel ->
-                    //추가된 StorageModel에 대한 StorageDetailFragment으로 이동
-                    findNavController().navigate(R.id.action_navAddStorage_to_navStorageDetail)
-                }
 
-
-            } else {
-                context.makeToast(it.message)
-            }
-        })
+        viewModel.saveStorageModel(model)
 
     }
 

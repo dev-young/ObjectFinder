@@ -8,7 +8,10 @@ import io.ymsoft.objectfinder.data.StorageModel
 interface StorageDAO {
 
     @Query("SELECT * from storage ORDER BY created_date ASC")
-    fun getAllStorages() : LiveData<List<StorageModel>>
+    fun observeStorageList() : LiveData<List<StorageModel>>
+
+    @Query("SELECT * FROM storage WHERE id = :id")
+    fun observeStorage(id:Long) : LiveData<StorageModel>
 
     @Query("SELECT * FROM storage WHERE id = :id")
     fun getStorage(id:Long) : StorageModel
@@ -28,6 +31,9 @@ interface StorageDAO {
 
     @Delete
     fun delete(model: StorageModel) : Int
+
+    @Query("DELETE FROM storage WHERE id = :id")
+    fun delete(id: Long) : Int
 
 
 }

@@ -8,21 +8,22 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.ymsoft.objectfinder.common.OnItemClickListener
 import io.ymsoft.objectfinder.R
+import io.ymsoft.objectfinder.common.OnItemLongClickListener
 import io.ymsoft.objectfinder.databinding.ItemStorageBinding
 import io.ymsoft.objectfinder.util.loadFilePath
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.util.PointerUtil
 
-class StorageViewHolder(itemView: View, clickListener: OnItemClickListener?) : RecyclerView.ViewHolder(itemView) {
-    constructor(parent:ViewGroup, clickListener: OnItemClickListener?):
-            this(LayoutInflater.from(parent.context).inflate(R.layout.item_storage, parent, false), clickListener)
+class StorageViewHolder(parent: ViewGroup, clickListener: OnItemClickListener?, longClickListener: OnItemLongClickListener?) :
+    RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_storage, parent, false)) {
+
 
     private val binding : ItemStorageBinding by lazy {ItemStorageBinding.bind(itemView)}
 
     init {
         binding.clickableLayout.setOnClickListener { clickListener?.onItemClick(adapterPosition) }
         binding.clickableLayout.setOnLongClickListener {
-            clickListener?.onItemLongClick(adapterPosition)
+            longClickListener?.onItemLongClick(adapterPosition)
             true
         }
     }

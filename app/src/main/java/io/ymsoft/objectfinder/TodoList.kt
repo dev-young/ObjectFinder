@@ -2,9 +2,8 @@ package io.ymsoft.objectfinder
 
 interface TodoList {
 
-    // TODO: 2020-05-17 StorageDetailFragment 에서 사용할 뷰모델 따로 생성하기 (현재 StorageViewModel 사용중)
     // TODO: 2020-05-19 StorageDetailFragment 에 Storage 수정, 삭제 메뉴 추가
-    // TODO: 2020-05-17 AddStorageFragment mvvm 적용
+    // TODO: 2020-05-17 AddStorageFragment mvvm 다시 설계하기
     // TODO: 2020-05-20 사진 추가시 특정 사진들은 회전되는 현상 수정하기
     // TODO: 2020-05-17 사진 추가 로직 최적화
     // TODO: 2020-05-17 이미지 크기 최적화 ( +정사각형으로? )

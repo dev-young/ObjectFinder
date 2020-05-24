@@ -43,7 +43,11 @@
         android:id="@+id/navStorageDetail"
         android:name="io.ymsoft.objectfinder.ui.detail.StorageDetailFragment"
         android:label="@string/storage_detail"
-        tools:layout="@layout/fragment_storage_detail" />
+        tools:layout="@layout/fragment_storage_detail" >
+        <argument
+            android:name="storageModel"
+            app:argType="io.ymsoft.objectfinder.data.StorageModel" />
+    </fragment>
     <fragment
         android:id="@+id/navAddStorage"
         android:name="io.ymsoft.objectfinder.ui.storage_add.AddStorageFragment"
