@@ -70,4 +70,11 @@ class StorageDetailViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
+    fun removeStorage() = viewModelScope.launch {
+        val storageId = _storageId.value
+        storageId?.let {
+            repo.deleteStorageModel(it)
+        }
+    }
+
 }

@@ -18,8 +18,10 @@ import io.ymsoft.objectfinder.common.OnModelClickListener
  * Chip을 롱클릭시 전체 Chip들이 체크 가능한 상태로 돌입한다.
  * 체크 가능한 상태에서 다시 체크 불가능한 상태로 만들기 위해서는 함수를 호출해야한다.
  * */
-class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel>(private val chipGroup: ChipGroup) {
+class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
+    lateinit var chipGroup: ChipGroup
     private val context by lazy { chipGroup.context }
+
 
     var chipClickListener : OnModelClickListener<T>? = null
     var checkableChangeListener: OnCheckableChangeListener? = null  // chipGroup의 체크 가능 여부를 전달
@@ -163,6 +165,20 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel>(private v
 
     fun getCheckedList(): List<T> {
         return checkedModelsMap.values.toList()
+    }
+
+    fun clear() {
+        // Chip들을 체크 가능한 상태 여부
+//        isCheckable = false
+
+        // 체크된 Chip 수
+//        checkedCount = 0
+
+        // 현재 Chip으로 생성되어있는 Model 리스트
+        currentList = listOf<T>()
+
+        // 현재 체크된 Model 리스트
+        checkedModelsMap.clear()
     }
 
 

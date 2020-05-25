@@ -14,7 +14,7 @@ class StorageListAdapter : ListAdapter<StorageModel, StorageViewHolder>(object :
     }
 
     override fun areContentsTheSame(oldItem: StorageModel, newItem: StorageModel): Boolean {
-        return oldItem.objString == newItem.objString
+        return oldItem == newItem
     }
 
 }) {

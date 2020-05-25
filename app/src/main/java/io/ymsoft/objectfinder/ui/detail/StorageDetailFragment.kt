@@ -1,14 +1,12 @@
 package io.ymsoft.objectfinder.ui.detail
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ScrollView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.common.OnModelClickListener
@@ -27,7 +25,7 @@ class StorageDetailFragment : Fragment() {
     private val args by navArgs<StorageDetailFragmentArgs>()
 
     private val chipGroupHelper by lazy {
-        CheckableChipGroupHelper<ObjectModel>(binding.chipGroup).apply {
+        CheckableChipGroupHelper<ObjectModel>().apply {
             chipClickListener = object :
                 OnModelClickListener<ObjectModel> {
                 override fun onItemClick(model: ObjectModel) {
@@ -63,7 +61,7 @@ class StorageDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentStorageDetailBinding.inflate(inflater, container, false)
-
+        chipGroupHelper.chipGroup = binding.chipGroup
         //버튼 리스너 추가
         binding.addBtn.setOnClickListener { addObject() }
         binding.checkAllBtn.setOnClickListener {
@@ -87,6 +85,9 @@ class StorageDetailFragment : Fragment() {
 
         changeChipGroupCheckMode(false)
 
+
+        setHasOptionsMenu(true)
+
         return binding.root
     }
 
@@ -100,9 +101,9 @@ class StorageDetailFragment : Fragment() {
             binding.imgView.loadFilePath(storageModel.imgUrl)
         }
 
-        storageModel.name.apply {
-            if (!isNullOrBlank())
-                (activity as AppCompatActivity).supportActionBar?.title = this
+        storageModel.name?.apply {
+            if (isNotEmpty())
+                setToolbarTitle(this)
         }
 
         binding.imgView.setOnMeasureListener(object : SquareImageView.OnMeasureListener {
@@ -128,6 +129,9 @@ class StorageDetailFragment : Fragment() {
 
         if (list.isEmpty()) binding.emptyMessage.visibility = View.VISIBLE
         else binding.emptyMessage.visibility = View.GONE
+
+
+        binding.chipGroup.invalidate()
     }
 
     private fun addObject() {
@@ -149,5 +153,36 @@ class StorageDetailFragment : Fragment() {
             binding.checkActionMenu.visibility = View.GONE
         }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_edit -> {
+                startEdit()
+                true
+            }
+            R.id.action_remove -> {
+                removeStorage()
+                true
+            }
+            else -> false
+        }
+    }
+
+    private fun removeStorage() {
+        viewModel.removeStorage()
+        findNavController().navigateUp()
+    }
+
+    private fun startEdit() {
+        viewModel.storageModel.value?.let {
+            val direction = StorageDetailFragmentDirections.actionNavStorageDetailToNavAddStorage(it)
+            findNavController().navigate(direction)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.storage_detail_toolbar, menu)
+    }
+
 
 }

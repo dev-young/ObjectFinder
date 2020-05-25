@@ -4,12 +4,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import com.gun0912.tedpermission.PermissionListener
 import io.ymsoft.objectfinder.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 
@@ -18,7 +22,11 @@ const val PICK_FROM_ALBUM = 10
 
 /**촬영, 갤러리를 사용하여 사진을 고르는 작업을 편하게 해주는 클래스 */
 class PickPhotoHelper {
-
+    var fileNeverBeDeleted : String? = null //삭제되면 안되는 FilePath (새롭게 생성된 이미지가 아닌 기존에 있던 이미지)
+        set(value) {
+            currentPhotoPath = value
+            field = value
+        }
     var photoUri : Uri? = null
     var currentPhotoPath : String? = null
 
@@ -41,16 +49,22 @@ class PickPhotoHelper {
 
     /**외부 저장소의 Uri를 Bitmap으로 변환한 뒤 내부 저장소에 새로운 파일로 저장한다.*/
     fun makePhotoFromUri(context:Context, uri: Uri){
-        photoUri = uri
+        CoroutineScope(Dispatchers.IO).launch {
+            photoUri = uri
+            val bm = getBitmap(context, uri)
+            val file = FileUtil.createImageFile(context)
+            file?.let{
+                currentPhotoPath = file.absolutePath
+                FileUtil.saveBitmapToFile(bm, file)
+            }
+        }
+    }
+
+    fun getBitmap(context: Context, uri: Uri): Bitmap {
         val input = context.contentResolver.openInputStream(uri)
         val bm = BitmapFactory.decodeStream(input)
         input?.close()
-        val file = FileUtil.createImageFile(context)
-        file?.let{
-            currentPhotoPath = file.absolutePath
-            FileUtil.saveBitmapToFile(bm, file)
-        }
-
+        return bm
     }
 
     fun dispatchTakePictureIntentIfAvailable(activity: Activity? = null, fragment: Fragment? = null){
@@ -126,7 +140,8 @@ class PickPhotoHelper {
     /**촬영된 원본 사진을 삭제한다.
      * 주로 뒤로가기에 의해 저장하지 않고 나갈경우 사용된다*/
     fun deletePickedPhoto(){
-        FileUtil.delete(currentPhotoPath)
+        if(fileNeverBeDeleted == null || fileNeverBeDeleted != currentPhotoPath)
+            FileUtil.delete(currentPhotoPath)
         clear()
     }
 

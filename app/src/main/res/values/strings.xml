@@ -44,4 +44,6 @@
     <string name="error_this_func_is_developing">개발중인 기능입니다.</string>
     <string name="cancel">취소</string>
     <string name="empty_msg_storage">이 보관함에는 물건이 없습니다!</string>
+    <string name="title_edit_storage">보관함 수정하기</string>
+    <string name="edit">수정</string>
 </resources>

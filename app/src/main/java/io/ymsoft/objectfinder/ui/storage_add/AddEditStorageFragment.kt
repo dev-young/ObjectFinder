@@ -2,7 +2,9 @@ package io.ymsoft.objectfinder.ui.storage_add
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -13,16 +15,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.FragmentAddStorageBinding
 import io.ymsoft.objectfinder.util.*
 import io.ymsoft.objectfinder.view_custom.SquareImageView
+import java.io.File
 
-class AddStorageFragment : Fragment() {
+class AddEditStorageFragment : Fragment() {
     private lateinit var binding : FragmentAddStorageBinding
     private val pickPhotoHelper = PickPhotoHelper()
     private val viewModel by viewModels<AddEditStorageViewModel>()
+
+    private val args by navArgs<AddEditStorageFragmentArgs>()
     
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,14 +46,44 @@ class AddStorageFragment : Fragment() {
         viewModel.isSaved.observe(viewLifecycleOwner, Observer {
             it?.let {
                 pickPhotoHelper.clear()
-                val direction = AddStorageFragmentDirections.actionNavAddStorageToNavStorageDetail(it)
+                val direction = AddEditStorageFragmentDirections.actionNavAddStorageToNavStorageDetail(it)
                 findNavController().navigate(direction)
             }
         })
 
-        setPointLayoutEnabled(false)
+        initView(args.storage)
+
+        val directory = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        logI("${directory?.absolutePath}")
+        directory?.listFiles()?.forEach {
+            logI("${it.name} // ${it.absolutePath}")
+        }
+
+
 
         return binding.root
+    }
+
+    private fun initView(storage: StorageModel?) {
+        if(storage == null){
+            setPointLayoutEnabled(false)
+            return
+        }
+        //기존의 보관함을 수정하는 경우
+
+        setToolbarTitle(R.string.title_edit_storage) //툴바 타이틀명 변경
+
+        //추가버튼 '저장'으로 이름 변경
+        binding.saveBtn.setText(R.string.save)
+
+        pickPhotoHelper.fileNeverBeDeleted = storage.imgUrl //초기에 저장된 이미지를 삭제하면 안되는 이미지로 지정
+        if(storage.imgUrl == null) {
+            setPointLayoutEnabled(false)
+        } else {
+            binding.imgView.loadFilePath(storage.imgUrl)
+            setPointLayoutEnabled(true, storage.x, storage.y)
+        }
+        storage.name?.let { binding.storageName.setText(it) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -57,16 +93,19 @@ class AddStorageFragment : Fragment() {
             var isPhotoLoaded = false
             if (requestCode == PICK_FROM_ALBUM) {
                 data?.data?.let {uri ->
+//                    val bitmap = pickPhotoHelper.getBitmap(requireContext(), uri)
+//                    binding.imgView.setImageBitmap(bitmap)
+//                    binding.imgView.loadBitmap(bitmap)
+                    pickPhotoHelper.makePhotoFromUri(requireContext(), uri)
                     binding.imgView.loadUri(uri)
-                    context?.let { pickPhotoHelper.makePhotoFromUri(it, uri) }
+
 
                     isPhotoLoaded = true
                 }
             } else if (requestCode == REQUEST_TAKE_PHOTO) {
-                /*저해상도
-                val bm = data?.extras?.get("data") as Bitmap?
-                binding.imgView.loadBitmap(bm)
-                */
+                //저해상도
+//                val bm = data?.extras?.get("data") as Bitmap
+//                binding.imgView.loadBitmap(bm)
 
                 pickPhotoHelper.photoUri?.let {
                     binding.imgView.loadUri(it)
@@ -104,13 +143,22 @@ class AddStorageFragment : Fragment() {
         }
 
         //StorageModel 생성
-        val model = StorageModel(
-            imgUrl = photoUrl,
-            name = name,
-            x = point?.first,
-            y = point?.second,
-            memo = memo
-        )
+        var model = args.storage
+        if(model == null){
+            model = StorageModel(
+                imgUrl = photoUrl,
+                name = name,
+                x = point?.first,
+                y = point?.second,
+                memo = memo
+            )
+        } else {
+            model.imgUrl = photoUrl
+            model.name = name
+            model.x = point?.first
+            model.y = point?.second
+            model.memo = memo
+        }
 
         viewModel.saveStorageModel(model)
 
@@ -141,8 +189,12 @@ class AddStorageFragment : Fragment() {
     }
 
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun setPointLayoutEnabled(enable:Boolean){
+        setPointLayoutEnabled(enable, 0.5f, 0.5f)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setPointLayoutEnabled(enable:Boolean, rx:Float?, ry:Float?){
         if(enable){
             binding.addPhotoBtnGroup.visibility = View.GONE
             binding.photoMenuLayout.visibility = View.VISIBLE
@@ -162,7 +214,7 @@ class AddStorageFragment : Fragment() {
             }
             binding.imgView.setOnMeasureListener( object : SquareImageView.OnMeasureListener {
                 override fun measured(width: Int, height: Int) {
-                    PointerUtil.movePointerByRelative(binding.pointer, width, height, 0.5f, 0.5f)
+                    PointerUtil.movePointerByRelative(binding.pointer, width, height, rx, ry)
                     binding.imgView.setOnMeasureListener(null)
                 }
             })

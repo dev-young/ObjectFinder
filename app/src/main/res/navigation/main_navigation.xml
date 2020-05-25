@@ -47,10 +47,15 @@
         <argument
             android:name="storageModel"
             app:argType="io.ymsoft.objectfinder.data.StorageModel" />
+        <action
+            android:id="@+id/action_navStorageDetail_to_navAddStorage"
+            app:destination="@id/navAddStorage"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/navAddStorage"
-        android:name="io.ymsoft.objectfinder.ui.storage_add.AddStorageFragment"
+        android:name="io.ymsoft.objectfinder.ui.storage_add.AddEditStorageFragment"
         android:label="@string/title_add_storage"
         tools:layout="@layout/fragment_add_storage">
         <action
@@ -63,6 +68,11 @@
             app:exitAnim="@anim/fragment_open_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/fragment_fade_exit"/>
+        <argument
+            android:name="storage"
+            app:argType="io.ymsoft.objectfinder.data.StorageModel"
+            app:nullable="true"
+            android:defaultValue="@null" />
 
     </fragment>
 
