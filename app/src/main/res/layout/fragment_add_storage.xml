@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.storage_add.AddEditStorageFragment"
-    tools:ignore="ContentDescription">
+    tools:context=".ui.storage_add.AddEditStorageFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,6 +75,7 @@
                                     android:background="@color/colorAccent"
                                     android:tint="@android:color/white"
                                     android:alpha="0.75"
+                                    android:contentDescription="@string/description_take_photo"
                                     />
                                 <ImageView
                                     android:id="@+id/pickFromAlbum"
@@ -88,8 +88,25 @@
                                     android:focusable="true"
                                     android:tint="@color/colorAccent"
                                     android:foreground="?attr/selectableItemBackground"
-
                                     android:alpha="0.75"
+                                    android:contentDescription="@string/description_pick_from_album"
+                                    />
+
+                                <ImageView
+                                    android:id="@+id/pickFromOtherStorage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/pick_from_album"
+                                    android:src="@drawable/ic_empty_drawer"
+                                    android:padding="@dimen/default_item_spacing"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:background="@color/colorAccent"
+                                    android:tint="@android:color/white"
+                                    android:foreground="?attr/selectableItemBackground"
+                                    android:alpha="0.75"
+                                    android:contentDescription="@string/description_pick_from_other_storage"
                                     />
                             </LinearLayout>
 

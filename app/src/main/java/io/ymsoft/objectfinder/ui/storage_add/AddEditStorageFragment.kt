@@ -2,9 +2,7 @@ package io.ymsoft.objectfinder.ui.storage_add
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -19,9 +17,11 @@ import androidx.navigation.fragment.navArgs
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.FragmentAddStorageBinding
+import io.ymsoft.objectfinder.ui.pick_photo.PickPhotoFromSpecificDirActivity
+import io.ymsoft.objectfinder.ui.pick_photo.REQUEST_PICK_FROM_STORAGE
 import io.ymsoft.objectfinder.util.*
 import io.ymsoft.objectfinder.view_custom.SquareImageView
-import java.io.File
+
 
 class AddEditStorageFragment : Fragment() {
     private lateinit var binding : FragmentAddStorageBinding
@@ -39,6 +39,7 @@ class AddEditStorageFragment : Fragment() {
 
         binding.takePhoto.setOnClickListener { takePhoto() }
         binding.pickFromAlbum.setOnClickListener { pickFromAlbum() }
+        binding.pickFromOtherStorage.setOnClickListener { pickFromOtherStorage() }
 
         binding.saveBtn.setOnClickListener { save() }
         binding.removeBtn.setOnClickListener { clearPhoto() }
@@ -52,12 +53,6 @@ class AddEditStorageFragment : Fragment() {
         })
 
         initView(args.storage)
-
-        val directory = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        logI("${directory?.absolutePath}")
-        directory?.listFiles()?.forEach {
-            logI("${it.name} // ${it.absolutePath}")
-        }
 
 
 
@@ -91,33 +86,43 @@ class AddEditStorageFragment : Fragment() {
 
         if (resultCode == AppCompatActivity.RESULT_OK) {
             var isPhotoLoaded = false
-            if (requestCode == PICK_FROM_ALBUM) {
-                data?.data?.let {uri ->
-//                    val bitmap = pickPhotoHelper.getBitmap(requireContext(), uri)
-//                    binding.imgView.setImageBitmap(bitmap)
-//                    binding.imgView.loadBitmap(bitmap)
-                    pickPhotoHelper.makePhotoFromUri(requireContext(), uri)
-                    binding.imgView.loadUri(uri)
+            when (requestCode) {
+                REQUEST_TAKE_PHOTO -> {
+                    //저해상도
+//                    val bm = data?.extras?.get("data") as Bitmap
+//                    binding.imgView.loadBitmap(bm)
 
-
-                    isPhotoLoaded = true
+                    pickPhotoHelper.photoUri?.let {
+                        binding.imgView.loadUri(it)
+                        isPhotoLoaded = true
+                    }
                 }
-            } else if (requestCode == REQUEST_TAKE_PHOTO) {
-                //저해상도
-//                val bm = data?.extras?.get("data") as Bitmap
-//                binding.imgView.loadBitmap(bm)
+                REQUEST_PICK_FROM_ALBUM -> {
+                    data?.data?.let {uri ->
+//                        val bitmap = pickPhotoHelper.getBitmap(requireContext(), uri)
+//                        binding.imgView.setImageBitmap(bitmap)
+//                        binding.imgView.loadBitmap(bitmap)
+                        pickPhotoHelper.makePhotoFromUri(requireContext(), uri)
+                        binding.imgView.loadUri(uri)
+                        isPhotoLoaded = true
+                    }
+                }
 
-                pickPhotoHelper.photoUri?.let {
-                    binding.imgView.loadUri(it)
-                    isPhotoLoaded = true
+                REQUEST_PICK_FROM_STORAGE -> {
+                    data?.getStringExtra("filePath")?.let {
+                        pickPhotoHelper.fileNeverBeDeleted = it
+                        binding.imgView.loadFilePath(it)
+                        isPhotoLoaded = true
+                    }
                 }
             }
 
             if(isPhotoLoaded)
                 setPointLayoutEnabled(isPhotoLoaded)
         } else {
+            // 사진을 불러오는작업을 취소하는 경우 (이 경우 사진을 고르지 않은 상태이다)
             logE("사진 불러오기 취소")
-            pickPhotoHelper.clear()
+            pickPhotoHelper.deletePickedPhoto()
 
         }
     }
@@ -126,7 +131,6 @@ class AddEditStorageFragment : Fragment() {
     private fun clearPhoto() {
         pickPhotoHelper.deletePickedPhoto()
         setPointLayoutEnabled(false)
-        binding.imgView.setImageDrawable(null)
     }
 
 
@@ -178,14 +182,21 @@ class AddEditStorageFragment : Fragment() {
     }
 
 
+    private fun takePhoto(){
+        pickPhotoHelper.deletePickedPhoto()
+        pickPhotoHelper.dispatchTakePictureIntentIfAvailable(fragment = this)
+    }
+
+
     private fun pickFromAlbum(){
         pickPhotoHelper.startPickFromAlbumActivity(fragment = this)
     }
 
 
-    private fun takePhoto(){
-        pickPhotoHelper.deletePickedPhoto()
-        pickPhotoHelper.dispatchTakePictureIntentIfAvailable(fragment = this)
+    private fun pickFromOtherStorage() {
+//        pickPhotoHelper.startPickFromOtherStorage(fragment = this)
+//        ActivityUtil.start(requireContext(), PickPhotoFromSpecificDirActivity::class.java)
+        PickPhotoFromSpecificDirActivity.start(this, null)
     }
 
 
@@ -197,6 +208,7 @@ class AddEditStorageFragment : Fragment() {
     private fun setPointLayoutEnabled(enable:Boolean, rx:Float?, ry:Float?){
         if(enable){
             binding.addPhotoBtnGroup.visibility = View.GONE
+            binding.imgView.visibility = View.VISIBLE
             binding.photoMenuLayout.visibility = View.VISIBLE
             binding.pointer.visibility = View.VISIBLE
             binding.pointLayout.setOnTouchListener { v, event ->
@@ -221,6 +233,7 @@ class AddEditStorageFragment : Fragment() {
 
         } else {
             binding.addPhotoBtnGroup.visibility = View.VISIBLE
+            binding.imgView.visibility = View.INVISIBLE
             binding.photoMenuLayout.visibility = View.GONE
             binding.pointer.visibility = View.GONE
             binding.pointLayout.setOnTouchListener(null)

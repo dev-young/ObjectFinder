@@ -33,4 +33,8 @@
     <string name="empty_msg_storage">이 보관함에는 물건이 없습니다!</string>
     <string name="title_edit_storage">보관함 수정하기</string>
     <string name="edit">수정</string>
+    <string name="description_take_photo">사진 촬영하기</string>
+    <string name="description_pick_from_album">앨범에서 고르기</string>
+    <string name="description_pick_from_other_storage">기존의 보관함 사진 사용하기</string>
+    <string name="title_pick_from_storage">사진을 골라주세요.</string>
 </resources>

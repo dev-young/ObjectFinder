@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Environment
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import com.gun0912.tedpermission.PermissionListener
@@ -18,7 +19,8 @@ import java.io.File
 import java.io.IOException
 
 const val REQUEST_TAKE_PHOTO = 100
-const val PICK_FROM_ALBUM = 10
+const val REQUEST_PICK_FROM_ALBUM = 10
+const val PICK_FROM_OTHERS = 20
 
 /**촬영, 갤러리를 사용하여 사진을 고르는 작업을 편하게 해주는 클래스 */
 class PickPhotoHelper {
@@ -36,13 +38,32 @@ class PickPhotoHelper {
         }
 
         activity?.apply {
-            if (intent.resolveActivity(packageManager) != null) startActivityForResult(intent, PICK_FROM_ALBUM)
+            if (intent.resolveActivity(packageManager) != null) startActivityForResult(intent, REQUEST_PICK_FROM_ALBUM)
             return
         }
 
         fragment?.apply {
-            if (fragment?.activity?.packageManager?.let { intent.resolveActivity(it) } != null) {
-                startActivityForResult(intent, PICK_FROM_ALBUM)
+            if (fragment.activity?.packageManager?.let { intent.resolveActivity(it) } != null) {
+                startActivityForResult(intent, REQUEST_PICK_FROM_ALBUM)
+            }
+        }
+    }
+
+    fun startPickFromOtherStorage(activity: Activity? = null, fragment: Fragment? = null) {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+
+        activity?.apply {
+            val uri = Uri.parse(this.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath)
+            intent.setDataAndType(uri, "image/*")
+            if (intent.resolveActivity(packageManager) != null) startActivityForResult(intent, PICK_FROM_OTHERS)
+            return
+        }
+
+        fragment?.apply {
+            val uri = FileUtil.getUri(requireContext(), requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!)
+            intent.setDataAndType(uri, "image/*")
+            if (fragment.activity?.packageManager?.let { intent.resolveActivity(it) } != null) {
+                startActivityForResult(intent, PICK_FROM_OTHERS)
             }
         }
     }
@@ -113,7 +134,7 @@ class PickPhotoHelper {
                     }
                     // Continue only if the File was successfully created
                     photoFile?.also {
-                        val photoURI: Uri? = context?.let { c -> FileUtil.getUri(c, it) }
+                        val photoURI: Uri? = context.let { c -> FileUtil.getUri(c, it) }
                         photoUri = photoURI
                         currentPhotoPath = it.absolutePath
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)

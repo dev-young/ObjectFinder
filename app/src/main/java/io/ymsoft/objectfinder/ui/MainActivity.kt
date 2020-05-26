@@ -67,7 +67,8 @@ class MainActivity : AppCompatActivity(){
             R.id.navSearch -> {
                 setAppBarVisivle(top = true, bottom = false)
                 binding.searchView.requestFocus()
-                showKeyboard()
+                binding.searchView.postDelayed(Runnable { showKeyboard() }, 200)
+//                binding.searchView
             }
             R.id.navAddStorage -> {
                 setAppBarVisivle(top = true, bottom = false)
@@ -102,7 +103,7 @@ class MainActivity : AppCompatActivity(){
             binding.fab.show()
         } else {
             binding.bottomAppBar.hideOnScroll = false
-            binding.bottomAppBar.performHide()
+            binding.bottomAppBar.apply { post { performHide() } }
             binding.fab.hide()
         }
 
