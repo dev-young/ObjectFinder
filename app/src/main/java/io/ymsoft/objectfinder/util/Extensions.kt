@@ -41,7 +41,7 @@ fun ImageView.loadFilePath(filePath: String?) {
     loadUri(FileUtil.getUri(context, filePath))
 }
 
-fun ImageView.loadUri(uri: Uri?) {
+fun ImageView.loadUri(uri: Uri?, bitmapListener: ((bitmap:Bitmap) -> Unit?)? = null) {
     Glide.with(this)
         .asBitmap()
         .load(uri)
@@ -65,6 +65,7 @@ fun ImageView.loadUri(uri: Uri?) {
                 isFirstResource: Boolean
             ): Boolean {
                 resource?.printInfo()
+                resource?.let { bitmapListener?.invoke(it) }
                 return false
             }
 

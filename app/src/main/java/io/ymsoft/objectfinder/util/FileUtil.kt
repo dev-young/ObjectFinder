@@ -6,6 +6,9 @@ import android.net.Uri
 import android.os.Environment
 import android.util.Log
 import androidx.core.content.FileProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -16,19 +19,21 @@ import java.util.*
 object FileUtil {
 
     fun saveBitmapToFile(bitmap: Bitmap, file: File){
-        if(!file.exists()){
-            Log.i("", "파일 디렉토리 생성")
-            file.mkdirs()
-        }
+        CoroutineScope(Dispatchers.IO).launch {
+            if(!file.exists()){
+                Log.i("", "파일 디렉토리 생성")
+                file.mkdirs()
+            }
 
-        var out : FileOutputStream? = null
-        try {
-            out = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-        } catch (e:Exception){
-            e.printStackTrace()
-        } finally {
-            out?.close()
+            var out : FileOutputStream? = null
+            try {
+                out = FileOutputStream(file)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+            } catch (e:Exception){
+                e.printStackTrace()
+            } finally {
+                out?.close()
+            }
         }
     }
 

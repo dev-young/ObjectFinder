@@ -81,6 +81,17 @@ class PickPhotoHelper {
         }
     }
 
+    /**내부 저장소에 새로운 파일로 저장한다.*/
+    fun makePhotoFromBitmap(context:Context, bitmap: Bitmap){
+        CoroutineScope(Dispatchers.IO).launch {
+            val file = FileUtil.createImageFile(context)
+            file?.let{
+                currentPhotoPath = file.absolutePath
+                FileUtil.saveBitmapToFile(bitmap, file)
+            }
+        }
+    }
+
     fun getBitmap(context: Context, uri: Uri): Bitmap {
         val input = context.contentResolver.openInputStream(uri)
         val bm = BitmapFactory.decodeStream(input)

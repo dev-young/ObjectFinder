@@ -3,9 +3,6 @@ package io.ymsoft.objectfinder
 interface TodoList {
 
     // TODO: 2020-05-17 AddStorageFragment mvvm 다시 설계하기
-    // TODO: 2020-05-20 사진 추가시 특정 사진들은 회전되는 현상 수정하기
-    // TODO: 2020-05-17 사진 추가 로직 최적화
-    // TODO: 2020-05-17 이미지 크기 최적화 ( +정사각형으로? )
     // TODO: 2020-05-26 검색화면에서 아이템 삭제시 이벤트 처리
 
     // TODO: 2020-05-18 오브젝트 복수선택하여 이동 기능 추가

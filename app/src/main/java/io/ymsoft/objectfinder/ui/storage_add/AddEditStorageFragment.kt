@@ -21,6 +21,7 @@ import io.ymsoft.objectfinder.ui.pick_photo.PickPhotoFromSpecificDirActivity
 import io.ymsoft.objectfinder.ui.pick_photo.REQUEST_PICK_FROM_STORAGE
 import io.ymsoft.objectfinder.util.*
 import io.ymsoft.objectfinder.view_custom.SquareImageView
+import java.io.File
 
 
 class AddEditStorageFragment : Fragment() {
@@ -93,7 +94,12 @@ class AddEditStorageFragment : Fragment() {
 //                    binding.imgView.loadBitmap(bm)
 
                     pickPhotoHelper.photoUri?.let {
-                        binding.imgView.loadUri(it)
+                        binding.imgView.loadUri(it, bitmapListener = {bitmap ->
+                            pickPhotoHelper.currentPhotoPath?.let {filePath->
+                                FileUtil.saveBitmapToFile(bitmap, File(filePath))
+                            }
+                        })
+
                         isPhotoLoaded = true
                     }
                 }
@@ -102,8 +108,10 @@ class AddEditStorageFragment : Fragment() {
 //                        val bitmap = pickPhotoHelper.getBitmap(requireContext(), uri)
 //                        binding.imgView.setImageBitmap(bitmap)
 //                        binding.imgView.loadBitmap(bitmap)
-                        pickPhotoHelper.makePhotoFromUri(requireContext(), uri)
-                        binding.imgView.loadUri(uri)
+
+                        binding.imgView.loadUri(uri, bitmapListener = {bitmap ->
+                            pickPhotoHelper.makePhotoFromBitmap(requireContext(), bitmap)
+                        })
                         isPhotoLoaded = true
                     }
                 }
