@@ -24,6 +24,10 @@ class DefaultStorageModelsRepo(context: Context) : StorageModelsRepository {
         return storageDataSource.observeStorageModels()
     }
 
+    override fun observeStorageModels(query: String): LiveData<Result<List<StorageModel>>> {
+        return storageDataSource.observeStorageModels(query)
+    }
+
     override suspend fun getStorageModels(query: String): Result<List<StorageModel>> {
         return storageDataSource.getStorageModels(query)
     }

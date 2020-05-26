@@ -28,6 +28,8 @@ interface StorageModelsDataSource {
 
     suspend fun getStorageModels(): Result<List<StorageModel>>
 
+    fun observeStorageModels(query: String): LiveData<Result<List<StorageModel>>>
+
     suspend fun getStorageModels(query: String) : Result<List<StorageModel>>
 
     fun observeStorageModel(storageModelId: Long): LiveData<Result<StorageModel>>

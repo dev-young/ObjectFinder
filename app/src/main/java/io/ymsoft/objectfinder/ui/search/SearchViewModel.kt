@@ -23,6 +23,10 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private val _isLoading = MutableLiveData<Boolean>()  //로딩중인지 여부
     val isLoading : LiveData<Boolean> = _isLoading
 
+    init {
+        _searchResult.postValue(arrayListOf())
+    }
+
 
 
     @SuppressLint("CheckResult")

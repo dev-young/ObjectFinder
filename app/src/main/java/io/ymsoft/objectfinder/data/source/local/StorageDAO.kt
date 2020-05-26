@@ -17,6 +17,9 @@ interface StorageDAO {
     fun getStorage(id:Long) : StorageModel
 
     @Query("SELECT * from storage WHERE objects_text LIKE '%' || :objectName || '%' ORDER BY created_date ASC")
+    fun observeStorageListContain(objectName: String) : LiveData<List<StorageModel>>
+
+    @Query("SELECT * from storage WHERE objects_text LIKE '%' || :objectName || '%' ORDER BY created_date ASC")
     fun getStorageListContain(objectName: String): List<StorageModel>
 
 

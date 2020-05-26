@@ -26,6 +26,12 @@ class StorageModelsLocalDataSource(context: Context) : StorageModelsDataSource {
 
     }
 
+    override fun observeStorageModels(query: String): LiveData<Result<List<StorageModel>>> {
+        return storageDao.observeStorageListContain(query).map{
+            Result.Success(it)
+        }
+    }
+
     override suspend fun getStorageModels(): Result<List<StorageModel>> {
         TODO("Not yet implemented")
     }

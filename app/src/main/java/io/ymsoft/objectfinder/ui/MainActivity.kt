@@ -67,8 +67,6 @@ class MainActivity : AppCompatActivity(){
             R.id.navSearch -> {
                 setAppBarVisivle(top = true, bottom = false)
                 binding.searchView.requestFocus()
-                binding.searchView.postDelayed(Runnable { showKeyboard() }, 200)
-//                binding.searchView
             }
             R.id.navAddStorage -> {
                 setAppBarVisivle(top = true, bottom = false)

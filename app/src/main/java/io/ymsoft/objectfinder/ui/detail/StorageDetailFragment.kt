@@ -1,8 +1,12 @@
 package io.ymsoft.objectfinder.ui.detail
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.widget.ScrollView
+import android.widget.TextView.OnEditorActionListener
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -17,6 +21,7 @@ import io.ymsoft.objectfinder.util.*
 import io.ymsoft.objectfinder.util.CheckableChipGroupHelper.OnCheckableChangeListener
 import io.ymsoft.objectfinder.util.CheckableChipGroupHelper.OnCheckedCounterChangeListener
 import io.ymsoft.objectfinder.view_custom.SquareImageView
+
 
 class StorageDetailFragment : Fragment() {
 
@@ -71,6 +76,14 @@ class StorageDetailFragment : Fragment() {
         binding.moveBtn.setOnClickListener { context.makeToast(R.string.error_this_func_is_developing) }
         binding.deleteBtn.setOnClickListener { viewModel.deleteObjects(chipGroupHelper.getCheckedList()) }
         binding.cancelBtn.setOnClickListener { chipGroupHelper.setCheckable(false) }
+
+        binding.inputObject.setOnEditorActionListener(OnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addObject()
+                return@OnEditorActionListener true
+            }
+            false
+        })
 
         args.storageModel?.let {
             updateUI(it)
@@ -161,7 +174,7 @@ class StorageDetailFragment : Fragment() {
                 true
             }
             R.id.action_remove -> {
-                removeStorage()
+                showRemoveCheckDialog()
                 true
             }
             else -> false
@@ -178,6 +191,20 @@ class StorageDetailFragment : Fragment() {
             val direction = StorageDetailFragmentDirections.actionNavStorageDetailToNavAddStorage(it)
             findNavController().navigate(direction)
         }
+    }
+
+    private fun showRemoveCheckDialog(){
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(R.string.check_remove_title).setMessage(R.string.check_remove_message)
+        builder.setPositiveButton(R.string.ok, DialogInterface.OnClickListener { dialog, which ->
+            removeStorage()
+        })
+        builder.setNegativeButton(R.string.cancel, DialogInterface.OnClickListener { dialog, _ ->
+            dialog.dismiss()
+        })
+
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
