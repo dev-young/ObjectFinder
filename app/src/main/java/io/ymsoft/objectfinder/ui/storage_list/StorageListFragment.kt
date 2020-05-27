@@ -32,7 +32,7 @@ class StorageListFragment : Fragment() {
 
             longClickListener = object : OnItemLongClickListener {
                 override fun onItemLongClick(position: Int) {
-                    currentList[position].id?.let { viewModel.deleteStorageModel(it) }
+//                    currentList[position].id?.let { viewModel.deleteStorageModel(it) }
                 }
 
             }

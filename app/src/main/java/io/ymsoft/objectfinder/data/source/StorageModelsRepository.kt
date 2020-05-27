@@ -27,8 +27,6 @@ import java.util.ArrayList
  */
 interface StorageModelsRepository {
 
-    val isLoading:LiveData<Boolean>
-
     fun observeStorageModels(): LiveData<Result<List<StorageModel>>>
 
     /**현재 메모리에 로드된 List<StorageModel>을 리턴한다.*/
@@ -50,7 +48,7 @@ interface StorageModelsRepository {
 
     suspend fun moveObject(objList: List<ObjectModel>, targetStorageId:Long)
 
-    suspend fun deleteObjectModels(idList: ArrayList<Long>): Int
+    suspend fun deleteObjectModels(objList: List<ObjectModel>)
 
     suspend fun getObjectNames(storageId: Long): List<String>
 

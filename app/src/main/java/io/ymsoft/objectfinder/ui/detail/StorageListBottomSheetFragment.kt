@@ -17,11 +17,16 @@ import io.ymsoft.objectfinder.databinding.FragmentStorageListBottomSheetBinding
 import io.ymsoft.objectfinder.ui.storage_list.StorageListAdapter
 
 
-class StorageListBottomSheetFragment(private val storageList:List<StorageModel>, listener:(model:StorageModel)-> Unit) : BottomSheetDialogFragment() {
+class StorageListBottomSheetFragment(listener:(model:StorageModel)-> Unit) : BottomSheetDialogFragment() {
 
     lateinit var binding : FragmentStorageListBottomSheetBinding
 
     private lateinit var bottomSheetBehavior : BottomSheetBehavior<View>
+
+    var storageList = listOf<StorageModel>()
+        set(value) {
+            listAdapter.submitList(value)
+        }
 
     private val listAdapter: StorageListAdapter = StorageListAdapter().apply {
         clickListener = object : OnItemClickListener {
@@ -74,7 +79,7 @@ class StorageListBottomSheetFragment(private val storageList:List<StorageModel>,
 //        hideAppBar(binding.appBarLayout)
 
         binding.recyclerView.adapter = listAdapter
-        listAdapter.submitList(storageList)
+//        listAdapter.submitList(storageList)
 
         return bottomSheet
     }

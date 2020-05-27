@@ -22,9 +22,6 @@ class DefaultStorageModelsRepo(context: Context) : StorageModelsRepository {
 
     private lateinit var loadedStorageModels : LiveData<Result<List<StorageModel>>>
 
-    private val _isLoading = MutableLiveData(false)
-    override val isLoading: LiveData<Boolean> = _isLoading
-
     init {
         storageDataSource = StorageModelsLocalDataSource(context)
         objectDataSource = ObjectModelsLocalDataSource(context)
@@ -91,8 +88,21 @@ class DefaultStorageModelsRepo(context: Context) : StorageModelsRepository {
         }
     }
 
-    override suspend fun deleteObjectModels(idList: ArrayList<Long>) = coroutineScope {
-        objectDataSource.deleteObjectModels(idList)
+    override suspend fun deleteObjectModels(objList: List<ObjectModel>) {
+        withContext(Dispatchers.Default) {
+            val storageId = objList[0].storageId
+            val idList = arrayListOf<Long>().apply {
+                objList.forEach {
+                    it.id?.let { it -> add(it) }
+                }
+            }
+            objectDataSource.deleteObjectModels(idList)
+
+            storageId?.let {
+                val nameList = getObjectNames(it)
+                update(it, nameList.joinToString())
+            }
+        }
     }
 
     override suspend fun getObjectNames(storageId: Long): List<String> {

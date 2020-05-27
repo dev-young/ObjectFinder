@@ -56,20 +56,9 @@ class StorageDetailViewModel(application: Application) : AndroidViewModel(applic
 
 
     fun deleteObjects(checkedList: List<ObjectModel>) = viewModelScope.launch {
-//        objectRepo.removeObjects(checkedList)
-        withContext(Dispatchers.Default) {
-            val idList = arrayListOf<Long>().apply {
-                checkedList.forEach {
-                    it.id?.let { it -> add(it) }
-                }
-            }
-            repo.deleteObjectModels(idList)
-            _storageId.value?.let {
-                val nameList = repo.getObjectNames(it)
-                repo.update(it, nameList.joinToString())
-            }
-        }
-
+        _isLoading.value = true
+        repo.deleteObjectModels(checkedList)
+        _isLoading.value = false
     }
 
     fun addNewObject(objName: String) = viewModelScope.launch {
@@ -83,7 +72,6 @@ class StorageDetailViewModel(application: Application) : AndroidViewModel(applic
         viewModelScope.launch {
             _isLoading.value = true
             repo.moveObject(objList, targetStorageId)
-            _isLoading.postValue(false)
             _isLoading.value = false
         }
     }

@@ -62,6 +62,11 @@ class StorageDetailFragment : Fragment() {
             }
         }
     }
+    private val storageListDialog by lazy {
+        StorageListBottomSheetFragment {
+            moveAnotherStorage(it.id!!)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -138,10 +143,8 @@ class StorageDetailFragment : Fragment() {
     }
 
     private fun showStorageList() {
-        val f = StorageListBottomSheetFragment(viewModel.getCurrentStorageList()) {
-            moveAnotherStorage(it.id!!)
-        }
-        f.show(childFragmentManager, f.tag)
+        storageListDialog.storageList = viewModel.getCurrentStorageList()
+        storageListDialog.show(childFragmentManager, storageListDialog.tag)
     }
 
     private fun moveAnotherStorage(targetStorageId: Long) {

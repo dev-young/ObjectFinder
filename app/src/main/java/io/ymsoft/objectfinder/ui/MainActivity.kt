@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(){
         }
 
         binding.fab.setOnClickListener {
-            navController.navigate(R.id.navAddStorage)
+            navController.navigate(R.id.action_global_navAddStorage)
         }
 
         initBottomAppBar()
