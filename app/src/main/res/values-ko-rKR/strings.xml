@@ -41,4 +41,5 @@
     <string name="check_remove_title">보관함 삭제</string>
     <string name="check_remove_message">보관함 및 물건들이 모두 삭제됩니다.\n정말로 삭제하시겠습니까?</string>
     <string name="ok">확인</string>
+    <string name="please_choice_storage">보관함을 선택해주세요.</string>
 </resources>

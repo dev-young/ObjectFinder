@@ -2,12 +2,17 @@ package io.ymsoft.objectfinder.data.source
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.ymsoft.objectfinder.data.ObjectModel
 import io.ymsoft.objectfinder.data.Result
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.data.source.local.ObjectModelsLocalDataSource
 import io.ymsoft.objectfinder.data.source.local.StorageModelsLocalDataSource
+import io.ymsoft.objectfinder.util.logE
+import io.ymsoft.objectfinder.util.logI
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class DefaultStorageModelsRepo(context: Context) : StorageModelsRepository {
@@ -15,17 +20,27 @@ class DefaultStorageModelsRepo(context: Context) : StorageModelsRepository {
     private val storageDataSource: StorageModelsDataSource
     private val objectDataSource: ObjectModelsDataSource
 
+    private lateinit var loadedStorageModels : LiveData<Result<List<StorageModel>>>
+
+    private val _isLoading = MutableLiveData(false)
+    override val isLoading: LiveData<Boolean> = _isLoading
+
     init {
         storageDataSource = StorageModelsLocalDataSource(context)
         objectDataSource = ObjectModelsLocalDataSource(context)
     }
 
     override fun observeStorageModels(): LiveData<Result<List<StorageModel>>> {
-        return storageDataSource.observeStorageModels()
+        loadedStorageModels = storageDataSource.observeStorageModels()
+        return loadedStorageModels
     }
 
-    override fun observeStorageModels(query: String): LiveData<Result<List<StorageModel>>> {
-        return storageDataSource.observeStorageModels(query)
+    override fun getStorageModelsInMemory(): List<StorageModel> {
+        val result = loadedStorageModels.value
+        return if(result is Result.Success){
+            result.data
+        } else
+            emptyList()
     }
 
     override suspend fun getStorageModels(query: String): Result<List<StorageModel>> {
@@ -62,6 +77,18 @@ class DefaultStorageModelsRepo(context: Context) : StorageModelsRepository {
             storageDataSource.addStorage(storageModel)
         }
         return@coroutineScope
+    }
+
+    override suspend fun moveObject(objList: List<ObjectModel>, targetStorageId: Long) {
+        withContext(Dispatchers.Default){
+            val currentStorageId = objList[0].storageId!!
+            val idList = arrayListOf<Long>().apply { objList.forEach { it.id?.let { add(it) } } }
+            objectDataSource.moveObjectModels(idList, targetStorageId)
+            val currentStorageNames = objectDataSource.getObjectNames(currentStorageId).joinToString()
+            val targetStorageNames = objectDataSource.getObjectNames(targetStorageId).joinToString()
+            storageDataSource.updateObjectNames(currentStorageId, currentStorageNames)
+            storageDataSource.updateObjectNames(targetStorageId, targetStorageNames)
+        }
     }
 
     override suspend fun deleteObjectModels(idList: ArrayList<Long>) = coroutineScope {

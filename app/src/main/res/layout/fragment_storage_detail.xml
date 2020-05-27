@@ -200,7 +200,7 @@
                     android:focusable="true"
                     android:text="@string/move"
                     android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Large"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     tools:visibility="visible"
                     />
 

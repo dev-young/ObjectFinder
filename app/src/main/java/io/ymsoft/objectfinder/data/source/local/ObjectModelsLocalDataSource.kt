@@ -6,6 +6,7 @@ import androidx.lifecycle.map
 import io.ymsoft.objectfinder.data.Result
 import io.ymsoft.objectfinder.data.ObjectModel
 import io.ymsoft.objectfinder.data.source.ObjectModelsDataSource
+import io.ymsoft.objectfinder.util.logI
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -42,6 +43,11 @@ class ObjectModelsLocalDataSource(context: Context) : ObjectModelsDataSource {
         r
     }
 
+    override suspend fun moveObjectModels(idList: List<Long>, targetStorageId: Long) =
+        withContext(ioDispatcher){
+            objectDao.updateStorage(idList, targetStorageId)
+        }
+
     override suspend fun deleteObjectModels(idList: List<Long>) = withContext(ioDispatcher) {
         objectDao.delete(idList)
     }
@@ -52,6 +58,7 @@ class ObjectModelsLocalDataSource(context: Context) : ObjectModelsDataSource {
     }
 
     override suspend fun getObjectNames(storageId: Long): List<String>  = withContext(ioDispatcher) {
+        logI("")
         objectDao.getObjectNames(storageId)
     }
 

@@ -6,8 +6,8 @@ import io.ymsoft.objectfinder.data.source.StorageModelsRepository
 import timber.log.Timber
 
 class MyApp : Application() {
-    val storageModelsRepository : StorageModelsRepository
-        get() = DefaultStorageModelsRepo(this)
+    val storageModelsRepository : StorageModelsRepository by lazy {  DefaultStorageModelsRepo(this) }
+
 
     override fun onCreate() {
         super.onCreate()

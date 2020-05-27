@@ -52,9 +52,11 @@ class StorageDetailFragment : Fragment() {
                     if (count == 0) {
                         binding.cancelBtn.visibility = View.VISIBLE
                         binding.deleteBtn.visibility = View.GONE
+                        binding.moveBtn.visibility = View.GONE
                     } else {
                         binding.cancelBtn.visibility = View.GONE
                         binding.deleteBtn.visibility = View.VISIBLE
+                        binding.moveBtn.visibility = View.VISIBLE
                     }
                 }
             }
@@ -73,7 +75,7 @@ class StorageDetailFragment : Fragment() {
             binding.checkAllCheckBox.toggle()
             chipGroupHelper.checkAllChips(binding.checkAllCheckBox.isChecked)
         }
-        binding.moveBtn.setOnClickListener { context.makeToast(R.string.error_this_func_is_developing) }
+        binding.moveBtn.setOnClickListener { showStorageList() }
         binding.deleteBtn.setOnClickListener { viewModel.deleteObjects(chipGroupHelper.getCheckedList()) }
         binding.cancelBtn.setOnClickListener { chipGroupHelper.setCheckable(false) }
 
@@ -104,6 +106,8 @@ class StorageDetailFragment : Fragment() {
         return binding.root
     }
 
+
+
     private fun updateUI(storageModel: StorageModel?) {
         if (storageModel == null) return
 
@@ -131,6 +135,17 @@ class StorageDetailFragment : Fragment() {
             }
         })
 
+    }
+
+    private fun showStorageList() {
+        val f = StorageListBottomSheetFragment(viewModel.getCurrentStorageList()) {
+            moveAnotherStorage(it.id!!)
+        }
+        f.show(childFragmentManager, f.tag)
+    }
+
+    private fun moveAnotherStorage(targetStorageId: Long) {
+        viewModel.moveStorage(chipGroupHelper.getCheckedList(), targetStorageId)
     }
 
     private fun updateObjectList(list: List<ObjectModel>?) {

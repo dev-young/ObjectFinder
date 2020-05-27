@@ -19,9 +19,11 @@ interface ObjectDAO {
     @Query("SELECT objName FROM objects WHERE storageId = :storageId")
     fun getObjectNames(storageId: Long) : List<String>
 
-
     @Insert
     fun insert(model: ObjectModel) : Long  //@return rowId
+
+    @Query("UPDATE objects SET storageId = :storageId WHERE id in (:models)")
+    fun updateStorage(models:List<Long>, storageId: Long)
 
     @Delete
     fun delete(model: ObjectModel) : Int   //@return 삭제된 행 수

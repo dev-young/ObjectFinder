@@ -32,6 +32,8 @@ interface ObjectModelsDataSource {
 
     suspend fun addObjectModel(objectModel: ObjectModel) : Long
 
+    suspend fun moveObjectModels(idList: List<Long>, targetStorageId: Long)
+
     suspend fun deleteObjectModels(idList: List<Long>): Int
 
     suspend fun deleteObjectModel(model: ObjectModel)
