@@ -12,20 +12,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.ymsoft.objectfinder.common.OnItemClickListener
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.FragmentSearchBinding
 import io.ymsoft.objectfinder.ui.MainActivity
 import io.ymsoft.objectfinder.ui.storage_list.StorageListAdapter
 import io.ymsoft.objectfinder.util.showKeyboard
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 class SearchFragment : Fragment() {
@@ -35,10 +29,8 @@ class SearchFragment : Fragment() {
     private val viewModel : SearchViewModel by viewModels()
     private val adapter = StorageListAdapter()
         .apply {
-            clickListener = object : (Int, View, View) -> Unit?{
-                override fun invoke(position: Int, p2: View, p3: View): Unit? {
-                    return showDetail(currentList[position])
-                }
+            setClickListener { position, sharedViews ->
+                showDetail(currentList[position])
             }
         }
 

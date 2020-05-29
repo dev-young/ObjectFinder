@@ -95,9 +95,12 @@ class AddEditStorageFragment : Fragment() {
 
                     pickPhotoHelper.photoUri?.let {
                         binding.imgView.loadUri(it, bitmapListener = {bitmap ->
-                            pickPhotoHelper.currentPhotoPath?.let {filePath->
-                                FileUtil.saveBitmapToFile(bitmap, File(filePath))
+                            bitmap?.let {
+                                pickPhotoHelper.currentPhotoPath?.let {filePath->
+                                    FileUtil.saveBitmapToFile(bitmap, File(filePath))
+                                }
                             }
+
                         })
 
                         isPhotoLoaded = true
@@ -110,7 +113,8 @@ class AddEditStorageFragment : Fragment() {
 //                        binding.imgView.loadBitmap(bitmap)
 
                         binding.imgView.loadUri(uri, bitmapListener = {bitmap ->
-                            pickPhotoHelper.makePhotoFromBitmap(requireContext(), bitmap)
+                            bitmap?.let { pickPhotoHelper.makePhotoFromBitmap(requireContext(), bitmap) }
+
                         })
                         isPhotoLoaded = true
                     }

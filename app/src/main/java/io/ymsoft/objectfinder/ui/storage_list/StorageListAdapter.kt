@@ -18,7 +18,11 @@ class StorageListAdapter : ListAdapter<StorageModel, StorageViewHolder>(object :
     }
 
 }) {
-    var clickListener : ((position: Int, rootView: View, sharedView: View) -> Unit?)? = null
+
+    fun setClickListener(listener: (position: Int, sharedViews :List<View>) -> Unit){
+        clickListener = listener
+    }
+    private var clickListener : ((Int, List<View>) -> Unit)? = null
     var longClickListener : OnItemLongClickListener? = null
 
 

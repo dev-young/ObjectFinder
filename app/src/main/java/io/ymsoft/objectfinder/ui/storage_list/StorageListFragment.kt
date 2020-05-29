@@ -8,11 +8,13 @@ import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import io.ymsoft.objectfinder.common.OnItemLongClickListener
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.FragmentStorageListBinding
+import io.ymsoft.objectfinder.util.SharedViewUtil
 import timber.log.Timber
 
 class StorageListFragment : Fragment() {
@@ -22,11 +24,9 @@ class StorageListFragment : Fragment() {
 
     private val storageListAdapter = StorageListAdapter()
         .apply {
-            clickListener = object : (Int, View, View) -> Unit? {
-                override fun invoke(p1: Int, p2: View, p3: View) {
-                    showDetail(currentList[p1], p2, p3)
-                }
+            setClickListener { position, sharedViews ->
 
+                showDetail(currentList[position], sharedViews)
             }
 
             longClickListener = object : OnItemLongClickListener {
@@ -71,14 +71,10 @@ class StorageListFragment : Fragment() {
         }
     }
 
-    private fun showDetail(model: StorageModel?, rootView: View, sharedView: View) {
+    private fun showDetail(model: StorageModel?, rootViews: List<View>) {
         model?.let {
-            val extras = FragmentNavigatorExtras(
-                rootView to rootView.transitionName,
-                sharedView to sharedView.transitionName
-            )
             val direction = StorageListFragmentDirections.actionNavStorageListToNavStorageDetail(it)
-            findNavController().navigate(direction, extras)
+            findNavController().navigate(direction, SharedViewUtil.makeStorageTransition(rootViews))
         }
     }
 

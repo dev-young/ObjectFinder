@@ -8,19 +8,36 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.common.OnItemLongClickListener
-import io.ymsoft.objectfinder.databinding.ItemStorageBinding
-import io.ymsoft.objectfinder.util.loadFilePath
 import io.ymsoft.objectfinder.data.StorageModel
+import io.ymsoft.objectfinder.databinding.ItemStorageBinding
 import io.ymsoft.objectfinder.util.PointerUtil
+import io.ymsoft.objectfinder.util.SharedViewUtil
+import io.ymsoft.objectfinder.util.loadFilePath
 
-class StorageViewHolder(parent: ViewGroup, clickListener: ((Int, View, View) -> Unit?)?, longClickListener: OnItemLongClickListener?) :
-    RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_storage, parent, false)) {
+class StorageViewHolder(
+    parent: ViewGroup,
+    clickListener: ((Int, List<View>) -> Unit?)?,
+    longClickListener: OnItemLongClickListener?
+) :
+    RecyclerView.ViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.item_storage, parent, false)
+    ) {
 
 
-    private val binding : ItemStorageBinding by lazy {ItemStorageBinding.bind(itemView)}
+    private val binding: ItemStorageBinding by lazy { ItemStorageBinding.bind(itemView) }
 
     init {
-        binding.clickableLayout.setOnClickListener { clickListener?.invoke(adapterPosition, binding.root, binding.imgView) }
+        binding.clickableLayout.setOnClickListener {
+            clickListener?.invoke(
+                adapterPosition,
+                arrayListOf(
+                    binding.root,
+                    binding.photoLayout,
+                    binding.pointer,
+                    binding.imgView
+                )
+            )
+        }
         binding.clickableLayout.setOnLongClickListener {
             longClickListener?.onItemLongClick(adapterPosition)
             true
@@ -28,9 +45,9 @@ class StorageViewHolder(parent: ViewGroup, clickListener: ((Int, View, View) -> 
     }
 
     fun onBind(model: StorageModel) {
-        binding.root.transitionName = "root_${model.id}"
-        binding.imgView.transitionName = "${model.id}"
-        if (model.imgUrl.isNullOrBlank()){
+        SharedViewUtil.setTransitionName(binding, model)
+
+        if (model.imgUrl.isNullOrBlank()) {
             binding.photoLayout.visibility = GONE
         } else {
             binding.photoLayout.visibility = VISIBLE
@@ -38,7 +55,7 @@ class StorageViewHolder(parent: ViewGroup, clickListener: ((Int, View, View) -> 
             PointerUtil.movePointerByRelative(binding.pointer, binding.imgView, model.x, model.y)
         }
 
-        if(model.name.isNullOrBlank()){
+        if (model.name.isNullOrBlank()) {
             binding.title.visibility = GONE
         } else {
             binding.title.text = model.name
@@ -46,10 +63,10 @@ class StorageViewHolder(parent: ViewGroup, clickListener: ((Int, View, View) -> 
         }
 
         val c = binding.root.context
-        if(model.objString.isNullOrBlank()){
+        if (model.objString.isNullOrBlank()) {
             binding.objects.text = c.getString(R.string.empty_msg_storage)
             binding.objects.setTextColor(c.resources.getColor(android.R.color.darker_gray, null))
-        } else{
+        } else {
             binding.objects.text = model.objString
             binding.objects.setTextColor(c.resources.getColor(R.color.colorAccent, null))
         }

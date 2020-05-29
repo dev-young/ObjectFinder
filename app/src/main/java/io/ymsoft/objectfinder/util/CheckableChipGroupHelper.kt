@@ -56,6 +56,7 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
             chip.setOnLongClickListener(chipLongClickListener)
             chip.setOnCheckedChangeListener(chipCheckedChangeListener)
             chipGroup.addView(chip)
+            chip.animateFadeIn()
             logI("${model.modelName} 추가!")
             currentList = list
         } else {
@@ -81,8 +82,10 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
                 .subscribe { chipList ->
                     chipGroup.removeAllViews()
                     chipList.forEach(chipGroup::addView)
-                    currentList = list
+                    if(list.size > currentList.size)
+                        chipGroup.animateFadeIn(200)    // 최초 로딩시에만 애니메이션 적용
 
+                    currentList = list
                     // 이곳이 실행되는 경우는 체크한 항목들이 삭제되거나 이동된 경우이므로 체크 기능 false 로 초기화
                     setCheckable(false)
                 }

@@ -1,5 +1,7 @@
 package io.ymsoft.objectfinder.util
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
@@ -29,6 +31,12 @@ fun logE(message: String) {
     Timber.e(message)
 }
 
+fun View.animateFadeIn(startDelay: Long = 0){
+    alpha = 0f
+    translationY = 5f
+    animate().alpha(1f).setStartDelay(startDelay).translationY(0f).setDuration(300).start()
+}
+
 fun ImageView.loadBitmap(image: Bitmap?) {
     Glide.with(this).load(image).apply(RequestOptions.centerCropTransform()).into(this)
 }
@@ -37,11 +45,11 @@ fun ImageView.loadUrl(imageUrl: String?) {
     Glide.with(this).load(imageUrl).into(this)
 }
 
-fun ImageView.loadFilePath(filePath: String?, bitmapListener: ((bitmap:Bitmap) -> Unit?)? = null) {
+fun ImageView.loadFilePath(filePath: String?, bitmapListener: ((bitmap:Bitmap?) -> Unit?)? = null) {
     loadUri(FileUtil.getUri(context, filePath), bitmapListener)
 }
 
-fun ImageView.loadUri(uri: Uri?, bitmapListener: ((bitmap:Bitmap) -> Unit?)? = null) {
+fun ImageView.loadUri(uri: Uri?, bitmapListener: ((bitmap:Bitmap?) -> Unit?)? = null) {
     Glide.with(this)
         .asBitmap()
         .load(uri)

@@ -122,13 +122,13 @@ class StorageDetailFragment : Fragment() {
 
     private fun updateUI(model: StorageModel?) {
         if (model == null) return
-        binding.root.transitionName = "root_${model.id}"
-        binding.imgView.transitionName = "${model.id}"
+        SharedViewUtil.setTransitionName(binding, model)
 
+        postponeEnterTransition()
         if (model.imgUrl.isNullOrBlank()) {
             binding.imageLayout.visibility = View.GONE
+            startPostponedEnterTransition()
         } else {
-            postponeEnterTransition()
             binding.imageLayout.visibility = View.VISIBLE
             binding.imgView.loadFilePath(model.imgUrl) {
                 startPostponedEnterTransition()
@@ -152,33 +152,29 @@ class StorageDetailFragment : Fragment() {
 
     }
 
-    private fun showStorageList() {
-        storageListDialog.storageList = viewModel.getCurrentStorageList()
-        storageListDialog.show(childFragmentManager, storageListDialog.tag)
-    }
-
-    private fun moveAnotherStorage(targetStorageId: Long) {
-        viewModel.moveStorage(chipGroupHelper.getCheckedList(), targetStorageId)
-    }
-
     private fun updateObjectList(list: List<ObjectModel>?) {
         if (list == null) return
-
         chipGroupHelper.setChipGroups(list)
         if (binding.chipGroup.childCount != 0)
             binding.scrollView.apply { post { this.fullScroll(ScrollView.FOCUS_DOWN) } }
 
         if (list.isEmpty()) binding.emptyMessage.visibility = View.VISIBLE
         else binding.emptyMessage.visibility = View.GONE
-
-
-        binding.chipGroup.invalidate()
     }
 
     private fun addObject() {
         viewModel.addNewObject(binding.inputObject.text.toString())
         binding.inputObject.setText("")
         binding.scrollView.apply { post { this.fullScroll(ScrollView.FOCUS_DOWN) } }
+    }
+
+    private fun moveAnotherStorage(targetStorageId: Long) {
+        viewModel.moveStorage(chipGroupHelper.getCheckedList(), targetStorageId)
+    }
+
+    private fun showStorageList() {
+        storageListDialog.storageList = viewModel.getCurrentStorageList()
+        storageListDialog.show(childFragmentManager, storageListDialog.tag)
     }
 
     /**체크모드에 따라 하단의 메뉴를 변경한다. */
@@ -235,6 +231,8 @@ class StorageDetailFragment : Fragment() {
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.storage_detail_toolbar, menu)
