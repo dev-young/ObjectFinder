@@ -29,11 +29,12 @@ class StorageListBottomSheetFragment(listener:(model:StorageModel)-> Unit) : Bot
         }
 
     private val listAdapter: StorageListAdapter = StorageListAdapter().apply {
-        clickListener = object : OnItemClickListener {
-            override fun onItemClick(position: Int) {
+        clickListener = object : (Int, View, View) -> Unit? {
+            override fun invoke(position: Int, p2: View, p3: View) {
                 listener(currentList[position])
                 dismiss()
             }
+
         }
     }
 

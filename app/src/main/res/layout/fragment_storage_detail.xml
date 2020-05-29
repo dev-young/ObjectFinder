@@ -24,6 +24,7 @@
                 android:orientation="vertical"
                 >
 
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/imageLayout"
                     android:layout_width="match_parent"
@@ -43,7 +44,9 @@
                             android:layout_height="wrap_content"
                             android:foreground="?attr/selectableItemBackground"
                             android:clickable="true"
-                            android:focusable="true"/>
+                            android:focusable="true"
+                            android:transitionName="storage_image"
+                            />
 
                         <ImageView
                             android:id="@+id/pointer"
@@ -56,6 +59,7 @@
                     </FrameLayout>
 
                 </androidx.cardview.widget.CardView>
+
 
 
                 <!--뷰 스타일 확인용 실제로는 안보인다-->

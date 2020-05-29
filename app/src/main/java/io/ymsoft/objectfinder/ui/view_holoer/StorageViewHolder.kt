@@ -6,7 +6,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import io.ymsoft.objectfinder.common.OnItemClickListener
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.common.OnItemLongClickListener
 import io.ymsoft.objectfinder.databinding.ItemStorageBinding
@@ -14,14 +13,14 @@ import io.ymsoft.objectfinder.util.loadFilePath
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.util.PointerUtil
 
-class StorageViewHolder(parent: ViewGroup, clickListener: OnItemClickListener?, longClickListener: OnItemLongClickListener?) :
+class StorageViewHolder(parent: ViewGroup, clickListener: ((Int, View, View) -> Unit?)?, longClickListener: OnItemLongClickListener?) :
     RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_storage, parent, false)) {
 
 
     private val binding : ItemStorageBinding by lazy {ItemStorageBinding.bind(itemView)}
 
     init {
-        binding.clickableLayout.setOnClickListener { clickListener?.onItemClick(adapterPosition) }
+        binding.clickableLayout.setOnClickListener { clickListener?.invoke(adapterPosition, binding.root, binding.imgView) }
         binding.clickableLayout.setOnLongClickListener {
             longClickListener?.onItemLongClick(adapterPosition)
             true
@@ -29,6 +28,8 @@ class StorageViewHolder(parent: ViewGroup, clickListener: OnItemClickListener?, 
     }
 
     fun onBind(model: StorageModel) {
+        binding.root.transitionName = "root_${model.id}"
+        binding.imgView.transitionName = "${model.id}"
         if (model.imgUrl.isNullOrBlank()){
             binding.photoLayout.visibility = GONE
         } else {

@@ -4,30 +4,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import io.ymsoft.objectfinder.R
-import io.ymsoft.objectfinder.common.OnItemClickListener
 import io.ymsoft.objectfinder.common.OnItemLongClickListener
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.FragmentStorageListBinding
-import io.ymsoft.objectfinder.ui.detail.StorageDetailFragment
-import io.ymsoft.objectfinder.ui.detail.StorageDetailFragmentArgs
 import timber.log.Timber
 
 class StorageListFragment : Fragment() {
 
-    private lateinit var binding : FragmentStorageListBinding
+    private lateinit var binding: FragmentStorageListBinding
     private val viewModel by viewModels<StorageModelsViewModel>()
 
     private val storageListAdapter = StorageListAdapter()
         .apply {
-            clickListener = object : OnItemClickListener {
-                override fun onItemClick(position: Int) {
-                    showDetail(currentList[position])
+            clickListener = object : (Int, View, View) -> Unit? {
+                override fun invoke(p1: Int, p2: View, p3: View) {
+                    showDetail(currentList[p1], p2, p3)
                 }
+
             }
 
             longClickListener = object : OnItemLongClickListener {
@@ -36,10 +35,12 @@ class StorageListFragment : Fragment() {
                 }
 
             }
-    }
+        }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentStorageListBinding.inflate(inflater, container, false)
 
         binding.recyclerView.adapter = storageListAdapter
@@ -50,7 +51,7 @@ class StorageListFragment : Fragment() {
         })
 
         viewModel.isEmpty.observe(viewLifecycleOwner, Observer {
-            if (it){
+            if (it) {
                 Timber.e("비어있음")
                 binding.emptyMessage.visibility = View.VISIBLE
             } else {
@@ -62,10 +63,22 @@ class StorageListFragment : Fragment() {
         return binding.root
     }
 
-    private fun showDetail(model: StorageModel?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        postponeEnterTransition()
+        binding.recyclerView.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
+    }
+
+    private fun showDetail(model: StorageModel?, rootView: View, sharedView: View) {
         model?.let {
+            val extras = FragmentNavigatorExtras(
+                rootView to rootView.transitionName,
+                sharedView to sharedView.transitionName
+            )
             val direction = StorageListFragmentDirections.actionNavStorageListToNavStorageDetail(it)
-            findNavController().navigate(direction)
+            findNavController().navigate(direction, extras)
         }
     }
 

@@ -7,11 +7,13 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ScrollView
 import android.widget.TextView.OnEditorActionListener
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionInflater
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.common.OnModelClickListener
 import io.ymsoft.objectfinder.data.ObjectModel
@@ -20,7 +22,6 @@ import io.ymsoft.objectfinder.databinding.FragmentStorageDetailBinding
 import io.ymsoft.objectfinder.util.*
 import io.ymsoft.objectfinder.util.CheckableChipGroupHelper.OnCheckableChangeListener
 import io.ymsoft.objectfinder.util.CheckableChipGroupHelper.OnCheckedCounterChangeListener
-import io.ymsoft.objectfinder.view_custom.SquareImageView
 
 
 class StorageDetailFragment : Fragment() {
@@ -68,6 +69,12 @@ class StorageDetailFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val transition = TransitionInflater.from(context).inflateTransition(R.transition.shared_element_transition)
+        sharedElementEnterTransition = transition
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -113,32 +120,35 @@ class StorageDetailFragment : Fragment() {
 
 
 
-    private fun updateUI(storageModel: StorageModel?) {
-        if (storageModel == null) return
+    private fun updateUI(model: StorageModel?) {
+        if (model == null) return
+        binding.root.transitionName = "root_${model.id}"
+        binding.imgView.transitionName = "${model.id}"
 
-        if (storageModel.imgUrl.isNullOrBlank()) {
+        if (model.imgUrl.isNullOrBlank()) {
             binding.imageLayout.visibility = View.GONE
         } else {
+            postponeEnterTransition()
             binding.imageLayout.visibility = View.VISIBLE
-            binding.imgView.loadFilePath(storageModel.imgUrl)
+            binding.imgView.loadFilePath(model.imgUrl) {
+                startPostponedEnterTransition()
+            }
         }
 
-        storageModel.name?.apply {
+        model.name?.apply {
             if (isNotEmpty())
                 setToolbarTitle(this)
         }
 
-        binding.imgView.setOnMeasureListener(object : SquareImageView.OnMeasureListener {
-            override fun measured(width: Int, height: Int) {
-                PointerUtil.movePointerByRelative(
-                    binding.pointer,
-                    width,
-                    height,
-                    storageModel.x,
-                    storageModel.y
-                )
-            }
-        })
+        binding.imgView.doOnPreDraw {
+            PointerUtil.movePointerByRelative(
+                binding.pointer,
+                it.width,
+                it.height,
+                model.x,
+                model.y
+            )
+        }
 
     }
 
@@ -206,20 +216,21 @@ class StorageDetailFragment : Fragment() {
 
     private fun startEdit() {
         viewModel.storageModel.value?.let {
-            val direction = StorageDetailFragmentDirections.actionNavStorageDetailToNavAddStorage(it)
+            val direction =
+                StorageDetailFragmentDirections.actionNavStorageDetailToNavAddStorage(it)
             findNavController().navigate(direction)
         }
     }
 
-    private fun showRemoveCheckDialog(){
+    private fun showRemoveCheckDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(R.string.check_remove_title).setMessage(R.string.check_remove_message)
-        builder.setPositiveButton(R.string.ok, DialogInterface.OnClickListener { dialog, which ->
+        builder.setPositiveButton(R.string.ok) { _, _ ->
             removeStorage()
-        })
-        builder.setNegativeButton(R.string.cancel, DialogInterface.OnClickListener { dialog, _ ->
+        }
+        builder.setNegativeButton(R.string.cancel) { dialog, _ ->
             dialog.dismiss()
-        })
+        }
 
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()

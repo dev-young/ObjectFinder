@@ -37,14 +37,15 @@ fun ImageView.loadUrl(imageUrl: String?) {
     Glide.with(this).load(imageUrl).into(this)
 }
 
-fun ImageView.loadFilePath(filePath: String?) {
-    loadUri(FileUtil.getUri(context, filePath))
+fun ImageView.loadFilePath(filePath: String?, bitmapListener: ((bitmap:Bitmap) -> Unit?)? = null) {
+    loadUri(FileUtil.getUri(context, filePath), bitmapListener)
 }
 
 fun ImageView.loadUri(uri: Uri?, bitmapListener: ((bitmap:Bitmap) -> Unit?)? = null) {
     Glide.with(this)
         .asBitmap()
         .load(uri)
+        .dontAnimate()
         .apply(RequestOptions.centerCropTransform())
         .error(R.drawable.ic_error_outline_24dp)
         .addListener(object : RequestListener<Bitmap>{

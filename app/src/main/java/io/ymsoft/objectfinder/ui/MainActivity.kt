@@ -124,10 +124,6 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
-
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()

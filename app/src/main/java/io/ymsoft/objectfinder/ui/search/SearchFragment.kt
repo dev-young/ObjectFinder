@@ -35,12 +35,12 @@ class SearchFragment : Fragment() {
     private val viewModel : SearchViewModel by viewModels()
     private val adapter = StorageListAdapter()
         .apply {
-            clickListener = object : OnItemClickListener{
-                override fun onItemClick(position: Int) {
-                    showDetail(currentList[position])
+            clickListener = object : (Int, View, View) -> Unit?{
+                override fun invoke(position: Int, p2: View, p3: View): Unit? {
+                    return showDetail(currentList[position])
                 }
             }
-    }
+        }
 
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
