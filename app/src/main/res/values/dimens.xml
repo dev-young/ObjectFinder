@@ -9,4 +9,6 @@
     <dimen name="empty_msg_size">30sp</dimen>
     <dimen name="empty_msg_size2">20sp</dimen>
     <dimen name="default_item_radius">6dp</dimen>
+
+    <integer name="default_transition_duration">300</integer>
 </resources>

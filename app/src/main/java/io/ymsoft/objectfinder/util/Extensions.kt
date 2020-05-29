@@ -34,7 +34,8 @@ fun logE(message: String) {
 fun View.animateFadeIn(startDelay: Long = 0){
     alpha = 0f
     translationY = 5f
-    animate().alpha(1f).setStartDelay(startDelay).translationY(0f).setDuration(300).start()
+    val duration = resources.getInteger(R.integer.default_transition_duration).toLong()
+    animate().alpha(1f).setStartDelay(startDelay).translationY(0f).setDuration(duration).start()
 }
 
 fun ImageView.loadBitmap(image: Bitmap?) {

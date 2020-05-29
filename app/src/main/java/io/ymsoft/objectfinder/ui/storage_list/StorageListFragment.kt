@@ -1,5 +1,6 @@
 package io.ymsoft.objectfinder.ui.storage_list
 
+import android.app.SharedElementCallback
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.transition.Transition
+import androidx.transition.Transition.TransitionListener
+import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.common.OnItemLongClickListener
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.FragmentStorageListBinding
@@ -21,6 +25,7 @@ class StorageListFragment : Fragment() {
 
     private lateinit var binding: FragmentStorageListBinding
     private val viewModel by viewModels<StorageModelsViewModel>()
+    private var loadCounter = 0
 
     private val storageListAdapter = StorageListAdapter()
         .apply {
@@ -45,10 +50,7 @@ class StorageListFragment : Fragment() {
 
         binding.recyclerView.adapter = storageListAdapter
 
-        viewModel.items.observe(viewLifecycleOwner, Observer {
-            Timber.i("StorageList Changed!")
-            storageListAdapter.submitList(it)
-        })
+        viewModel.items.observe(viewLifecycleOwner, Observer(this::updateItems))
 
         viewModel.isEmpty.observe(viewLifecycleOwner, Observer {
             if (it) {
@@ -70,6 +72,19 @@ class StorageListFragment : Fragment() {
             startPostponedEnterTransition()
         }
     }
+
+    /**뷰가 변경된 경우에는 딜레이를 주고 변경한다.
+     * 이유: 공유요소 전환을 사용시 애니메이션이 끝난 뒤 리스트를 업데이트해야 애니메이션이 문제 없이 작동한다.*/
+    private fun updateItems(models: List<StorageModel>?) {
+        Timber.i("StorageList Changed!")
+        if(loadCounter++ == 0)
+            storageListAdapter.submitList(models)
+        else
+            binding.recyclerView.postDelayed({
+                storageListAdapter.submitList(models)
+            }, requireContext().resources.getInteger(R.integer.default_transition_duration).toLong())
+    }
+
 
     private fun showDetail(model: StorageModel?, rootViews: List<View>) {
         model?.let {
