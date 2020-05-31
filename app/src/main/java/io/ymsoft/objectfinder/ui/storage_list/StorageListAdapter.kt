@@ -27,7 +27,7 @@ class StorageListAdapter : ListAdapter<StorageModel, StorageViewHolder>(object :
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StorageViewHolder {
-        return StorageViewHolder(parent, clickListener, longClickListener)
+        return StorageViewHolder.from(parent, clickListener, longClickListener)
     }
 
     override fun onBindViewHolder(holder: StorageViewHolder, storage: Int) {

@@ -14,17 +14,14 @@ import io.ymsoft.objectfinder.util.PointerUtil
 import io.ymsoft.objectfinder.util.SharedViewUtil
 import io.ymsoft.objectfinder.util.loadFilePath
 
-class StorageViewHolder(
-    parent: ViewGroup,
+class StorageViewHolder private constructor(
+    val binding: ItemStorageBinding,
     clickListener: ((Int, List<View>) -> Unit?)?,
     longClickListener: OnItemLongClickListener?
 ) :
     RecyclerView.ViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.item_storage, parent, false)
+        binding.root
     ) {
-
-
-    private val binding: ItemStorageBinding by lazy { ItemStorageBinding.bind(itemView) }
 
     init {
         binding.clickableLayout.setOnClickListener {
@@ -69,6 +66,21 @@ class StorageViewHolder(
         } else {
             binding.objects.text = model.objString
             binding.objects.setTextColor(c.resources.getColor(R.color.colorAccent, null))
+        }
+    }
+
+    companion object {
+        fun from(
+            parent: ViewGroup,
+            clickListener: ((Int, List<View>) -> Unit?)?,
+            longClickListener: OnItemLongClickListener?
+        ): StorageViewHolder {
+            val inflater = LayoutInflater.from(parent.context)
+            return StorageViewHolder(
+                ItemStorageBinding.inflate(inflater, parent, false),
+                clickListener,
+                longClickListener
+            )
         }
     }
 }

@@ -24,7 +24,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     val isLoading : LiveData<Boolean> = _isLoading
 
     init {
-        _searchResult.postValue(arrayListOf())
+        _searchResult.value = repo.getStorageModelsInMemory()
     }
 
 

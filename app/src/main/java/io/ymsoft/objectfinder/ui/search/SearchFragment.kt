@@ -34,7 +34,7 @@ class SearchFragment : Fragment() {
     private val storageListAdapter = StorageListAdapter()
         .apply {
             setClickListener { position, sharedViews ->
-                showDetail(currentList[position], sharedViews)
+                showDetailWithSharedElements(currentList[position], sharedViews)
             }
         }
     private var loadCounter = 0
@@ -60,9 +60,7 @@ class SearchFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         binding.recyclerView.adapter = storageListAdapter
 
-        viewModel.searchResult.observe(viewLifecycleOwner, Observer {
-            updateItems(it)
-        })
+        viewModel.searchResult.observe(viewLifecycleOwner, Observer(this::updateItems))
 
         viewModel.isEmpty.observe(viewLifecycleOwner, Observer {isEmpty ->
             if(isEmpty){
@@ -113,10 +111,10 @@ class SearchFragment : Fragment() {
             }, requireContext().resources.getInteger(R.integer.default_transition_duration).toLong())
     }
 
-    private fun showDetail(model: StorageModel?, rootViews: List<View>) {
+    private fun showDetailWithSharedElements(model: StorageModel?, sharedViews: List<View>) {
         model?.let {
             val direction = SearchFragmentDirections.actionNavSearchToNavStorageDetail(it)
-            findNavController().navigate(direction, SharedViewUtil.makeStorageTransition(rootViews))
+            findNavController().navigate(direction, SharedViewUtil.makeStorageTransition(sharedViews))
         }
     }
 

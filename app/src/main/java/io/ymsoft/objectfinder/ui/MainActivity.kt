@@ -16,7 +16,6 @@ import androidx.navigation.ui.setupWithNavController
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.databinding.ActivityMainBinding
 import io.ymsoft.objectfinder.util.hideKeyboard
-import io.ymsoft.objectfinder.util.showKeyboard
 
 class MainActivity : AppCompatActivity(){
 
@@ -66,7 +65,6 @@ class MainActivity : AppCompatActivity(){
             }
             R.id.navSearch -> {
                 setAppBarVisivle(top = true, bottom = false)
-                binding.searchView.requestFocus()
             }
             R.id.navAddStorage -> {
                 setAppBarVisivle(top = true, bottom = false)
@@ -79,9 +77,11 @@ class MainActivity : AppCompatActivity(){
 
         if(destination.id == R.id.navSearch){
             searchView.visibility = View.VISIBLE
+            binding.searchView.isFocusable = true
         }
         else {
             searchView.visibility = View.GONE
+            binding.searchView.isFocusable = false
         }
 
         // 필요한 경우 destination 마다 다른 메뉴를 설정해 줄 수 있다.
