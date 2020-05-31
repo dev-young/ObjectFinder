@@ -38,6 +38,10 @@ fun View.animateFadeIn(startDelay: Long = 0){
     animate().alpha(1f).setStartDelay(startDelay).translationY(0f).setDuration(duration).start()
 }
 
+fun View.setOnSingleClickListener(action: (v: View) -> Unit){
+    setOnClickListener(SingleClickListener(action))
+}
+
 fun ImageView.loadBitmap(image: Bitmap?) {
     Glide.with(this).load(image).apply(RequestOptions.centerCropTransform()).into(this)
 }
@@ -119,13 +123,16 @@ fun Activity?.showKeyboard() {
 
 fun Activity?.hideKeyboard() {
     val inputMethodManager =
-        this?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        this?.getSystemService(Context.INPUT_METHOD_SERVICE)
 
-    currentFocus?.let {
-        inputMethodManager.hideSoftInputFromWindow(
-            it.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
-        )
+    if( inputMethodManager is InputMethodManager) {
+        this?.currentFocus?.let {
+            inputMethodManager.hideSoftInputFromWindow(
+                it.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
     }
+
 }
 
 fun Fragment.hideKeyboard() {

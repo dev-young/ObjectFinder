@@ -38,11 +38,11 @@ class AddEditStorageFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentAddStorageBinding.inflate(inflater, container, false)
 
-        binding.takePhoto.setOnClickListener { takePhoto() }
-        binding.pickFromAlbum.setOnClickListener { pickFromAlbum() }
-        binding.pickFromOtherStorage.setOnClickListener { pickFromOtherStorage() }
+        binding.takePhoto.setOnSingleClickListener { takePhoto() }
+        binding.pickFromAlbum.setOnSingleClickListener { pickFromAlbum() }
+        binding.pickFromOtherStorage.setOnSingleClickListener { pickFromOtherStorage() }
 
-        binding.saveBtn.setOnClickListener { save() }
+        binding.saveBtn.setOnSingleClickListener { save() }
         binding.removeBtn.setOnClickListener { clearPhoto() }
 
         viewModel.isSaved.observe(viewLifecycleOwner, Observer {

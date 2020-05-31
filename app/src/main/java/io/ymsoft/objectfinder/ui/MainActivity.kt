@@ -15,7 +15,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.databinding.ActivityMainBinding
+import io.ymsoft.objectfinder.util.SingleClickListener
 import io.ymsoft.objectfinder.util.hideKeyboard
+import io.ymsoft.objectfinder.util.setOnSingleClickListener
 
 class MainActivity : AppCompatActivity(){
 
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity(){
             setAppBarByDestination(destination)
         }
 
-        binding.fab.setOnClickListener {
+        binding.fab.setOnSingleClickListener {
             navController.navigate(R.id.action_global_navAddStorage)
         }
 
@@ -108,15 +110,16 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun initBottomAppBar() {
-        binding.bottomAppBar.setNavigationOnClickListener { v ->
+        binding.bottomAppBar.setNavigationOnClickListener(SingleClickListener({
             val f =
                 BottomNavigationDrawerFragment()
             f.show(supportFragmentManager, f.tag)
-        }
+        }))
+
         binding.bottomAppBar.setOnMenuItemClickListener { item ->
             Log.d("", item.toString())
             when(item.itemId){
-                R.id.action_search -> navController.navigate(R.id.navSearch)
+                R.id.action_search -> navController.navigate(R.id.action_global_navSearch)
 //                R.id.action_settings -> setAppBarVisivle(false, false)
             }
 

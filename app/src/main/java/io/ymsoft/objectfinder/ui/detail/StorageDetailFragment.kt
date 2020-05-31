@@ -87,9 +87,9 @@ class StorageDetailFragment : Fragment() {
             binding.checkAllCheckBox.toggle()
             chipGroupHelper.checkAllChips(binding.checkAllCheckBox.isChecked)
         }
-        binding.moveBtn.setOnClickListener { showStorageList() }
-        binding.deleteBtn.setOnClickListener { viewModel.deleteObjects(chipGroupHelper.getCheckedList()) }
-        binding.cancelBtn.setOnClickListener { chipGroupHelper.setCheckable(false) }
+        binding.moveBtn.setOnSingleClickListener { showStorageList() }
+        binding.deleteBtn.setOnSingleClickListener { viewModel.deleteObjects(chipGroupHelper.getCheckedList()) }
+        binding.cancelBtn.setOnSingleClickListener { chipGroupHelper.setCheckable(false) }
 
         binding.inputObject.setOnEditorActionListener(OnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {

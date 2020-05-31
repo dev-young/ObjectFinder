@@ -13,6 +13,7 @@ import io.ymsoft.objectfinder.databinding.ItemStorageBinding
 import io.ymsoft.objectfinder.util.PointerUtil
 import io.ymsoft.objectfinder.util.SharedViewUtil
 import io.ymsoft.objectfinder.util.loadFilePath
+import io.ymsoft.objectfinder.util.setOnSingleClickListener
 
 class StorageViewHolder private constructor(
     val binding: ItemStorageBinding,
@@ -24,7 +25,7 @@ class StorageViewHolder private constructor(
     ) {
 
     init {
-        binding.clickableLayout.setOnClickListener {
+        binding.clickableLayout.setOnSingleClickListener {
             clickListener?.invoke(
                 adapterPosition,
                 arrayListOf(

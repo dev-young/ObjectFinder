@@ -10,16 +10,16 @@
         android:id="@+id/navStorageList"
         android:name="io.ymsoft.objectfinder.ui.storage_list.StorageListFragment"
         android:label="@string/storage_list"
-        tools:layout="@layout/fragment_storage_list" >
+        tools:layout="@layout/fragment_storage_list">
         <action
             android:id="@+id/action_navStorageList_to_navStorageDetail"
             app:destination="@id/navStorageDetail"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/navStorageDetail"
             app:enterAnim="@anim/fragment_fade_enter"
             app:exitAnim="@anim/fragment_fade_exit"
+            app:launchSingleTop="true"
             app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit" />
+            app:popExitAnim="@anim/fragment_fade_exit"
+            app:popUpTo="@id/navStorageDetail" />
 
     </fragment>
 
@@ -27,23 +27,23 @@
         android:id="@+id/navSearch"
         android:name="io.ymsoft.objectfinder.ui.search.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_navSearch_to_navStorageDetail"
             app:destination="@id/navStorageDetail"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/navStorageDetail"
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="true"
             app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit" />
+            app:popExitAnim="@anim/fragment_fade_exit"
+            app:popUpTo="@id/navStorageDetail" />
     </fragment>
 
     <fragment
         android:id="@+id/navStorageDetail"
         android:name="io.ymsoft.objectfinder.ui.detail.StorageDetailFragment"
         android:label="@string/storage_detail"
-        tools:layout="@layout/fragment_storage_detail" >
+        tools:layout="@layout/fragment_storage_detail">
         <argument
             android:name="storageModel"
             app:argType="io.ymsoft.objectfinder.data.StorageModel" />
@@ -63,26 +63,32 @@
         <action
             android:id="@+id/action_navAddStorage_to_navStorageDetail"
             app:destination="@id/navStorageDetail"
-            app:launchSingleTop="true"
-            app:popUpToInclusive="true"
-            app:popUpTo="@id/navAddStorage"
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="true"
             app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit"/>
+            app:popExitAnim="@anim/fragment_fade_exit"
+            app:popUpTo="@id/navAddStorage"
+            app:popUpToInclusive="true" />
         <argument
             android:name="storage"
+            android:defaultValue="@null"
             app:argType="io.ymsoft.objectfinder.data.StorageModel"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
 
     </fragment>
     <action
         android:id="@+id/action_global_navAddStorage"
+        app:launchSingleTop="true"
         app:destination="@id/navAddStorage"
         app:enterAnim="@anim/fragment_open_enter"
         app:exitAnim="@anim/fragment_open_exit"
         app:popEnterAnim="@anim/fragment_fade_enter"
         app:popExitAnim="@anim/fragment_fade_exit" />
+
+    <action
+        android:id="@+id/action_global_navSearch"
+        app:launchSingleTop="true"
+        app:destination="@id/navSearch" />
 
 </navigation>
