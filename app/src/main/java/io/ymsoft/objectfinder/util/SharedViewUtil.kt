@@ -19,18 +19,18 @@ object SharedViewUtil {
     }
 
     fun setTransitionName(binding: FragmentStorageDetailBinding, model: StorageModel) {
-//        binding.root.transitionName = "root_${model.id}"
-        binding.imageLayout.transitionName = "layout_${model.id}"
-        binding.pointer.transitionName = "pointer_${model.id}"
-        binding.imgView.transitionName = "img_${model.id}"
+        binding.rootLayout.transitionName = "root_${model.id}"
+//        binding.imageLayout.transitionName = "layout_${model.id}"
+//        binding.pointer.transitionName = "pointer_${model.id}"
+//        binding.imgView.transitionName = "img_${model.id}"
 //        binding.chipGroup.transitionName = "objects_${model.id}"
     }
 
     fun setTransitionName(binding: ItemStorageBinding, model: StorageModel) {
-//        binding.root.transitionName = "root_${model.id}"
-        binding.photoLayout.transitionName = "layout_${model.id}"
-        binding.pointer.transitionName = "pointer_${model.id}"
-        binding.imgView.transitionName = "img_${model.id}"
+        binding.cardView.transitionName = "root_${model.id}"
+//        binding.photoLayout.transitionName = "layout_${model.id}"
+//        binding.pointer.transitionName = "pointer_${model.id}"
+//        binding.imgView.transitionName = "img_${model.id}"
 //        binding.objects.transitionName = "objects_${model.id}"
     }
 }

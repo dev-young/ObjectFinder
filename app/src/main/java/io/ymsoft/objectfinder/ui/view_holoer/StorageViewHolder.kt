@@ -29,10 +29,7 @@ class StorageViewHolder private constructor(
             clickListener?.invoke(
                 adapterPosition,
                 arrayListOf(
-                    binding.root,
-                    binding.photoLayout,
-                    binding.pointer,
-                    binding.imgView
+                    binding.cardView
                 )
             )
         }

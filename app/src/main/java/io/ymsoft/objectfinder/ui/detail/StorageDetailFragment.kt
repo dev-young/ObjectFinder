@@ -1,6 +1,6 @@
 package io.ymsoft.objectfinder.ui.detail
 
-import android.content.DialogInterface
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -13,7 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
+import com.google.android.material.transition.MaterialContainerTransform
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.common.OnModelClickListener
 import io.ymsoft.objectfinder.data.ObjectModel
@@ -22,7 +22,6 @@ import io.ymsoft.objectfinder.databinding.FragmentStorageDetailBinding
 import io.ymsoft.objectfinder.util.*
 import io.ymsoft.objectfinder.util.CheckableChipGroupHelper.OnCheckableChangeListener
 import io.ymsoft.objectfinder.util.CheckableChipGroupHelper.OnCheckedCounterChangeListener
-
 
 class StorageDetailFragment : Fragment() {
 
@@ -71,7 +70,11 @@ class StorageDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val transition = TransitionInflater.from(context).inflateTransition(R.transition.shared_element_transition)
+        val transition = MaterialContainerTransform().apply {
+            fadeMode = MaterialContainerTransform.FADE_MODE_CROSS
+            scrimColor = Color.TRANSPARENT
+//            duration = 1000
+        }
         sharedElementEnterTransition = transition
     }
 
@@ -99,7 +102,7 @@ class StorageDetailFragment : Fragment() {
             false
         })
 
-        args.storageModel?.let {
+        args.storageModel.let {
             updateUI(it)
             it.id?.let { id ->
                 viewModel.startObserve(id)
@@ -124,14 +127,13 @@ class StorageDetailFragment : Fragment() {
         if (model == null) return
         SharedViewUtil.setTransitionName(binding, model)
 
-        postponeEnterTransition()
         if (model.imgUrl.isNullOrBlank()) {
             binding.imageLayout.visibility = View.GONE
-            startPostponedEnterTransition()
         } else {
+//            postponeEnterTransition()
             binding.imageLayout.visibility = View.VISIBLE
             binding.imgView.loadFilePath(model.imgUrl) {
-                startPostponedEnterTransition()
+//                startPostponedEnterTransition()
             }
         }
 

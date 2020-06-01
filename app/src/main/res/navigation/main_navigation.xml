@@ -14,11 +14,7 @@
         <action
             android:id="@+id/action_navStorageList_to_navStorageDetail"
             app:destination="@id/navStorageDetail"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit"
             app:launchSingleTop="true"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit"
             app:popUpTo="@id/navStorageDetail" />
 
     </fragment>

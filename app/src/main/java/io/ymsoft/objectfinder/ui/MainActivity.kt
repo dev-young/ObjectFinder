@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -50,7 +51,8 @@ class MainActivity : AppCompatActivity(){
         }
 
         binding.fab.setOnSingleClickListener {
-            navController.navigate(R.id.action_global_navAddStorage)
+            val extra = FragmentNavigatorExtras(binding.fab to binding.fab.transitionName)
+            navController.navigate(R.id.action_global_navAddStorage, null, null, extra)
         }
 
         initBottomAppBar()
@@ -99,8 +101,12 @@ class MainActivity : AppCompatActivity(){
 
         if(bottom){
             binding.bottomAppBar.hideOnScroll = true
-            binding.bottomAppBar.performShow()
-            binding.fab.show()
+            binding.bottomAppBar.apply {
+                postDelayed({
+                    performShow()
+                    binding.fab.show()
+                }, 400)
+            }
         } else {
             binding.bottomAppBar.hideOnScroll = false
             binding.bottomAppBar.apply { post { performHide() } }

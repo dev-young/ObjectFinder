@@ -2,6 +2,7 @@ package io.ymsoft.objectfinder.ui.storage_add
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.transition.MaterialContainerTransform
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.FragmentAddStorageBinding
@@ -30,6 +32,15 @@ class AddEditStorageFragment : Fragment() {
     private val viewModel by viewModels<AddEditStorageViewModel>()
 
     private val args by navArgs<AddEditStorageFragmentArgs>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val transition = MaterialContainerTransform().apply {
+            fadeMode = MaterialContainerTransform.FADE_MODE_CROSS
+            scrimColor = Color.TRANSPARENT
+        }
+        sharedElementEnterTransition = transition
+    }
     
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +59,12 @@ class AddEditStorageFragment : Fragment() {
         viewModel.isSaved.observe(viewLifecycleOwner, Observer {
             it?.let {
                 pickPhotoHelper.clear()
-                val direction = AddEditStorageFragmentDirections.actionNavAddStorageToNavStorageDetail(it)
-                findNavController().navigate(direction)
+                if (args.storage != null)
+                    findNavController().navigateUp()
+                else{
+                    val direction = AddEditStorageFragmentDirections.actionNavAddStorageToNavStorageDetail(it)
+                    findNavController().navigate(direction)
+                }
             }
         })
 

@@ -13,6 +13,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.ActionMenuItemView
+import androidx.appcompat.widget.ActionMenuView
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -21,6 +24,8 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import io.ymsoft.objectfinder.R
+import io.ymsoft.objectfinder.ui.MainActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
 fun logI(message: String) {
@@ -113,6 +118,23 @@ fun Context?.makeToast(@StringRes id: Int?) {
 
 fun Context?.makeToast(text: String?) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+}
+
+fun Activity?.startToolbarAnimation(){
+    if (this is MainActivity){
+        this.toolbar.children.forEach {
+            if(it is ActionMenuView){
+                it.children.forEachIndexed { index, view ->
+                    if(view is ActionMenuItemView){
+                        view.setTranslationY(-30f)
+                        view.alpha = 0f
+                        view.animate().setStartDelay(100L + (index * 10)).setDuration(200).translationY(0f).alpha(1f)
+                    }
+                }
+
+            }
+        }
+    }
 }
 
 fun Activity?.showKeyboard() {
