@@ -1,7 +1,6 @@
 package io.ymsoft.objectfinder.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -38,7 +37,8 @@ class MainActivity : AppCompatActivity(){
             R.id.navStorageList,
             R.id.navSearch,
             R.id.navAddStorage,
-            R.id.navStorageDetail
+            R.id.navStorageDetail,
+            R.id.navSettings
         ))
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.toolbar.setupWithNavController(navController)
@@ -65,12 +65,14 @@ class MainActivity : AppCompatActivity(){
         when(destination.id){
             R.id.navStorageDetail -> {
                 setAppBarVisivle(top = true, bottom = false)
-                binding.fab.hide()
             }
             R.id.navSearch -> {
                 setAppBarVisivle(top = true, bottom = false)
             }
             R.id.navAddStorage -> {
+                setAppBarVisivle(top = true, bottom = false)
+            }
+            R.id.navSettings -> {
                 setAppBarVisivle(top = true, bottom = false)
             }
             else -> {

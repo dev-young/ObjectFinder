@@ -103,16 +103,18 @@ class SearchFragment : Fragment() {
      * 이유: 공유요소 전환을 사용시 애니메이션이 끝난 뒤 리스트를 업데이트해야 애니메이션이 문제 없이 작동한다.*/
     private fun updateItems(models: List<StorageModel>?) {
         Timber.i("StorageList Changed!")
-        if(loadCounter++ == 0)
+        if(loadCounter++ != 1)
             storageListAdapter.submitList(models)
         else
             binding.recyclerView.postDelayed({
                 storageListAdapter.submitList(models)
-            }, requireContext().resources.getInteger(R.integer.default_transition_duration).toLong())
+            }, animationDuration)
     }
+    private val animationDuration by lazy { requireContext().resources.getInteger(R.integer.default_transition_duration).toLong()+100 }
 
     private fun showDetailWithSharedElements(model: StorageModel?, sharedViews: List<View>) {
         model?.let {
+            loadCounter = 0
             val direction = SearchFragmentDirections.actionNavSearchToNavStorageDetail(it)
             findNavController().navigate(direction, SharedViewUtil.makeStorageTransition(sharedViews))
         }

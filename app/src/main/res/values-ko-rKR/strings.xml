@@ -43,4 +43,6 @@
     <string name="ok">확인</string>
     <string name="please_choice_storage">보관함을 선택해주세요.</string>
     <string name="title_settings">설정</string>
+    <string name="settings_remove_unused_img">사용하지 않는 이미지 제거</string>
+    <string name="message_delete_complete">삭제가 완료되었습니다.</string>
 </resources>

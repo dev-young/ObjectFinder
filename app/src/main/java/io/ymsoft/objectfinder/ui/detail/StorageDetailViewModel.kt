@@ -80,6 +80,7 @@ class StorageDetailViewModel(application: Application) : AndroidViewModel(applic
         val storageId = _storageId.value
         storageId?.let {
             _isLoading.postValue(true)
+            objectModels.value?.let { repo.deleteObjectModels(it) }
             repo.deleteStorageModel(it)
             _isLoading.postValue(false)
         }

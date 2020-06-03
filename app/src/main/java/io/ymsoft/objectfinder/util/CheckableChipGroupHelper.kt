@@ -91,10 +91,9 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { chipList ->
-                    chipGroup.removeAllViews()
+//                    chipGroup.removeAllViews()
                     chipList.forEach(chipGroup::addView)
-                    if(list.size > currentList.size)
-                        chipGroup.animateFadeIn(200)    // 최초 로딩시에만 애니메이션 적용
+                    chipGroup.animateFadeIn(200)    // 최초 로딩시에만 애니메이션 적용
 
                     currentList = list
                     // 이곳이 실행되는 경우는 체크한 항목들이 삭제되거나 이동된 경우이므로 체크 기능 false 로 초기화
@@ -105,6 +104,9 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
 
     /**그룹의 체크 가능 여부를 변경한다. */
     fun setCheckable(newState: Boolean) {
+        if(!newState)
+            checkAllChips(false)
+
         if (newState != isCheckable) {
             for (i in 0 until chipGroup.childCount) {
                 val chip = chipGroup[i] as Chip
@@ -136,6 +138,7 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
             checkedChipMap.clear()
             chipGroup.clearCheck()
             setCheckedCount(0)
+            chipGroup.invalidate()
         }
 
     }

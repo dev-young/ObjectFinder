@@ -75,16 +75,29 @@
     </fragment>
     <action
         android:id="@+id/action_global_navAddStorage"
-        app:launchSingleTop="true"
         app:destination="@id/navAddStorage"
         app:enterAnim="@anim/fragment_open_enter"
         app:exitAnim="@anim/fragment_open_exit"
+        app:launchSingleTop="true"
         app:popEnterAnim="@anim/fragment_fade_enter"
         app:popExitAnim="@anim/fragment_fade_exit" />
 
     <action
         android:id="@+id/action_global_navSearch"
+        app:destination="@id/navSearch"
+        app:launchSingleTop="true" />
+    <fragment
+        android:id="@+id/navSettings"
+        android:name="io.ymsoft.objectfinder.ui.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
+    <action
+        android:id="@+id/action_global_navSettings"
+        app:destination="@id/navSettings"
+        app:enterAnim="@anim/fragment_open_enter"
+        app:exitAnim="@anim/fragment_open_exit"
         app:launchSingleTop="true"
-        app:destination="@id/navSearch" />
+        app:popEnterAnim="@anim/fragment_fade_enter"
+        app:popExitAnim="@anim/fragment_fade_exit" />
 
 </navigation>

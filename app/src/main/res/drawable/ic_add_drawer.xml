@@ -8,8 +8,8 @@
     <item
         android:drawable="@drawable/ic_add_24dp"
         android:gravity="center"
-        android:width="20dp"
-        android:height="20dp"
+        android:width="14dp"
+        android:height="14dp"
         android:bottom="6.3dp"
         />
 

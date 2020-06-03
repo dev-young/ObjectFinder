@@ -105,6 +105,13 @@ fun Bitmap.printInfo(){
         ))
 }
 
+fun View.setVisible(visible: Boolean){
+    if (visible)
+        visibility = View.VISIBLE
+    else
+        visibility = View.GONE
+}
+
 fun View.addRipple() = with(TypedValue()) {
     context.theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
     setBackgroundResource(resourceId)

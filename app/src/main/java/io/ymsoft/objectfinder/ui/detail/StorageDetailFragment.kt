@@ -6,6 +6,7 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.ScrollView
 import android.widget.TextView.OnEditorActionListener
+import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
@@ -54,7 +55,7 @@ class StorageDetailFragment : Fragment() {
                         binding.deleteBtn.visibility = View.GONE
                         binding.moveBtn.visibility = View.GONE
                     } else {
-                        binding.cancelBtn.visibility = View.GONE
+//                        binding.cancelBtn.visibility = View.GONE
                         binding.deleteBtn.visibility = View.VISIBLE
                         binding.moveBtn.visibility = View.VISIBLE
                     }
@@ -73,7 +74,7 @@ class StorageDetailFragment : Fragment() {
         val transition = MaterialContainerTransform().apply {
             fadeMode = MaterialContainerTransform.FADE_MODE_CROSS
             scrimColor = Color.TRANSPARENT
-//            duration = 1000
+            duration = 400
         }
         sharedElementEnterTransition = transition
     }
@@ -118,6 +119,14 @@ class StorageDetailFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressed = {
+            if(binding.checkActionMenu.visibility == View.VISIBLE){
+                chipGroupHelper.setCheckable(false)
+            } else {
+                findNavController().navigateUp()
+            }
+        })
+
         return binding.root
     }
 
@@ -129,6 +138,7 @@ class StorageDetailFragment : Fragment() {
 
         if (model.imgUrl.isNullOrBlank()) {
             binding.imageLayout.visibility = View.GONE
+            startPostponedEnterTransition()
         } else {
             postponeEnterTransition()
             binding.imageLayout.visibility = View.VISIBLE
@@ -159,10 +169,6 @@ class StorageDetailFragment : Fragment() {
     private fun updateObjectList(list: List<ObjectModel>?) {
         if (list == null) return
         chipGroupHelper.setChipGroups(list)
-        if (binding.chipGroup.childCount != 0){
-            binding.scrollView.apply { post { this.fullScroll(ScrollView.FOCUS_DOWN) } }
-
-        }
 
 
         if (list.isEmpty()) binding.emptyMessage.visibility = View.VISIBLE

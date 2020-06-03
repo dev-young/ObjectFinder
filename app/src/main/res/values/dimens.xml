@@ -11,4 +11,5 @@
     <dimen name="default_item_radius">6dp</dimen>
 
     <integer name="default_transition_duration">300</integer>
+    <dimen name="default_divider_width" type="dimen" format="float">0.3dp</dimen>
 </resources>
