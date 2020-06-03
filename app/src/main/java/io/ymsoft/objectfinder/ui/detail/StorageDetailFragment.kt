@@ -130,10 +130,10 @@ class StorageDetailFragment : Fragment() {
         if (model.imgUrl.isNullOrBlank()) {
             binding.imageLayout.visibility = View.GONE
         } else {
-//            postponeEnterTransition()
+            postponeEnterTransition()
             binding.imageLayout.visibility = View.VISIBLE
             binding.imgView.loadFilePath(model.imgUrl) {
-//                startPostponedEnterTransition()
+                startPostponedEnterTransition()
             }
         }
 
@@ -159,8 +159,11 @@ class StorageDetailFragment : Fragment() {
     private fun updateObjectList(list: List<ObjectModel>?) {
         if (list == null) return
         chipGroupHelper.setChipGroups(list)
-        if (binding.chipGroup.childCount != 0)
+        if (binding.chipGroup.childCount != 0){
             binding.scrollView.apply { post { this.fullScroll(ScrollView.FOCUS_DOWN) } }
+
+        }
+
 
         if (list.isEmpty()) binding.emptyMessage.visibility = View.VISIBLE
         else binding.emptyMessage.visibility = View.GONE
@@ -169,7 +172,7 @@ class StorageDetailFragment : Fragment() {
     private fun addObject() {
         viewModel.addNewObject(binding.inputObject.text.toString())
         binding.inputObject.setText("")
-        binding.scrollView.apply { post { this.fullScroll(ScrollView.FOCUS_DOWN) } }
+        binding.scrollView.apply { postDelayed({ this.fullScroll(ScrollView.FOCUS_DOWN) }, 500)}
     }
 
     private fun moveAnotherStorage(targetStorageId: Long) {

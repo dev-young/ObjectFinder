@@ -38,6 +38,8 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
 
     // 현재 체크된 Model 리스트
     private var checkedModelsMap = hashMapOf<Long, T>()
+    // 현재 체크된 View 리스트
+    private var checkedChipMap = hashMapOf<Long, View>()
 
     /**모델 리스트를 Chip으로 생성한다.
      * 기존의 리스트와 비교하여 새롭게 추가된 경우에는 새롭게 추가된 모델만 Chip으로 추가한다.
@@ -59,8 +61,17 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
             chip.animateFadeIn()
             logI("${model.modelName} 추가!")
             currentList = list
+        } else if(list.size < currentList.size){
+            //ObjectModel 삭제 혹은 이동된 경우
+            checkedChipMap.values.forEach {
+                chipGroup.removeWithAnimation(it)
+            }
+            currentList = list
+            // 이곳이 실행되는 경우는 체크한 항목들이 삭제되거나 이동된 경우이므로 체크 기능 false 로 초기화
+            setCheckable(false)
+            return
         } else {
-            //ObjectModel을 1개 추가한 경우가 아닐때 : 삭제 혹은 최초 로딩
+            //ObjectModel 최초 로딩
             Observable.just(list)
                 .map {
                     val chipList = arrayListOf<Chip>()
@@ -77,7 +88,7 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
                     }
                     chipList
                 }
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { chipList ->
                     chipGroup.removeAllViews()
@@ -113,6 +124,8 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
             for (i in 0 until chipCount) {
                 val chip = chipGroup[i] as Chip
                 chip.isChecked = checked
+                val model = chip.tag as T
+                checkedChipMap[model.modelId] = chip
             }
             currentList.forEach {
                 checkedModelsMap[it.modelId] = it
@@ -120,6 +133,7 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
             setCheckedCount(chipCount)
         } else {
             checkedModelsMap.clear()
+            checkedChipMap.clear()
             chipGroup.clearCheck()
             setCheckedCount(0)
         }
@@ -149,9 +163,11 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
 
             if (isChecked) {
                 checkedModelsMap[model.modelId] = model
+                checkedChipMap[model.modelId] = it
                 addCheckedCount(1)
             } else {
                 checkedModelsMap.remove(model.modelId)
+                checkedChipMap.remove(model.modelId)
                 addCheckedCount(-1)
             }
         }

@@ -15,5 +15,10 @@
             android:id="@+id/navAddStorage"
             android:icon="@drawable/ic_add_drawer"
             android:title="@string/title_add_storage" />
+
+        <item
+            android:id="@+id/navSettings"
+            android:icon="@drawable/ic_settings_24dp"
+            android:title="@string/title_settings" />
     </group>
 </menu>

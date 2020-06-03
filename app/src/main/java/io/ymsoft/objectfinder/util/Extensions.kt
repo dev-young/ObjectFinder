@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Environment
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
@@ -74,6 +75,7 @@ fun ImageView.loadUri(uri: Uri?, bitmapListener: ((bitmap:Bitmap?) -> Unit?)? = 
                 target: Target<Bitmap>?,
                 isFirstResource: Boolean
             ): Boolean {
+                bitmapListener?.invoke(null)
                 return false
             }
 
@@ -111,6 +113,23 @@ fun View.addRipple() = with(TypedValue()) {
 fun View.addCircleRipple() = with(TypedValue()) {
     context.theme.resolveAttribute(R.attr.selectableItemBackgroundBorderless, this, true)
     setBackgroundResource(resourceId)
+}
+
+fun ViewGroup.removeWithAnimation(view:View){
+    view.animate().scaleX(0f).scaleY(0f).alpha(0f).setDuration(200).setListener(object : Animator.AnimatorListener{
+        override fun onAnimationRepeat(animation: Animator?) {
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            removeView(view)
+        }
+
+        override fun onAnimationCancel(animation: Animator?) {
+        }
+
+        override fun onAnimationStart(animation: Animator?) {
+        }
+    })
 }
 
 fun Context.getAbsolutePhotoPath(fileName : String): String? {

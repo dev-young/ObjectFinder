@@ -39,6 +39,19 @@ class SearchFragment : Fragment() {
         }
     private var loadCounter = 0
 
+    @SuppressLint("CheckResult")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        Observable.just(0)
+            .delay(300, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                activity.showKeyboard()
+            }
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,8 +87,6 @@ class SearchFragment : Fragment() {
 
             viewModel.doQuery(sv.query.toString())
         }
-
-        binding.root.postDelayed({ activity.showKeyboard() }, 300)
 
         return binding.root
     }
