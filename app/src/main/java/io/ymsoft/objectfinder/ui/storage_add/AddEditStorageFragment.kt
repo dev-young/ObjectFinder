@@ -67,8 +67,9 @@ class AddEditStorageFragment : Fragment() {
                 }
             }
         })
-
-        initView(args.storage)
+        viewModel.toastMessage.observe(viewLifecycleOwner, Observer { requireContext().makeToast(it) })
+        viewModel.storageModel.observe(viewLifecycleOwner, Observer(this::initView))
+        viewModel.initModel(args.storage)
 
 
 
@@ -167,31 +168,8 @@ class AddEditStorageFragment : Fragment() {
         val point = getRelativeCoordinate()
         val memo = binding.storageMemo.text.toString()
 
-        //유효성 검사
-        if(photoUrl.isNullOrBlank() && name.isBlank()){
-            context.makeToast(R.string.please_input_name_or_photo)
-            return
-        }
 
-        //StorageModel 생성
-        var model = args.storage
-        if(model == null){
-            model = StorageModel(
-                imgUrl = photoUrl,
-                name = name,
-                x = point?.first,
-                y = point?.second,
-                memo = memo
-            )
-        } else {
-            model.imgUrl = photoUrl
-            model.name = name
-            model.x = point?.first
-            model.y = point?.second
-            model.memo = memo
-        }
-
-        viewModel.saveStorageModel(model)
+        viewModel.saveStorageModel(photoUrl, name, point, memo)
 
     }
 
@@ -245,7 +223,7 @@ class AddEditStorageFragment : Fragment() {
                     MotionEvent.ACTION_DOWN -> v.parent.requestDisallowInterceptTouchEvent(true)
                     MotionEvent.ACTION_UP -> {
                         v.parent.requestDisallowInterceptTouchEvent(false)
-                        Log.i("", getRelativeCoordinate().toString())
+                        logI(getRelativeCoordinate().toString())
                     }
                 }
 

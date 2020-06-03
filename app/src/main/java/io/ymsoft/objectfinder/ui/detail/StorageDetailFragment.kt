@@ -140,6 +140,8 @@ class StorageDetailFragment : Fragment() {
         model.name?.apply {
             if (isNotEmpty())
                 setToolbarTitle(this)
+            else
+                setToolbarTitle(R.string.storage_detail)
         }
 
         binding.imgView.doOnPreDraw {

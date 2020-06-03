@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Environment
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -112,6 +113,14 @@ fun View.addCircleRipple() = with(TypedValue()) {
     setBackgroundResource(resourceId)
 }
 
+fun Context.getAbsolutePhotoPath(fileName : String): String? {
+    var path : String? = null
+    getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.let {
+        path = "${it.absolutePath}/$fileName"
+    }
+    return path
+}
+
 fun Context?.makeToast(@StringRes id: Int?) {
     id?.let { makeToast(this?.getString(id)) }
 }
@@ -138,9 +147,8 @@ fun Activity?.startToolbarAnimation(){
 }
 
 fun Activity?.showKeyboard() {
-    val imm: InputMethodManager =
-        this?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS)
+    val imm = this?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+    imm?.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS)
 }
 
 fun Activity?.hideKeyboard() {

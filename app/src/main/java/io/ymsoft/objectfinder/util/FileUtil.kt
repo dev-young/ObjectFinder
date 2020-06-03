@@ -21,7 +21,7 @@ object FileUtil {
     fun saveBitmapToFile(bitmap: Bitmap, file: File){
         CoroutineScope(Dispatchers.IO).launch {
             if(!file.exists()){
-                Log.i("", "파일 디렉토리 생성")
+                logI("파일 디렉토리 생성")
                 file.mkdirs()
             }
 
@@ -44,12 +44,12 @@ object FileUtil {
             val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
             val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
             return File.createTempFile(
-                "JPEG_${timeStamp}_", /* prefix */
+                "IMG_${timeStamp}", /* prefix */
                 ".jpg", /* suffix */
                 storageDir /* directory */
             ).apply {
                 // Save a file: path for use with ACTION_VIEW intents
-
+                logI("파일 생성! $absolutePath")
             }
         }
         return null
@@ -71,15 +71,15 @@ object FileUtil {
         )
     }
 
-    fun delete(currentPhotoPath: String?) {
-        currentPhotoPath?.let {
+    fun delete(filePath: String?) {
+        filePath?.let {
             File(it).apply {
                 var r = false
                 if(exists()){
                     r = delete()
                 }
-                if(r) Log.i("", "삭제 성공!  $it")
-                else Log.e("", "삭제 실패!  $it")
+                if(r) logI("파일 삭제!  $it")
+                else logE("삭제 실패!  $it")
             }
         }
     }

@@ -123,7 +123,6 @@ class MainActivity : AppCompatActivity(){
         }))
 
         binding.bottomAppBar.setOnMenuItemClickListener { item ->
-            Log.d("", item.toString())
             when(item.itemId){
                 R.id.action_search -> navController.navigate(R.id.action_global_navSearch)
 //                R.id.action_settings -> setAppBarVisivle(false, false)

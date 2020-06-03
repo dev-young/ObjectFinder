@@ -49,25 +49,6 @@ class PickPhotoHelper {
         }
     }
 
-    fun startPickFromOtherStorage(activity: Activity? = null, fragment: Fragment? = null) {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-
-        activity?.apply {
-            val uri = Uri.parse(this.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath)
-            intent.setDataAndType(uri, "image/*")
-            if (intent.resolveActivity(packageManager) != null) startActivityForResult(intent, PICK_FROM_OTHERS)
-            return
-        }
-
-        fragment?.apply {
-            val uri = FileUtil.getUri(requireContext(), requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!)
-            intent.setDataAndType(uri, "image/*")
-            if (fragment.activity?.packageManager?.let { intent.resolveActivity(it) } != null) {
-                startActivityForResult(intent, PICK_FROM_OTHERS)
-            }
-        }
-    }
-
     /**외부 저장소의 Uri를 Bitmap으로 변환한 뒤 내부 저장소에 새로운 파일로 저장한다.*/
     fun makePhotoFromUri(context:Context, uri: Uri){
         CoroutineScope(Dispatchers.IO).launch {
