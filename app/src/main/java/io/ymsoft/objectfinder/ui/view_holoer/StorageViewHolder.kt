@@ -5,15 +5,14 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.common.OnItemLongClickListener
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.ItemStorageBinding
-import io.ymsoft.objectfinder.util.PointerUtil
-import io.ymsoft.objectfinder.util.SharedViewUtil
-import io.ymsoft.objectfinder.util.loadFilePath
-import io.ymsoft.objectfinder.util.setOnSingleClickListener
+import io.ymsoft.objectfinder.util.*
 
 class StorageViewHolder private constructor(
     val binding: ItemStorageBinding,
@@ -37,7 +36,20 @@ class StorageViewHolder private constructor(
             longClickListener?.onItemLongClick(adapterPosition)
             true
         }
+
+//        binding.objects.apply {
+//            viewTreeObserver.addOnGlobalLayoutListener {
+//                val h = height
+//                val lh = lineHeight + 3
+//                val lines = h/lh
+//                if(maxLines != lines)
+//                    maxLines = lines
+//                logI("$adapterPosition -> $h, $lh, $lines")
+//                postInvalidate()
+//            }
+//        }
     }
+
 
     fun onBind(model: StorageModel) {
         SharedViewUtil.setTransitionName(binding, model)
@@ -63,8 +75,30 @@ class StorageViewHolder private constructor(
             binding.objects.setTextColor(c.resources.getColor(android.R.color.darker_gray, null))
         } else {
             binding.objects.text = model.objString
-            binding.objects.setTextColor(c.resources.getColor(R.color.colorAccent, null))
+            binding.objects.setTextColor(c.resources.getColor(R.color.colorPrimaryDark, null))
         }
+
+//        val lineSpace = (binding.objects.paint.fontMetrics.bottom - binding.objects.paint.fontMetrics.top).toInt()
+//        binding.textLayout.setOnMeasureListener { w, _h ->
+//            binding.objects.apply {
+//                doOnPreDraw {
+//                    val h = _h - binding.title.measuredHeight
+//                    val lh = lineSpace
+//                    val lines = h/lh
+//                    if(maxLines != lines){
+//                        maxLines = lines
+//                        postInvalidate()
+//                        val ch = height
+//                        logI(ch.toString())
+//                    }
+//                    logI("$adapterPosition -> $h, $lh, $lines,  ${_h - h}")
+//
+//                }
+//            }
+//        }
+
+
+
     }
 
     companion object {

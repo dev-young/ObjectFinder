@@ -5,7 +5,7 @@ import timber.log.Timber
 
 class SingleClickListener (
     private val action: (v: View) -> Unit,
-    private val interval: Long = 300
+    private val interval: Long = 500
 ) :
     View.OnClickListener {
 

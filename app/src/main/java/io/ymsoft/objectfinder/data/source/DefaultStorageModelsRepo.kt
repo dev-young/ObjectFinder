@@ -89,6 +89,7 @@ class DefaultStorageModelsRepo(context: Context) : StorageModelsRepository {
     }
 
     override suspend fun deleteObjectModels(objList: List<ObjectModel>) {
+        if (objList.isEmpty()) return
         withContext(Dispatchers.Default) {
             val storageId = objList[0].storageId
             val idList = arrayListOf<Long>().apply {

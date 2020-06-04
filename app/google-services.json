@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "87726616919",
+    "firebase_url": "https://object-finder-6a6c3.firebaseio.com",
+    "project_id": "object-finder-6a6c3",
+    "storage_bucket": "object-finder-6a6c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87726616919:android:7ec99112c3355cc7838e12",
+        "android_client_info": {
+          "package_name": "io.ymsoft.objectfinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87726616919-a9225ilhoq6fnd6vn3l1m939mriiane6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAswHShFSACWlb7rCwKzsN8k6C0n_Efe4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87726616919-a9225ilhoq6fnd6vn3l1m939mriiane6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

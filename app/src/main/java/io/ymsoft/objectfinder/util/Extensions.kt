@@ -49,6 +49,8 @@ fun View.setOnSingleClickListener(action: (v: View) -> Unit){
     setOnClickListener(SingleClickListener(action))
 }
 
+
+
 fun ImageView.loadBitmap(image: Bitmap?) {
     Glide.with(this).load(image).apply(RequestOptions.centerCropTransform()).into(this)
 }

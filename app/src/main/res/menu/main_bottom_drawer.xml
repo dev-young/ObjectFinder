@@ -4,7 +4,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/navStorageList"
-            android:icon="@drawable/ic_drawers"
+            android:icon="@drawable/ic_storages"
             android:title="@string/storage_list" />
         <item
             android:id="@+id/navSearch"
@@ -13,7 +13,7 @@
 
         <item
             android:id="@+id/navAddStorage"
-            android:icon="@drawable/ic_add_drawer"
+            android:icon="@drawable/ic_add_storage"
             android:title="@string/title_add_storage" />
 
         <item

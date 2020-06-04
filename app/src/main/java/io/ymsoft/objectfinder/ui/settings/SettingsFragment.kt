@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.ymsoft.objectfinder.databinding.FragmentSettingsBinding
+import io.ymsoft.objectfinder.util.logI
 import io.ymsoft.objectfinder.util.makeToast
 import io.ymsoft.objectfinder.util.setOnSingleClickListener
 import io.ymsoft.objectfinder.util.setVisible
@@ -37,6 +38,8 @@ class SettingsFragment : Fragment() {
         viewModel.isWorking.observe(viewLifecycleOwner, Observer(binding.progress::setVisible))
         viewModel.toastMessage.observe(viewLifecycleOwner, Observer(requireContext()::makeToast))
 
+
+        //test
 
         return binding.root
     }

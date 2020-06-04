@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            tools:src="@drawable/ic_menu_gallery"
+            tools:src="@drawable/ic_launcher"
             />
     </io.ymsoft.objectfinder.view_custom.SquareFrameLayout>
 
