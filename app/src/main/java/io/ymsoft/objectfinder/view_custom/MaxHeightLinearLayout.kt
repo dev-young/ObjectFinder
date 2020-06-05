@@ -20,9 +20,6 @@ class MaxHeightLinearLayout @JvmOverloads constructor(
 
         if (measuredHeight > maxHeight){
             setMeasuredDimension(measuredWidth, maxHeight)
-//            layoutParams.apply {
-//                height = maxHeight
-//            }
         }
         measureListener?.invoke(measuredWidth, measuredHeight)
     }

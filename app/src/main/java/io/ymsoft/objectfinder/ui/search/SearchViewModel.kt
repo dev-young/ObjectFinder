@@ -36,7 +36,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             withContext(Dispatchers.IO){
                 val result = repo.getStorageModels(query)
                 if (result is Result.Success){
-                    _searchResult.postValue(result.data)
+                    result.data?.let { _searchResult.postValue(it) }
                 }
                 _isLoading.postValue(false)
             }

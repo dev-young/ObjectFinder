@@ -16,17 +16,16 @@ class AutoMaxLineTextView @JvmOverloads constructor(
     }
 
     private val lineSpace by lazy { (paint.fontMetrics.bottom - paint.fontMetrics.top).toInt() }
-    init {
-        maxLines = 4
-        ellipsize = TextUtils.TruncateAt.END
-        viewTreeObserver.addOnGlobalLayoutListener {
-            val h = height
-            val lh = lineSpace
-            val lines = h/lh
-            if(maxLines != lines)
-                maxLines = lines
-//            logI("$adapterPosition -> $h, $lh, $lines")
-            postInvalidate()
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+//        logI("측정된 높이: $measuredHeight  -> $text")
+        val lines = measuredHeight/lineSpace
+        if(maxLines != lines){
+            ellipsize = null
+            maxLines = lines
+            ellipsize = TextUtils.TruncateAt.END
+//            logI("수정된 줄 수 : $lines  -> $text")
         }
     }
 

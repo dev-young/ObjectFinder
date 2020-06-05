@@ -64,9 +64,9 @@ class SearchFragment : Fragment() {
 
         viewModel.isEmpty.observe(viewLifecycleOwner, Observer {isEmpty ->
             if(isEmpty){
-                binding.emptyMessage.visibility = View.VISIBLE
+                binding.recyclerView.visibility = View.GONE
             } else {
-                binding.emptyMessage.visibility = View.GONE
+                binding.recyclerView.visibility = View.VISIBLE
             }
         })
 

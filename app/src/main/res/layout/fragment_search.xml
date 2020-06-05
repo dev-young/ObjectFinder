@@ -12,26 +12,14 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
             >
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:clipToPadding="false"
-                android:paddingBottom="?actionBarSize"
-                tools:listitem="@layout/item_storage"
-                />
-
-
             <LinearLayout
                 android:id="@+id/emptyMessage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:visibility="gone"
                 >
 
 
@@ -46,6 +34,20 @@
                     />
 
             </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:clipToPadding="false"
+                android:paddingBottom="?actionBarSize"
+                tools:listitem="@layout/item_storage"
+                android:background="@android:color/white"
+                />
+
+
+
         </FrameLayout>
 
 

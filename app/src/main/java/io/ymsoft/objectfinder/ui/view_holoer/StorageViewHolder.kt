@@ -36,18 +36,6 @@ class StorageViewHolder private constructor(
             longClickListener?.onItemLongClick(adapterPosition)
             true
         }
-
-//        binding.objects.apply {
-//            viewTreeObserver.addOnGlobalLayoutListener {
-//                val h = height
-//                val lh = lineHeight + 3
-//                val lines = h/lh
-//                if(maxLines != lines)
-//                    maxLines = lines
-//                logI("$adapterPosition -> $h, $lh, $lines")
-//                postInvalidate()
-//            }
-//        }
     }
 
 
@@ -77,27 +65,6 @@ class StorageViewHolder private constructor(
             binding.objects.text = model.objString
             binding.objects.setTextColor(c.resources.getColor(R.color.colorPrimaryDark, null))
         }
-
-//        val lineSpace = (binding.objects.paint.fontMetrics.bottom - binding.objects.paint.fontMetrics.top).toInt()
-//        binding.textLayout.setOnMeasureListener { w, _h ->
-//            binding.objects.apply {
-//                doOnPreDraw {
-//                    val h = _h - binding.title.measuredHeight
-//                    val lh = lineSpace
-//                    val lines = h/lh
-//                    if(maxLines != lines){
-//                        maxLines = lines
-//                        postInvalidate()
-//                        val ch = height
-//                        logI(ch.toString())
-//                    }
-//                    logI("$adapterPosition -> $h, $lh, $lines,  ${_h - h}")
-//
-//                }
-//            }
-//        }
-
-
 
     }
 
