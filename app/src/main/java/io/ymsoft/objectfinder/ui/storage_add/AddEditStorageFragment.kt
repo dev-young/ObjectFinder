@@ -76,6 +76,11 @@ class AddEditStorageFragment : Fragment() {
         return binding.root
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setAppBarVisible(top = true)
+    }
+
     private fun initView(storage: StorageModel?) {
         if(storage == null){
             setPointLayoutEnabled(false)

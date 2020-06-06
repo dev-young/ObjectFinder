@@ -130,6 +130,10 @@ class StorageDetailFragment : Fragment() {
         return binding.root
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setAppBarVisible(top = true)
+    }
 
 
     private fun updateUI(model: StorageModel?) {

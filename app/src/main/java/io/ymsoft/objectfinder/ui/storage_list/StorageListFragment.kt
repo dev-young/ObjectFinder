@@ -14,6 +14,8 @@ import io.ymsoft.objectfinder.common.OnItemLongClickListener
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.FragmentStorageListBinding
 import io.ymsoft.objectfinder.util.SharedViewUtil
+import io.ymsoft.objectfinder.util.replaceBottomMenu
+import io.ymsoft.objectfinder.util.setAppBarVisible
 import timber.log.Timber
 
 class StorageListFragment : Fragment() {
@@ -61,6 +63,12 @@ class StorageListFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        replaceBottomMenu(R.menu.main)
+        setAppBarVisible(top = true, bottom = true)
     }
 
     /**뷰가 변경된 경우에는 딜레이를 주고 변경한다.

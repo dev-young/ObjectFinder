@@ -1,7 +1,6 @@
 package io.ymsoft.objectfinder.util
 
 import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
@@ -13,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.ActionMenuItemView
@@ -48,8 +48,6 @@ fun View.animateFadeIn(startDelay: Long = 0){
 fun View.setOnSingleClickListener(action: (v: View) -> Unit){
     setOnClickListener(SingleClickListener(action))
 }
-
-
 
 fun ImageView.loadBitmap(image: Bitmap?) {
     Glide.with(this).load(image).apply(RequestOptions.centerCropTransform()).into(this)
@@ -203,4 +201,16 @@ fun Fragment.setToolbarTitle(@StringRes resId: Int){
 
 fun Fragment.setToolbarTitle(title: String){
     (activity as AppCompatActivity).supportActionBar?.title = title
+}
+
+fun Fragment.setAppBarVisible(top: Boolean = false, bottom: Boolean = false, search: Boolean = false){
+    if(requireActivity() is MainActivity) {
+        (requireActivity() as MainActivity).setAppBarVisible(top, bottom, search)
+    }
+}
+
+fun Fragment.replaceBottomMenu(@MenuRes newMenu: Int){
+    if(requireActivity() is MainActivity) {
+        (requireActivity() as MainActivity).replaceBottomMenu(newMenu)
+    }
 }

@@ -21,7 +21,9 @@ import io.ymsoft.objectfinder.databinding.FragmentSearchBinding
 import io.ymsoft.objectfinder.ui.MainActivity
 import io.ymsoft.objectfinder.ui.storage_list.StorageListAdapter
 import io.ymsoft.objectfinder.util.SharedViewUtil
+import io.ymsoft.objectfinder.util.setAppBarVisible
 import io.ymsoft.objectfinder.util.showKeyboard
+import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -43,13 +45,6 @@ class SearchFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Observable.just(0)
-            .delay(300, TimeUnit.MILLISECONDS)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                activity.showKeyboard()
-            }
 
     }
 
@@ -97,6 +92,9 @@ class SearchFragment : Fragment() {
         binding.recyclerView.doOnPreDraw {
             startPostponedEnterTransition()
         }
+
+        setAppBarVisible(top = true, search = true)
+        requireActivity().showKeyboard()
     }
 
     /**뷰가 변경된 경우에는 딜레이를 주고 변경한다.

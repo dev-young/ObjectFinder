@@ -9,10 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.ymsoft.objectfinder.databinding.FragmentSettingsBinding
-import io.ymsoft.objectfinder.util.logI
-import io.ymsoft.objectfinder.util.makeToast
-import io.ymsoft.objectfinder.util.setOnSingleClickListener
-import io.ymsoft.objectfinder.util.setVisible
+import io.ymsoft.objectfinder.util.*
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : Fragment() {
@@ -42,6 +39,11 @@ class SettingsFragment : Fragment() {
         //test
 
         return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setAppBarVisible(top = true)
     }
 
     private fun removeUnusedImg() {
