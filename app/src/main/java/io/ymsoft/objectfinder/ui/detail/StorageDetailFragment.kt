@@ -71,12 +71,14 @@ class StorageDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val transition = MaterialContainerTransform().apply {
-            fadeMode = MaterialContainerTransform.FADE_MODE_CROSS
-            scrimColor = Color.TRANSPARENT
-            duration = 400
+        if(args.hasSharedElement) {
+            val transition = MaterialContainerTransform().apply {
+                fadeMode = MaterialContainerTransform.FADE_MODE_CROSS
+                scrimColor = Color.TRANSPARENT
+                duration = 400
+            }
+            sharedElementEnterTransition = transition
         }
-        sharedElementEnterTransition = transition
     }
 
     override fun onCreateView(
@@ -253,6 +255,11 @@ class StorageDetailFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.storage_detail_toolbar, menu)
+    }
+
+    override fun postponeEnterTransition() {
+        if(args.hasSharedElement)
+            super.postponeEnterTransition()
     }
 
 

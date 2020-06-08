@@ -113,7 +113,7 @@ class SearchFragment : Fragment() {
     private fun showDetailWithSharedElements(model: StorageModel?, sharedViews: List<View>) {
         model?.let {
             loadCounter = 0
-            val direction = SearchFragmentDirections.actionNavSearchToNavStorageDetail(it)
+            val direction = SearchFragmentDirections.actionNavSearchToNavStorageDetail(it, true)
             findNavController().navigate(direction, SharedViewUtil.makeStorageTransition(sharedViews))
         }
     }

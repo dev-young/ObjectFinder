@@ -50,6 +50,10 @@
             app:exitAnim="@anim/fragment_open_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/fragment_fade_exit" />
+        <argument
+            android:name="hasSharedElement"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/navAddStorage"

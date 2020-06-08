@@ -68,7 +68,8 @@ class StorageListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         replaceBottomMenu(R.menu.main)
-        setAppBarVisible(top = true, bottom = true)
+        if( findNavController().currentDestination?.id == R.id.navStorageList )
+            setAppBarVisible(top = true, bottom = true)
     }
 
     /**뷰가 변경된 경우에는 딜레이를 주고 변경한다.
@@ -87,7 +88,7 @@ class StorageListFragment : Fragment() {
 
     private fun showDetailWithSharedElements(model: StorageModel?, sharedViews: List<View>) {
         model?.let {
-            val direction = StorageListFragmentDirections.actionNavStorageListToNavStorageDetail(it)
+            val direction = StorageListFragmentDirections.actionNavStorageListToNavStorageDetail(it, true)
             findNavController().navigate(direction, SharedViewUtil.makeStorageTransition(sharedViews))
         }
     }
