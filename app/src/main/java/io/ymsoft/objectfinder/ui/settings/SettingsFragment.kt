@@ -1,21 +1,20 @@
 package io.ymsoft.objectfinder.ui.settings
 
 import android.os.Bundle
-import android.os.Environment
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.databinding.FragmentSettingsBinding
 import io.ymsoft.objectfinder.util.*
-import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : Fragment() {
 
     private lateinit var binding : FragmentSettingsBinding
-    private val viewModel by viewModels<SettingslViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +31,6 @@ class SettingsFragment : Fragment() {
             removeUnusedImg()
         }
 
-        viewModel.isWorking.observe(viewLifecycleOwner, Observer(binding.progress::setVisible))
-        viewModel.toastMessage.observe(viewLifecycleOwner, Observer(requireContext()::makeToast))
-
-
-        //test
-
         return binding.root
     }
 
@@ -47,8 +40,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun removeUnusedImg() {
-        val dir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        viewModel.removeUnusedImg(dir)
+        findNavController().navigate(R.id.action_navSettings_to_navDeleteUnusedImg)
     }
 
 }

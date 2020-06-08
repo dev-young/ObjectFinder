@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.settings.DeleteUnusedImgFragment">
+
+        <FrameLayout
+            android:id="@+id/emptyMessage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_msg_unused_photo"
+                android:layout_gravity="center"
+                />
+
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:listitem="@layout/item_photo"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="3" />
+
+
+            <LinearLayout
+                android:id="@+id/checkActionMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingVertical="@dimen/default_item_spacing"
+                android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                android:animateLayoutChanges="true"
+                >
+                <LinearLayout
+                    android:id="@+id/checkAllBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    >
+
+                    <CheckBox
+                        android:id="@+id/checkAllCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="1dp"
+                        android:minHeight="1dp"
+                        android:layout_marginBottom="-4dp"
+                        android:clickable="false"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:text="전체"
+                        android:textColor="@android:color/black"
+                        />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/checkedCounter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/default_item_spacing"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    tools:text="17"
+                    />
+                <TextView
+                    android:id="@+id/cancelBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/default_item_spacing"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="@string/cancel"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Large"
+                    />
+
+                <TextView
+                    android:id="@+id/deleteBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/default_item_spacing"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="@string/remove"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Large"
+                    android:visibility="gone"
+                    />
+
+
+
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+</layout>

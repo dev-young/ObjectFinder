@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <io.ymsoft.objectfinder.view_custom.SquareFrameLayout
@@ -10,17 +9,33 @@
         android:layout_margin="0.7dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
-        android:focusable="true"
-        tools:background="@android:color/darker_gray"
-        >
+        android:focusable="true">
 
         <io.ymsoft.objectfinder.view_custom.SquareImageView
             android:id="@+id/imgView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            tools:src="@drawable/ic_launcher"
-            />
+            android:src="@mipmap/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/checkView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_checkable_image_state_list"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:clickable="false"
+            android:minWidth="1dp"
+            android:visibility="gone" />
+
+
     </io.ymsoft.objectfinder.view_custom.SquareFrameLayout>
 
 </layout>

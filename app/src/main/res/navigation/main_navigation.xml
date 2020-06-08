@@ -90,7 +90,15 @@
         android:id="@+id/navSettings"
         android:name="io.ymsoft.objectfinder.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_navSettings_to_navDeleteUnusedImg"
+            app:destination="@id/navDeleteUnusedImg"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+    </fragment>
     <action
         android:id="@+id/action_global_navSettings"
         app:destination="@id/navSettings"
@@ -99,5 +107,10 @@
         app:launchSingleTop="true"
         app:popEnterAnim="@anim/fragment_fade_enter"
         app:popExitAnim="@anim/fragment_fade_exit" />
+    <fragment
+        android:id="@+id/navDeleteUnusedImg"
+        android:name="io.ymsoft.objectfinder.ui.settings.DeleteUnusedImgFragment"
+        android:label="@string/settings_remove_unused_img"
+        tools:layout="@layout/fragment_delete_unused_img" />
 
 </navigation>

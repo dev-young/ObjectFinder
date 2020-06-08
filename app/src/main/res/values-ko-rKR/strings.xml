@@ -14,7 +14,7 @@
     <string name="hint_object_name">저장할 물건을 입력해주세요.</string>
     <string name="save">저장</string>
     <string name="add">추가</string>
-    <string name="select_photo">이미지를 골라주세요.</string>
+    <string name="select_photo">사진을 골라주세요.</string>
     <string name="camera_cannot_be_used">카메라를 사용할 수 없습니다.</string>
     <string name="permission_denied_explanation">거부하시면 이용에 제한이 됩니다.\n하지만 [설정] > [권한] 에서 권한을 허용할 수 있습니다.</string>
     <string name="permission_rationale_storage">해당 기능을 사용하기 위해서는 저장소 접근 권한이 필요합니다.</string>
@@ -43,6 +43,7 @@
     <string name="ok">확인</string>
     <string name="please_choice_storage">보관함을 선택해주세요.</string>
     <string name="title_settings">설정</string>
-    <string name="settings_remove_unused_img">사용하지 않는 이미지 제거</string>
+    <string name="settings_remove_unused_img">사용하지 않는 사진 제거</string>
     <string name="message_delete_complete">삭제가 완료되었습니다.</string>
+    <string name="empty_msg_unused_photo">사용중이지 않는 사진이 없습니다.</string>
 </resources>

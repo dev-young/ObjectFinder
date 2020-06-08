@@ -12,10 +12,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class SettingslViewModel(application: Application) : AndroidViewModel(application) {
+class DeleteUnusedImgViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repo = (application as MyApp).storageModelsRepository
-
 
     private val _isWorking = MutableLiveData(false)
     val isWorking = _isWorking as LiveData<Boolean>
@@ -23,7 +22,14 @@ class SettingslViewModel(application: Application) : AndroidViewModel(applicatio
     private val _toastMessage = MutableLiveData<Int>()
     val toastMessage = _toastMessage as LiveData<Int>
 
-    fun removeUnusedImg(directory: File?) {
+    private val _unusedFiles = MutableLiveData<List<String>>()
+    val unusedFiles : LiveData<List<String>> = _unusedFiles
+
+    private val _deleteAllCompleteEvent = MediatorLiveData<Boolean>()
+    val deleteAllCompleteEvent : MediatorLiveData<Boolean> = _deleteAllCompleteEvent
+
+
+    fun loadUnusedImage(directory: File?) {
         viewModelScope.launch {
             _isWorking.value = true
             withContext(Dispatchers.IO){
@@ -46,18 +52,41 @@ class SettingslViewModel(application: Application) : AndroidViewModel(applicatio
                         totalPath.remove(it)
                     }
                 }
-
-                unusedFile.forEach {
-                    FileUtil.delete(it)
-                }
+                _unusedFiles.postValue(unusedFile.toList())
             }
-            showToast(R.string.message_delete_complete)
             _isWorking.value = false
         }
     }
 
     private fun showToast(@StringRes msg : Int){
         _toastMessage.postValue(msg)
+    }
+
+    fun removeImages(filePathList: List<String>) {
+        viewModelScope.launch {
+            _isWorking.value = true
+            var isDeleteAll = false
+            withContext(Dispatchers.IO){
+                filePathList.forEach {
+                    FileUtil.delete(it)
+                }
+                val set = _unusedFiles.value?.toHashSet()
+                set?.let {
+                    it.removeAll(filePathList)
+                    isDeleteAll = it.isEmpty()
+                    if(!isDeleteAll)
+                        _unusedFiles.postValue(it.toList())
+                }
+
+
+            }
+            showToast(R.string.message_delete_complete)
+            _isWorking.value = false
+            if(isDeleteAll) {
+                _deleteAllCompleteEvent.value = true
+            }
+
+        }
     }
 
 }
