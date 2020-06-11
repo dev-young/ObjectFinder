@@ -1,63 +1,52 @@
 <resources>
     <string name="app_name">Object Finder</string>
-    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
-    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-    <string name="nav_header_title" translatable="false">Android Studio</string>
-    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
-    <string name="nav_header_desc" translatable="false">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
-    <string name="menu_home" translatable="false">Home</string>
-    <string name="menu_gallery" translatable="false">Gallery</string>
-    <string name="menu_slideshow" translatable="false">Slideshow</string>
-
-    <string name="home_second" translatable="false">Home Second</string>
     <string name="search">Search</string>
 
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
-    <string name="storage_list">보관함 목록</string>
-    <string name="storage_detail">보관함 상세</string>
-    <string name="title_search">물건 찾기</string>
-    <string name="please_input_word">검색어를 입력해주세요.</string>
-    <string name="empty_msg_storage_list">저장된 물건이 없습니다!</string>
-    <string name="please_click_add_btn">하단의 + 버튼을 눌러 물건을 추가해보세요!</string>
-    <string name="title_add_object">물건 추가하기</string>
-    <string name="hint_storage_name">보관함 이름을 입력해주세요.</string>
-    <string name="hint_object_name">저장할 물건을 입력해주세요.</string>
-    <string name="save">저장</string>
-    <string name="add">추가</string>
-    <string name="select_photo">이미지를 골라주세요.</string>
-    <string name="camera_cannot_be_used">카메라를 사용할 수 없습니다.</string>
-    <string name="permission_denied_explanation">If you refuse, you will be restricted.\nHowever, you can grant permissions in [Settings] > [Permissions].</string>
+    <string name="storage_list">Storage List</string>
+    <string name="storage_detail">Storage Detail</string>
+    <string name="title_search">Search</string>
+    <string name="please_input_word">Input Object Name</string>
+    <string name="empty_msg_storage_list">There is no Storage</string>
+    <string name="please_click_add_btn">Press the + button at the bottom to add an Storage!</string>
+    <string name="title_add_object">Add Object</string>
+    <string name="hint_storage_name">Input Storage Name</string>
+    <string name="hint_object_name">Input Object</string>
+    <string name="save">Save</string>
+    <string name="add">Add</string>
+    <string name="select_photo">pick a Photo</string>
+    <string name="camera_cannot_be_used">You can\'t use Camera</string>
+    <string name="permission_denied_explanation">If you refuse, you will be restricted. However, you can grant permissions in [Settings] > [Permissions].</string>
     <string name="permission_rationale_storage">You need to have access to a repository to use this feature.</string>
     <string name="permission_rationale_camera">You need to have access to a camera to use this feature.</string>
-    <string name="please_input_name_or_photo">사진 혹은 이름을 입력해주세요.</string>
-    <string name="title_add_storage">보관함 추가하기</string>
-    <string name="hint_storage_memo">메모</string>
-    <string name="please_input_storage">사진에 정확한 위치를 표시해주세요!</string>
-    <string name="take_photo">촬영하기</string>
-    <string name="pick_from_album">앨범에서 불러오기</string>
-    <string name="empty_msg_search_result">검색된 결과가 없습니다.</string>
-    <string name="move">이동</string>
-    <string name="remove">삭제</string>
-    <string name="error_this_func_is_developing">개발중인 기능입니다.</string>
-    <string name="cancel">취소</string>
-    <string name="empty_msg_storage">이 보관함에는 물건이 없습니다!</string>
-    <string name="title_edit_storage">보관함 수정하기</string>
-    <string name="edit">수정</string>
-    <string name="description_take_photo">사진 촬영하기</string>
-    <string name="description_pick_from_album">앨범에서 고르기</string>
-    <string name="description_pick_from_other_storage">기존의 보관함 사진 사용하기</string>
-    <string name="title_pick_from_storage">사진을 골라주세요.</string>
-    <string name="empty_msg_exist_photo">저장된 사진이 없습니다!</string>
-    <string name="check_remove_title">보관함 삭제</string>
-    <string name="check_remove_message">보관함 및 물건들이 모두 삭제됩니다.\n정말로 삭제하시겠습니까?</string>
-    <string name="ok">확인</string>
-    <string name="please_choice_storage">보관함을 선택해주세요.</string>
+    <string name="please_input_name_or_photo">Please input Photo or Storage Name.</string>
+    <string name="title_add_storage">Add strogae</string>
+    <string name="hint_storage_memo">memo</string>
+    <string name="please_input_storage">Please mark the exact location of the picture!</string>
+    <string name="take_photo">take photo</string>
+    <string name="pick_from_album">pick from album</string>
+    <string name="empty_msg_search_result">There are no results to be shown.</string>
+    <string name="remove">delete</string>
+    <string name="error_this_func_is_developing">It\'s a function under development.</string>
+    <string name="cancel">cancel</string>
+    <string name="empty_msg_storage">This storage is empty</string>
+    <string name="title_edit_storage">Edit Storage</string>
+    <string name="edit">Edit</string>
+    <string name="description_take_photo">take photo</string>
+    <string name="description_pick_from_album">pick from album</string>
+    <string name="description_pick_from_other_storage">To use an existing archive picture</string>
+    <string name="title_pick_from_storage">Pick Photo</string>
+    <string name="empty_msg_exist_photo">No photos saved!</string>
+    <string name="check_remove_title">Delete Storage</string>
+    <string name="check_remove_message">All storage boxes and items will be deleted. Are you sure you want to delete it?</string>
+    <string name="ok">OK</string>
+    <string name="please_choice_storage">Select Storage</string>
     <string name="transition_name_add" translatable="false">transitionNameAdd</string>
-    <string name="title_settings">설정</string>
-    <string name="settings_remove_unused_img">사용하지 않는 이미지 제거</string>
-    <string name="message_delete_complete">삭제가 완료되었습니다.</string>
-    <string name="empty_msg_unused_photo">사용중이지 않는 사진이 없습니다.</string>
+    <string name="title_settings">Settings</string>
+    <string name="settings_remove_unused_img">Remove Unused Image</string>
+    <string name="message_delete_complete">Delete complete</string>
+    <string name="empty_msg_unused_photo">There are no pictures that are not in use.</string>
+    <string name="move">move</string>
 </resources>

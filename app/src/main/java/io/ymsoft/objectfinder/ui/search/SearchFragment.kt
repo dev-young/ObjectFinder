@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.postDelayed
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -94,7 +95,9 @@ class SearchFragment : Fragment() {
         }
 
         setAppBarVisible(top = true, search = true)
-        requireActivity().showKeyboard()
+        binding.root.postDelayed({
+            requireActivity().showKeyboard()
+        }, 300)
     }
 
     /**뷰가 변경된 경우에는 딜레이를 주고 변경한다.

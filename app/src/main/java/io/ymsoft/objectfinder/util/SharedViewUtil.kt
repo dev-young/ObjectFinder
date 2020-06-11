@@ -6,6 +6,7 @@ import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.FragmentStorageDetailBinding
 import io.ymsoft.objectfinder.databinding.ItemStorageBinding
 
+/** 공유 요소 전환을 편하게 도와준다. */
 object SharedViewUtil {
 
     fun makeStorageTransition(rootView: List<View>): FragmentNavigator.Extras {
