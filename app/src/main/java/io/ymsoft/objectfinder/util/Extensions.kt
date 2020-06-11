@@ -59,7 +59,7 @@ fun Fragment.showFabAnimation(animate: Boolean){
                 it.fab.animation = animation
                 animation.start()
             } else {
-                it.fab.animation?.cancel()
+                it.fab.animation = null
             }
 
         }

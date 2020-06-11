@@ -49,4 +49,5 @@
     <string name="message_delete_complete">Delete complete</string>
     <string name="empty_msg_unused_photo">There are no pictures that are not in use.</string>
     <string name="move">move</string>
+    <string name="all">all</string>
 </resources>

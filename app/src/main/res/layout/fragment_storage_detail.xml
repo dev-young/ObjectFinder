@@ -187,7 +187,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:text="전체"
+                        android:text="@string/all"
                         android:textColor="@android:color/black"
                         />
                 </LinearLayout>

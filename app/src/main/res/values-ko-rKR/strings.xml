@@ -45,4 +45,5 @@
     <string name="settings_remove_unused_img">사용하지 않는 사진 제거</string>
     <string name="message_delete_complete">삭제가 완료되었습니다.</string>
     <string name="empty_msg_unused_photo">사용중이지 않는 사진이 없습니다.</string>
+    <string name="all">전체</string>
 </resources>
