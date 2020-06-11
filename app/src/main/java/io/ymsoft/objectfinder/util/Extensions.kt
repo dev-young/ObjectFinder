@@ -9,6 +9,9 @@ import android.os.Environment
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils.loadAnimation
+import android.view.animation.Interpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
@@ -25,10 +28,13 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.google.android.material.animation.AnimationUtils
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.ui.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_storage_list.*
 import timber.log.Timber
+import java.util.Collections.rotate
 
 fun logI(message: String) {
     Timber.i(message)
@@ -43,6 +49,21 @@ fun View.animateFadeIn(startDelay: Long = 0){
     translationY = 5f
     val duration = resources.getInteger(R.integer.default_transition_duration).toLong()
     animate().alpha(1f).setStartDelay(startDelay).translationY(0f).setDuration(duration).start()
+}
+
+fun Fragment.showFabAnimation(animate: Boolean){
+    activity?.let {
+        if(it is MainActivity){
+            if(animate){
+                val animation = loadAnimation(it, R.anim.fab)
+                it.fab.animation = animation
+                animation.start()
+            } else {
+                it.fab.animation?.cancel()
+            }
+
+        }
+    }
 }
 
 fun View.setOnSingleClickListener(action: (v: View) -> Unit){

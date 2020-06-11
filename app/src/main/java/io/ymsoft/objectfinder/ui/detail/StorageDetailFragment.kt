@@ -105,6 +105,14 @@ class StorageDetailFragment : Fragment() {
             false
         })
 
+        binding.inputObject.apply {
+            setOnFocusChangeListener { v, hasFocus ->
+                if(hasFocus){
+                    postDelayed({binding.scrollView.fullScroll(ScrollView.FOCUS_DOWN)}, 200)
+                }
+            }
+        }
+
         args.storageModel.let {
             updateUI(it)
             it.id?.let { id ->
@@ -199,7 +207,7 @@ class StorageDetailFragment : Fragment() {
     /**체크모드에 따라 하단의 메뉴를 변경한다. */
     private fun changeChipGroupCheckMode(checkable: Boolean) {
         //체크모드 변경시 키보드를 숨긴다
-        hideKeyboard()
+//        hideKeyboard()
 
         if (checkable) {
             binding.addLayout.visibility = View.GONE

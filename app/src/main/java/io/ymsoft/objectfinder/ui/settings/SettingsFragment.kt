@@ -1,5 +1,7 @@
 package io.ymsoft.objectfinder.ui.settings
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,6 +22,7 @@ class SettingsFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,6 +32,11 @@ class SettingsFragment : Fragment() {
 
         binding.removeUnusedImgBtn.setOnSingleClickListener {
             removeUnusedImg()
+        }
+
+        context?.apply {
+            val pi = packageManager.getPackageInfo(packageName, 0)
+            binding.version.text = "ver. ${pi.versionName}"
         }
 
         return binding.root

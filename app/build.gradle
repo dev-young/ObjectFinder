@@ -15,8 +15,8 @@ android {
         applicationId "io.ymsoft.objectfinder"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 2
-        versionName "beta 1.1"
+        versionCode 4
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

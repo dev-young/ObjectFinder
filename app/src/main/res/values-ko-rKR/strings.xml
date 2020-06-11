@@ -7,7 +7,7 @@
     <string name="title_search">물건 찾기</string>
     <string name="please_input_word">물건을 입력해주세요.</string>
     <string name="empty_msg_storage_list">저장된 물건이 없습니다!</string>
-    <string name="please_click_add_btn">하단의 + 버튼을 눌러 물건을 추가해보세요!</string>
+    <string name="please_click_add_btn">새로운 보관함을 추가하세요!</string>
     <string name="title_add_object">물건 추가하기</string>
     <string name="hint_storage_name">보관함 이름을 입력해주세요.</string>
     <string name="hint_object_name">저장할 물건을 입력해주세요.</string>

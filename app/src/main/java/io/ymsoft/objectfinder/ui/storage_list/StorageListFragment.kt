@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,6 +17,8 @@ import io.ymsoft.objectfinder.databinding.FragmentStorageListBinding
 import io.ymsoft.objectfinder.util.SharedViewUtil
 import io.ymsoft.objectfinder.util.replaceBottomMenu
 import io.ymsoft.objectfinder.util.setAppBarVisible
+import io.ymsoft.objectfinder.util.showFabAnimation
+import kotlinx.android.synthetic.main.fragment_storage_list.*
 import timber.log.Timber
 
 class StorageListFragment : Fragment() {
@@ -52,8 +55,10 @@ class StorageListFragment : Fragment() {
         viewModel.isEmpty.observe(viewLifecycleOwner, Observer {
             if (it) {
                 binding.emptyMessage.visibility = View.VISIBLE
+                showFabAnimation(true)
             } else {
                 binding.emptyMessage.visibility = View.GONE
+                showFabAnimation(false)
             }
         })
 

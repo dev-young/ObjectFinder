@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Object Finder</string>
+    <string name="app_name">Item Finder</string>
 
     <string name="search">Search</string>
 
@@ -8,12 +8,12 @@
     <string name="storage_list">Storage List</string>
     <string name="storage_detail">Storage Detail</string>
     <string name="title_search">Search</string>
-    <string name="please_input_word">Input Object Name</string>
+    <string name="please_input_word">Input Item Name</string>
     <string name="empty_msg_storage_list">There is no Storage</string>
-    <string name="please_click_add_btn">Press the + button at the bottom to add an Storage!</string>
-    <string name="title_add_object">Add Object</string>
+    <string name="please_click_add_btn">Add New Storage!</string>
+    <string name="title_add_object">Add Item</string>
     <string name="hint_storage_name">Input Storage Name</string>
-    <string name="hint_object_name">Input Object</string>
+    <string name="hint_object_name">Input Item</string>
     <string name="save">Save</string>
     <string name="add">Add</string>
     <string name="select_photo">pick a Photo</string>

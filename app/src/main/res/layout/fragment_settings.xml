@@ -17,7 +17,9 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,6 +55,19 @@
                     android:background="@android:color/darker_gray"
                     />
 
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ver. 0.0.0"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_vertical_margin"
+                    />
 
 
 
