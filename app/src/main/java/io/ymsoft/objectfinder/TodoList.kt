@@ -2,8 +2,7 @@ package io.ymsoft.objectfinder
 
 interface TodoList {
 
-    // TODO: 2020-05-17 AddStorageFragment mvvm 다시 설계하기
-
+    // TODO: 2020-05-17 AddEditStorageFragment mvvm 다시 설계하기
 
     // TODO: 2020-05-27 보관함이 없는 물건 관리할 수 있게 메뉴 추가가
 

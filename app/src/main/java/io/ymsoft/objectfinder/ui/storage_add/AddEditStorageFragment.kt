@@ -3,19 +3,21 @@ package io.ymsoft.objectfinder.ui.storage_add
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.transition.MaterialContainerTransform
+import com.yalantis.ucrop.UCrop
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.FragmentAddStorageBinding
@@ -27,11 +29,13 @@ import java.io.File
 
 
 class AddEditStorageFragment : Fragment() {
-    private lateinit var binding : FragmentAddStorageBinding
-    private val pickPhotoHelper = PickPhotoHelper()
+    private lateinit var binding: FragmentAddStorageBinding
     private val viewModel by viewModels<AddEditStorageViewModel>()
+    private val pickPhotoHelper = PickPhotoHelper()
 
     private val args by navArgs<AddEditStorageFragmentArgs>()
+
+    private val tempCropImage by lazy { File(requireContext().cacheDir, "temp_img") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +45,7 @@ class AddEditStorageFragment : Fragment() {
         }
         sharedElementEnterTransition = transition
     }
-    
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,20 +58,25 @@ class AddEditStorageFragment : Fragment() {
         binding.pickFromOtherStorage.setOnSingleClickListener { pickFromOtherStorage() }
 
         binding.saveBtn.setOnSingleClickListener { save() }
-        binding.removeBtn.setOnClickListener { clearPhoto() }
+        binding.removeBtn.setOnClickListener {
+            viewModel.clearImage()
+            setPointLayoutEnabled(false)
+        }
 
         viewModel.isSaved.observe(viewLifecycleOwner, Observer {
             it?.let {
-                pickPhotoHelper.clear()
                 if (args.storage != null)
                     findNavController().navigateUp()
-                else{
-                    val direction = AddEditStorageFragmentDirections.actionNavAddStorageToNavStorageDetail(it)
+                else {
+                    val direction =
+                        AddEditStorageFragmentDirections.actionNavAddStorageToNavStorageDetail(it)
                     findNavController().navigate(direction)
                 }
             }
         })
-        viewModel.toastMessage.observe(viewLifecycleOwner, Observer { requireContext().makeToast(it) })
+        viewModel.toastMessage.observe(
+            viewLifecycleOwner,
+            Observer { requireContext().makeToast(it) })
         viewModel.storageModel.observe(viewLifecycleOwner, Observer(this::initView))
         viewModel.initModel(args.storage)
 
@@ -82,7 +91,7 @@ class AddEditStorageFragment : Fragment() {
     }
 
     private fun initView(storage: StorageModel?) {
-        if(storage == null){
+        if (storage == null) {
             setPointLayoutEnabled(false)
             return
         }
@@ -93,8 +102,7 @@ class AddEditStorageFragment : Fragment() {
         //추가버튼 '저장'으로 이름 변경
         binding.saveBtn.setText(R.string.save)
 
-        pickPhotoHelper.fileNeverBeDeleted = storage.imgUrl //초기에 저장된 이미지를 삭제하면 안되는 이미지로 지정
-        if(storage.imgUrl == null) {
+        if (storage.imgUrl == null) {
             setPointLayoutEnabled(false)
         } else {
             binding.imgView.loadFilePath(storage.imgUrl)
@@ -110,77 +118,82 @@ class AddEditStorageFragment : Fragment() {
             var isPhotoLoaded = false
             when (requestCode) {
                 REQUEST_TAKE_PHOTO -> {
-                    //저해상도
-//                    val bm = data?.extras?.get("data") as Bitmap
-//                    binding.imgView.loadBitmap(bm)
-
                     pickPhotoHelper.photoUri?.let {
-                        binding.imgView.loadUri(it, bitmapListener = {bitmap ->
-                            bitmap?.let {
-                                pickPhotoHelper.currentPhotoPath?.let {filePath->
-                                    FileUtil.saveBitmapToFile(bitmap, File(filePath))
-                                }
-                            }
-
-                        })
-
-                        isPhotoLoaded = true
+                        startCropImage(it, Uri.fromFile(tempCropImage))
                     }
                 }
                 REQUEST_PICK_FROM_ALBUM -> {
-                    data?.data?.let {uri ->
-//                        val bitmap = pickPhotoHelper.getBitmap(requireContext(), uri)
-//                        binding.imgView.setImageBitmap(bitmap)
-//                        binding.imgView.loadBitmap(bitmap)
+                    data?.data?.let { uri ->
+                        startCropImage(uri, Uri.fromFile(tempCropImage))
+                    }
+                }
 
-                        binding.imgView.loadUri(uri, bitmapListener = {bitmap ->
-                            bitmap?.let { pickPhotoHelper.makePhotoFromBitmap(requireContext(), bitmap) }
-
-                        })
-                        isPhotoLoaded = true
+                UCrop.REQUEST_CROP -> {
+                    data?.let {
+                        val resultUri = UCrop.getOutput(it)
+                        resultUri?.let { uri ->
+//                            val bitmap = pickPhotoHelper.getBitmap(requireContext(), uri)
+//                            binding.imgView.setImageBitmap(bitmap)
+//                            FileUtil.saveBitmapToFile(bitmap, uri.toFile())
+                            binding.imgView.loadWithNoCache(uri, bitmapListener = { bitmap ->
+                                viewModel.bitmap = bitmap
+                                Unit
+                            })
+                            isPhotoLoaded = true
+                        }
                     }
                 }
 
                 REQUEST_PICK_FROM_STORAGE -> {
                     data?.getStringExtra("filePath")?.let {
-                        pickPhotoHelper.fileNeverBeDeleted = it
                         binding.imgView.loadFilePath(it)
+                        viewModel.imagePath = it
                         isPhotoLoaded = true
                     }
                 }
             }
 
-            if(isPhotoLoaded)
+            if (isPhotoLoaded)
                 setPointLayoutEnabled(isPhotoLoaded)
         } else {
             // 사진을 불러오는작업을 취소하는 경우 (이 경우 사진을 고르지 않은 상태이다)
             logE("사진 불러오기 취소")
-            pickPhotoHelper.deletePickedPhoto()
 
         }
     }
 
+    private fun startCropImage(uri: Uri, destinationUri: Uri) {
+        val options = UCrop.Options()
+        options.withAspectRatio(1f, 1f)
+        options.setCropFrameStrokeWidth(5)
+        options.setCropFrameColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+        options.setShowCropGrid(false)
+
+//        val f = File(cacheDir, "TestFile.jpg")
+//        val destination = Uri.fromFile(f)
+        UCrop.of(uri, destinationUri)
+            .withOptions(options)
+            .start(requireContext(), this)
+
+    }
+
     /**현재 고른 사진을 지운다 */
     private fun clearPhoto() {
-        pickPhotoHelper.deletePickedPhoto()
-        setPointLayoutEnabled(false)
     }
 
 
     private fun save() {
-        val photoUrl = pickPhotoHelper.currentPhotoPath
         val name = binding.storageName.text.toString()
         val point = getRelativeCoordinate()
         val memo = binding.storageMemo.text.toString()
 
-
-        viewModel.saveStorageModel(photoUrl, name, point, memo)
+        viewModel.saveStorageModel(name, point, memo)
 
     }
 
     /**포인터가 화면에 표시되어있는경우 상대좌표 반환*/
     private fun getRelativeCoordinate(): Pair<Float, Float>? {
-        if(binding.pointer.visibility != View.VISIBLE)
+        if (binding.pointer.visibility != View.VISIBLE)
             return null
 
         val w = binding.pointLayout.width
@@ -188,17 +201,16 @@ class AddEditStorageFragment : Fragment() {
         val x = binding.pointer.x + binding.pointer.pivotX
         val y = binding.pointer.y + binding.pointer.pivotY
 
-        return Pair(x/w, y/h)
+        return Pair(x / w, y / h)
     }
 
 
-    private fun takePhoto(){
-        pickPhotoHelper.deletePickedPhoto()
+    private fun takePhoto() {
         pickPhotoHelper.dispatchTakePictureIntentIfAvailable(fragment = this)
     }
 
 
-    private fun pickFromAlbum(){
+    private fun pickFromAlbum() {
         pickPhotoHelper.startPickFromAlbumActivity(fragment = this)
     }
 
@@ -210,13 +222,13 @@ class AddEditStorageFragment : Fragment() {
     }
 
 
-    private fun setPointLayoutEnabled(enable:Boolean){
+    private fun setPointLayoutEnabled(enable: Boolean) {
         setPointLayoutEnabled(enable, 0.5f, 0.5f)
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun setPointLayoutEnabled(enable:Boolean, rx:Float?, ry:Float?){
-        if(enable){
+    private fun setPointLayoutEnabled(enable: Boolean, rx: Float?, ry: Float?) {
+        if (enable) {
             binding.addPhotoBtnGroup.visibility = View.GONE
             binding.imgView.visibility = View.VISIBLE
             binding.photoMenuLayout.visibility = View.VISIBLE
@@ -224,7 +236,7 @@ class AddEditStorageFragment : Fragment() {
             binding.pointLayout.setOnTouchListener { v, event ->
 //                Log.i("point", "${event.x} , ${event.y}, ${event.action}")
                 PointerUtil.movePointer(binding.pointer, binding.pointLayout, event.x, event.y)
-                when(event.action){
+                when (event.action) {
                     MotionEvent.ACTION_DOWN -> v.parent.requestDisallowInterceptTouchEvent(true)
                     MotionEvent.ACTION_UP -> {
                         v.parent.requestDisallowInterceptTouchEvent(false)
@@ -234,7 +246,7 @@ class AddEditStorageFragment : Fragment() {
 
                 v.onTouchEvent(event)
             }
-            binding.imgView.setOnMeasureListener( object : SquareImageView.OnMeasureListener {
+            binding.imgView.setOnMeasureListener(object : SquareImageView.OnMeasureListener {
                 override fun measured(width: Int, height: Int) {
                     PointerUtil.movePointerByRelative(binding.pointer, width, height, rx, ry)
                     binding.imgView.setOnMeasureListener(null)
@@ -254,7 +266,8 @@ class AddEditStorageFragment : Fragment() {
 
 
     override fun onDestroy() {
-        pickPhotoHelper.deletePickedPhoto()
+        tempCropImage.delete()
+        FileUtil.deleteTempImgFile(requireContext())
         super.onDestroy()
     }
 }

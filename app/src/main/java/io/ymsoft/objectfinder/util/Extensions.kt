@@ -20,10 +20,12 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.appcompat.widget.ActionMenuView
+import androidx.core.content.FileProvider
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
@@ -34,6 +36,7 @@ import io.ymsoft.objectfinder.ui.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_storage_list.*
 import timber.log.Timber
+import java.io.File
 import java.util.Collections.rotate
 
 fun logI(message: String) {
@@ -82,12 +85,54 @@ fun ImageView.loadFilePath(filePath: String?, bitmapListener: ((bitmap:Bitmap?) 
     loadUri(FileUtil.getUri(context, filePath), bitmapListener)
 }
 
-fun ImageView.loadUri(uri: Uri?, bitmapListener: ((bitmap:Bitmap?) -> Unit?)? = null) {
+fun ImageView.loadUri(uri: Uri?, bitmapListener: ((bitmap:Bitmap?) -> Unit?)? = null, useCache: Boolean = true) {
+    val options = RequestOptions.centerCropTransform()
+    if(!useCache) {
+        options.diskCacheStrategy(DiskCacheStrategy.NONE)
+        options.skipMemoryCache(true)
+    }
     Glide.with(this)
         .asBitmap()
         .load(uri)
         .dontAnimate()
-        .apply(RequestOptions.centerCropTransform())
+        .apply(options)
+        .error(R.drawable.ic_error_outline_24dp)
+        .addListener(object : RequestListener<Bitmap>{
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Bitmap>?,
+                isFirstResource: Boolean
+            ): Boolean {
+                bitmapListener?.invoke(null)
+                return false
+            }
+
+            override fun onResourceReady(
+                resource: Bitmap?,
+                model: Any?,
+                target: Target<Bitmap>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                resource?.printInfo()
+                resource?.let { bitmapListener?.invoke(it) }
+                return false
+            }
+
+        })
+        .into(this)
+}
+
+fun ImageView.loadWithNoCache(uri: Uri?, bitmapListener: ((bitmap:Bitmap?) -> Unit?)? = null) {
+    val options = RequestOptions.centerCropTransform()
+    Glide.with(this)
+        .asBitmap()
+        .load(uri)
+        .dontAnimate()
+        .apply(options)
+        .diskCacheStrategy(DiskCacheStrategy.NONE)
+        .skipMemoryCache(true)
         .error(R.drawable.ic_error_outline_24dp)
         .addListener(object : RequestListener<Bitmap>{
             override fun onLoadFailed(
@@ -174,6 +219,14 @@ fun Context?.makeToast(@StringRes id: Int?) {
 
 fun Context?.makeToast(text: String?) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.getUri(file: File): Uri {
+    return FileProvider.getUriForFile(
+        this,
+        "${packageName}.fileprovider",
+        file
+    )
 }
 
 fun Activity?.startToolbarAnimation(){
