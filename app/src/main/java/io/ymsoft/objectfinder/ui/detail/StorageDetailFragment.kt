@@ -1,5 +1,6 @@
 package io.ymsoft.objectfinder.ui.detail
 
+import android.animation.AnimatorInflater
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
@@ -71,7 +72,7 @@ class StorageDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(args.hasSharedElement) {
+        if (args.hasSharedElement) {
             val transition = MaterialContainerTransform().apply {
                 fadeMode = MaterialContainerTransform.FADE_MODE_CROSS
                 scrimColor = Color.TRANSPARENT
@@ -107,8 +108,8 @@ class StorageDetailFragment : Fragment() {
 
         binding.inputObject.apply {
             setOnFocusChangeListener { v, hasFocus ->
-                if(hasFocus){
-                    postDelayed({binding.scrollView.fullScroll(ScrollView.FOCUS_DOWN)}, 200)
+                if (hasFocus) {
+                    postDelayed({ binding.scrollView.fullScroll(ScrollView.FOCUS_DOWN) }, 200)
                 }
             }
         }
@@ -130,7 +131,7 @@ class StorageDetailFragment : Fragment() {
         setHasOptionsMenu(true)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressed = {
-            if(binding.checkActionMenu.visibility == View.VISIBLE){
+            if (binding.checkActionMenu.visibility == View.VISIBLE) {
                 chipGroupHelper.setCheckable(false)
             } else {
                 findNavController().navigateUp()
@@ -176,6 +177,11 @@ class StorageDetailFragment : Fragment() {
                 model.x,
                 model.y
             )
+
+            AnimatorInflater.loadAnimator(requireContext(), R.animator.cross_hair).apply {
+                setTarget(binding.pointer)
+                start()
+            }
         }
 
     }
@@ -192,7 +198,7 @@ class StorageDetailFragment : Fragment() {
     private fun addObject() {
         viewModel.addNewObject(binding.inputObject.text.toString())
         binding.inputObject.setText("")
-        binding.scrollView.apply { postDelayed({ this.fullScroll(ScrollView.FOCUS_DOWN) }, 500)}
+        binding.scrollView.apply { postDelayed({ this.fullScroll(ScrollView.FOCUS_DOWN) }, 500) }
     }
 
     private fun moveAnotherStorage(targetStorageId: Long) {
@@ -260,13 +266,12 @@ class StorageDetailFragment : Fragment() {
     }
 
 
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.storage_detail_toolbar, menu)
     }
 
     override fun postponeEnterTransition() {
-        if(args.hasSharedElement)
+        if (args.hasSharedElement)
             super.postponeEnterTransition()
     }
 

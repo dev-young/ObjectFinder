@@ -52,7 +52,7 @@
                             android:id="@+id/pointer"
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:src="@drawable/ic_target"
+                            android:src="@drawable/ic_focus_24"
                             />
 
 

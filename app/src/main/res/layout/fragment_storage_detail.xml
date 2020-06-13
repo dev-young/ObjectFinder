@@ -53,11 +53,12 @@
 
                         <ImageView
                             android:id="@+id/pointer"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:src="@drawable/ic_target"
+                            android:layout_width="@dimen/pointer_size"
+                            android:layout_height="@dimen/pointer_size"
+                            android:src="@drawable/ic_focus_24"
                             android:visibility="invisible"
                             tools:visibility="visible"
+                            android:stateListAnimator="@animator/cross_hair"
                             />
                     </FrameLayout>
 

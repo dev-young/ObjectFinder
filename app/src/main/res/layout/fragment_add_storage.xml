@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.storage_add.AddEditStorageFragment">
@@ -9,31 +8,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:transitionName="@string/transition_name_add"
-        >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            >
+            android:clipToPadding="false">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/default_item_spacing"
-                android:paddingBottom="?actionBarSize"
-                >
+                android:paddingBottom="?actionBarSize">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                     app:cardCornerRadius="@dimen/default_item_radius"
-                    app:cardUseCompatPadding="true"
-                    >
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -45,113 +42,118 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="true"
-                            android:focusable="true"
-                            >
+                            android:focusable="true">
 
                             <io.ymsoft.objectfinder.view_custom.SquareImageView
                                 android:id="@+id/imgView"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:backgroundTint="@android:color/darker_gray"
-                                />
+                                android:layout_height="match_parent" />
+
 
                             <LinearLayout
                                 android:id="@+id/addPhotoBtnGroup"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:orientation="vertical"
                                 android:layout_gravity="center"
                                 android:gravity="center"
-                                >
+                                android:orientation="vertical">
+
                                 <ImageView
                                     android:id="@+id/takePhoto"
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
-                                    android:text="@string/take_photo"
-                                    android:src="@drawable/ic_menu_camera"
+                                    android:alpha="0.75"
+                                    android:background="@color/colorAccent"
                                     android:clickable="true"
+                                    android:contentDescription="@string/description_take_photo"
                                     android:focusable="true"
                                     android:foreground="?attr/selectableItemBackground"
-                                    android:background="@color/colorAccent"
-                                    android:tint="@android:color/white"
-                                    android:alpha="0.75"
-                                    android:contentDescription="@string/description_take_photo"
-                                    />
+                                    android:src="@drawable/ic_menu_camera"
+                                    android:text="@string/take_photo"
+                                    android:tint="@android:color/white" />
+
                                 <ImageView
                                     android:id="@+id/pickFromAlbum"
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
-                                    android:text="@string/pick_from_album"
-                                    android:src="@drawable/ic_menu_gallery"
-                                    android:clickable="true"
-                                    android:focusable="true"
-                                    android:tint="@color/colorAccent"
-                                    android:foreground="?attr/selectableItemBackground"
                                     android:alpha="0.75"
+                                    android:clickable="true"
                                     android:contentDescription="@string/description_pick_from_album"
-                                    />
+                                    android:focusable="true"
+                                    android:foreground="?attr/selectableItemBackground"
+                                    android:src="@drawable/ic_menu_gallery"
+                                    android:text="@string/pick_from_album"
+                                    android:tint="@color/colorAccent" />
 
                                 <ImageView
                                     android:id="@+id/pickFromOtherStorage"
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
-                                    android:text="@string/pick_from_album"
-                                    android:src="@drawable/ic_empty_storage"
-                                    android:padding="@dimen/default_item_spacing"
-                                    android:clickable="true"
-                                    android:focusable="true"
-                                    android:background="@color/colorAccent"
-                                    android:tint="@android:color/white"
-                                    android:foreground="?attr/selectableItemBackground"
                                     android:alpha="0.75"
+                                    android:background="@color/colorAccent"
+                                    android:clickable="true"
                                     android:contentDescription="@string/description_pick_from_other_storage"
-                                    />
+                                    android:focusable="true"
+                                    android:foreground="?attr/selectableItemBackground"
+                                    android:padding="@dimen/default_item_spacing"
+                                    android:src="@drawable/ic_empty_storage"
+                                    android:text="@string/pick_from_album"
+                                    android:tint="@android:color/white" />
                             </LinearLayout>
 
 
                             <ImageView
                                 android:id="@+id/pointer"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:src="@drawable/ic_target"
-                                />
-
-
-                        </io.ymsoft.objectfinder.view_custom.SquareFrameLayout>
-
-                        <LinearLayout
-                            android:id="@+id/photoMenuLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:text="@string/please_input_storage"
-                                android:layout_weight="1"
-                                android:layout_gravity="center"
-                                android:paddingHorizontal="@dimen/default_item_spacing"
-                                />
+                                android:layout_width="@dimen/pointer_size"
+                                android:layout_height="@dimen/pointer_size"
+                                android:src="@drawable/ic_focus_24" />
 
                             <ImageView
                                 android:id="@+id/removeBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="top|end"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:padding="4dp"
-                                android:src="@drawable/ic_remove_24dp"/>
+                                android:src="@drawable/ic_round_cancel_24" />
 
-                        </LinearLayout>
-
+                        </io.ymsoft.objectfinder.view_custom.SquareFrameLayout>
 
                     </LinearLayout>
 
 
                 </androidx.cardview.widget.CardView>
+
+
+                <LinearLayout
+                    android:id="@+id/photoMenuLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="5dp"
+                        android:src="@drawable/ic_focus_24" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:paddingHorizontal="2dp"
+                        android:paddingVertical="3dp"
+                        android:text="@string/please_input_storage" />
+
+
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -159,15 +161,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="@dimen/default_item_spacing"
-                    app:boxStrokeColor="@color/colorAccent"
-                    >
+                    app:boxStrokeColor="@color/colorAccent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/storageName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_storage_name"
-                        android:singleLine="true"/>
+                        android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -177,8 +178,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="@dimen/default_item_spacing"
-                    android:visibility="gone"
-                    >
+                    android:visibility="gone">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/storageMemo"
@@ -188,21 +188,18 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:id="@+id/saveBtn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/default_item_spacing"
-                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                     android:layout_gravity="end"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                    android:layout_marginVertical="@dimen/default_item_spacing"
                     android:text="@string/add"
                     android:textColor="@color/colorAccent"
-                    app:strokeColor="@color/colorAccent"
-                    app:strokeWidth="1.2dp"
                     android:textStyle="bold"
-                    />
-
-
+                    app:strokeColor="@color/colorAccent"
+                    app:strokeWidth="1.2dp" />
 
 
             </LinearLayout>

@@ -35,9 +35,9 @@
 
                 <ImageView
                     android:id="@+id/pointer"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/ic_target"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_focus_24"
                     android:visibility="gone" />
             </FrameLayout>
 

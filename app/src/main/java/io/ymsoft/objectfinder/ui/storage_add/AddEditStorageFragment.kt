@@ -168,9 +168,14 @@ class AddEditStorageFragment : Fragment() {
         options.setCropFrameStrokeWidth(5)
         options.setCropFrameColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
         options.setShowCropGrid(false)
+        options.setActiveControlsWidgetColor(
+            ContextCompat.getColor(requireContext(), R.color.colorAccent)
+        )
+        options.setRootViewBackgroundColor(
+            ContextCompat.getColor(requireContext(), R.color.colorDimmedLayer)
+        )
+        options.setDimmedLayerColor(ContextCompat.getColor(requireContext(), R.color.colorDimmedLayer))
 
-//        val f = File(cacheDir, "TestFile.jpg")
-//        val destination = Uri.fromFile(f)
         UCrop.of(uri, destinationUri)
             .withOptions(options)
             .start(requireContext(), this)
@@ -232,6 +237,7 @@ class AddEditStorageFragment : Fragment() {
             binding.addPhotoBtnGroup.visibility = View.GONE
             binding.imgView.visibility = View.VISIBLE
             binding.photoMenuLayout.visibility = View.VISIBLE
+            binding.removeBtn.visibility = View.VISIBLE
             binding.pointer.visibility = View.VISIBLE
             binding.pointLayout.setOnTouchListener { v, event ->
 //                Log.i("point", "${event.x} , ${event.y}, ${event.action}")
@@ -256,6 +262,7 @@ class AddEditStorageFragment : Fragment() {
         } else {
             binding.addPhotoBtnGroup.visibility = View.VISIBLE
             binding.imgView.visibility = View.INVISIBLE
+            binding.removeBtn.visibility = View.INVISIBLE
             binding.photoMenuLayout.visibility = View.GONE
             binding.pointer.visibility = View.GONE
             binding.pointLayout.setOnTouchListener(null)

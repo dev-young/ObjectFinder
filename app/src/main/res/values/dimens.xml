@@ -12,4 +12,5 @@
 
     <integer name="default_transition_duration">300</integer>
     <dimen name="default_divider_width" type="dimen" format="float">0.3dp</dimen>
+    <dimen name="pointer_size">40dp</dimen>
 </resources>
