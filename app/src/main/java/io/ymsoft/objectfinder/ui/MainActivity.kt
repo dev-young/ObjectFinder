@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -74,8 +73,14 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             binding.bottomAppBar.hideOnScroll = false
-            binding.bottomAppBar.apply { post { performHide() } }
-            binding.fab.hide()
+            binding.bottomAppBar.apply {
+                performHide()
+                binding.fab.hide()
+                postDelayed({
+                    performHide()
+                    binding.fab.hide()
+                }, 300)
+            }
         }
 
         if (search) {

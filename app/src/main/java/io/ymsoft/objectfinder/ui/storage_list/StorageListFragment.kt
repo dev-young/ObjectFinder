@@ -20,6 +20,7 @@ import io.ymsoft.objectfinder.util.setAppBarVisible
 import io.ymsoft.objectfinder.util.showFabAnimation
 import kotlinx.android.synthetic.main.fragment_storage_list.*
 import timber.log.Timber
+import java.lang.Exception
 
 class StorageListFragment : Fragment() {
 
@@ -94,7 +95,9 @@ class StorageListFragment : Fragment() {
     private fun showDetailWithSharedElements(model: StorageModel?, sharedViews: List<View>) {
         model?.let {
             val direction = StorageListFragmentDirections.actionNavStorageListToNavStorageDetail(it, true)
-            findNavController().navigate(direction, SharedViewUtil.makeStorageTransition(sharedViews))
+            try {
+                findNavController().navigate(direction, SharedViewUtil.makeStorageTransition(sharedViews))
+            } catch (e: Exception){}
         }
     }
 

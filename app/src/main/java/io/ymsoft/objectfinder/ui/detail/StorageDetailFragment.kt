@@ -76,7 +76,7 @@ class StorageDetailFragment : Fragment() {
             val transition = MaterialContainerTransform().apply {
                 fadeMode = MaterialContainerTransform.FADE_MODE_CROSS
                 scrimColor = Color.TRANSPARENT
-                duration = 400
+                duration = resources.getInteger(R.integer.default_transition_duration).toLong()
             }
             sharedElementEnterTransition = transition
         }

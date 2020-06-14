@@ -96,7 +96,7 @@ class SearchFragment : Fragment() {
 
         setAppBarVisible(top = true, search = true)
         binding.root.postDelayed({
-            requireActivity().showKeyboard()
+            activity.showKeyboard()
         }, 300)
     }
 

@@ -15,8 +15,8 @@ android {
         applicationId "io.ymsoft.objectfinder"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 7
-        versionName "1.0.1"
+        versionCode 8
+        versionName "1.0.2 beta"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -26,7 +26,13 @@ android {
     }
 
     buildTypes {
+
+        debug {
+            manifestPlaceholders = [crashlyticsCollectionEnabled:"false"]
+        }
+
         release {
+            manifestPlaceholders = [crashlyticsCollectionEnabled:"true"]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
