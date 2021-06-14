@@ -4,12 +4,15 @@ import android.annotation.SuppressLint
 import android.view.View
 import android.widget.CompoundButton
 import androidx.core.view.get
+import androidx.core.view.isEmpty
+import androidx.core.view.isNotEmpty
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.ymsoft.objectfinder.common.OnModelClickListener
+import timber.log.Timber
 
 /**체크 가능한 ChipGroup을 다루기 편하게 도와주는 Helper
  * 그룹의 체크 가능 상태를 리스너를 통해 전달받을 수 있다.
@@ -70,23 +73,17 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
             // 이곳이 실행되는 경우는 체크한 항목들이 삭제되거나 이동된 경우이므로 체크 기능 false 로 초기화
             setCheckable(false)
             return
+        } else if (list.size == currentList.size) {
+            //바뀐게 없는 경우
+            Timber.e("변경사항 없음!")
+            if (chipGroup.isEmpty()) {
+                makeChipList(list).forEach(chipGroup::addView)
+            }
         } else {
             //ObjectModel 최초 로딩
             Observable.just(list)
                 .map {
-                    val chipList = arrayListOf<Chip>()
-                    list.forEach {
-                        val chip = Chip(context)
-                        chip.text = it.modelName
-                        chip.tag = it
-                        chip.isCheckable = isCheckable
-
-                        chip.setOnClickListener(clickListener)
-                        chip.setOnLongClickListener(chipLongClickListener)
-                        chip.setOnCheckedChangeListener(chipCheckedChangeListener)
-                        chipList.add(chip)
-                    }
-                    chipList
+                    makeChipList(list)
                 }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -100,6 +97,23 @@ class CheckableChipGroupHelper<T : CheckableChipGroupHelper.ChipModel> {
                     setCheckable(false)
                 }
         }
+    }
+
+    private fun makeChipList(list:List<T>)
+    : ArrayList<Chip> {
+        val chipList = arrayListOf<Chip>()
+        list.forEach {
+            val chip = Chip(context)
+            chip.text = it.modelName
+            chip.tag = it
+            chip.isCheckable = isCheckable
+
+            chip.setOnClickListener(clickListener)
+            chip.setOnLongClickListener(chipLongClickListener)
+            chip.setOnCheckedChangeListener(chipCheckedChangeListener)
+            chipList.add(chip)
+        }
+        return chipList
     }
 
     /**그룹의 체크 가능 여부를 변경한다. */
