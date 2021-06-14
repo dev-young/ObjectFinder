@@ -40,8 +40,8 @@ class StorageViewHolder private constructor(
 
 
     fun onBind(model: StorageModel) {
-        binding.cardView.transitionName = "test${model.id}"
-//        SharedViewUtil.setTransitionName(binding, model)
+//        binding.cardView.transitionName = "test${model.id}"
+        SharedViewUtil.setTransitionName(binding, model)
 
         if (model.imgUrl.isNullOrBlank()) {
             binding.photoLayout.visibility = GONE

@@ -5,6 +5,7 @@ import android.view.View
 import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -12,8 +13,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.transition.MaterialElevationScale
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.databinding.ActivityMainBinding
+import io.ymsoft.objectfinder.ui.storage_list.StorageListFragment
 import io.ymsoft.objectfinder.util.SingleClickListener
 import io.ymsoft.objectfinder.util.hideKeyboard
 import io.ymsoft.objectfinder.util.setOnSingleClickListener
@@ -22,7 +25,13 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
-    public lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
+
+    val currentNavigationFragment: Fragment?
+        get() = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+            ?.childFragmentManager
+            ?.fragments
+            ?.first()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +57,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.fab.setOnSingleClickListener {
-            val extra = FragmentNavigatorExtras(binding.fab to binding.fab.transitionName)
+            val extra = FragmentNavigatorExtras(binding.fab to getString(R.string.transition_name_add))
+            currentNavigationFragment?.apply {
+                exitTransition = MaterialElevationScale(false).apply {
+                    duration = resources.getInteger(R.integer.default_transition_duration).toLong()
+                }
+                reenterTransition = MaterialElevationScale(true).apply {
+                    duration = resources.getInteger(R.integer.default_transition_duration).toLong()
+                }
+            }
+//            navController.navigate(R.id.action_global_navAddStorage)
             navController.navigate(R.id.action_global_navAddStorage, null, null, extra)
         }
 
@@ -103,7 +121,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomAppBar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.action_search -> navController.navigate(R.id.action_global_navSearch)
+                R.id.action_search -> {
+
+                    currentNavigationFragment?.let {
+                        if (it is StorageListFragment) {
+                            it.exitTransition = null
+                            it.reenterTransition = null
+                        }
+                    }
+                    navController.navigate(R.id.action_global_navSearch)
+                }
 //                R.id.action_settings -> setAppBarVisivle(false, false)
             }
 

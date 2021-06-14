@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.transition.Slide
 import com.google.android.material.transition.MaterialContainerTransform
 import com.yalantis.ucrop.UCrop
 import io.ymsoft.objectfinder.R
@@ -39,11 +40,11 @@ class AddEditStorageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val transition = MaterialContainerTransform().apply {
-            fadeMode = MaterialContainerTransform.FADE_MODE_CROSS
-            scrimColor = Color.TRANSPARENT
-        }
-        sharedElementEnterTransition = transition
+//        val transition = MaterialContainerTransform().apply {
+//            fadeMode = MaterialContainerTransform.FADE_MODE_CROSS
+//            scrimColor = Color.TRANSPARENT
+//        }
+//        sharedElementEnterTransition = transition
     }
 
     override fun onCreateView(
@@ -64,6 +65,7 @@ class AddEditStorageFragment : Fragment() {
         }
 
         viewModel.isSaved.observe(viewLifecycleOwner, Observer {
+            returnTransition = null
             it?.let {
                 if (args.storage != null)
                     findNavController().navigateUp()
@@ -83,6 +85,24 @@ class AddEditStorageFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        enterTransition = MaterialContainerTransform().apply {
+            startView = requireActivity().findViewById(R.id.fab)
+            endView = binding.root
+            duration = resources.getInteger(R.integer.default_transition_duration).toLong()
+            scrimColor = Color.TRANSPARENT
+            containerColor = requireContext().themeColor(R.attr.colorSurface)
+            startContainerColor = requireContext().themeColor(R.attr.colorSecondary)
+            endContainerColor = requireContext().themeColor(R.attr.colorSurface)
+        }
+        returnTransition = Slide().apply {
+            duration = resources.getInteger(R.integer.default_transition_duration).toLong()
+            addTarget(binding.root)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -174,7 +194,12 @@ class AddEditStorageFragment : Fragment() {
         options.setRootViewBackgroundColor(
             ContextCompat.getColor(requireContext(), R.color.colorDimmedLayer)
         )
-        options.setDimmedLayerColor(ContextCompat.getColor(requireContext(), R.color.colorDimmedLayer))
+        options.setDimmedLayerColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.colorDimmedLayer
+            )
+        )
 
         UCrop.of(uri, destinationUri)
             .withOptions(options)

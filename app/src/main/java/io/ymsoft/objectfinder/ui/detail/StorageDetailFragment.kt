@@ -141,13 +141,6 @@ class StorageDetailFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-//        postponeEnterTransition()
-//        view.doOnPreDraw { startPostponedEnterTransition() }
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setAppBarVisible(top = true)
@@ -156,16 +149,14 @@ class StorageDetailFragment : Fragment() {
 
     private fun updateUI(model: StorageModel?) {
         if (model == null) return
-//        SharedViewUtil.setTransitionName(binding, model)
+        SharedViewUtil.setTransitionName(binding, model)
 
         if (model.imgUrl.isNullOrBlank()) {
             binding.imageLayout.visibility = View.GONE
-//            binding.root.doOnPreDraw { startPostponedEnterTransition() }
         } else {
-//            postponeEnterTransition()
             binding.imageLayout.visibility = View.VISIBLE
             binding.imgView.loadFilePath(model.imgUrl) {
-//                startPostponedEnterTransition()
+
             }
         }
 
@@ -276,11 +267,5 @@ class StorageDetailFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.storage_detail_toolbar, menu)
     }
-
-//    override fun postponeEnterTransition() {
-//        if (args.hasSharedElement)
-//            super.postponeEnterTransition()
-//    }
-
 
 }

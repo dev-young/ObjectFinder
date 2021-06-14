@@ -1,9 +1,11 @@
 package io.ymsoft.objectfinder.util
 
 import android.animation.Animator
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Environment
 import android.util.TypedValue
@@ -15,6 +17,8 @@ import android.view.animation.Interpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +26,7 @@ import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.appcompat.widget.ActionMenuView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider
+import androidx.core.content.res.use
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -228,6 +233,18 @@ fun Context.getUri(file: File): Uri {
         "${packageName}.fileprovider",
         file
     )
+}
+
+@ColorInt
+@SuppressLint("Recycle")
+fun Context.themeColor(
+    @AttrRes themeAttrId: Int
+): Int {
+    return obtainStyledAttributes(
+        intArrayOf(themeAttrId)
+    ).use {
+        it.getColor(0, Color.MAGENTA)
+    }
 }
 
 fun Activity?.startToolbarAnimation(){

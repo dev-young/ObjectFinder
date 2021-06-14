@@ -44,7 +44,6 @@ class StorageListFragment : Fragment() {
                 override fun onItemLongClick(position: Int) {
 //                    currentList[position].id?.let { viewModel.deleteStorageModel(it) }
                 }
-
             }
         }
 
@@ -104,8 +103,8 @@ class StorageListFragment : Fragment() {
         model?.let {
             val direction = StorageListFragmentDirections.actionNavStorageListToNavStorageDetail(it, true)
             try {
-//                val extras = SharedViewUtil.makeStorageTransition(sharedViews)
-                val extras = FragmentNavigatorExtras(sharedViews[0] to "test_123")
+                val extras = SharedViewUtil.makeStorageTransition(sharedViews)
+//                val extras = FragmentNavigatorExtras(sharedViews[0] to "test_123")
                 findNavController().navigate(direction, extras)
 //                findNavController().navigate(direction)
             } catch (e: Exception){}
