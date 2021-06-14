@@ -22,7 +22,7 @@ class BottomNavigationDrawerFragment : BottomSheetDialogFragment() {
         if (navController != null) {
             view.findViewById<NavigationView>(R.id.navView).setupWithNavController(navController)
         }
-        // TODO: 2021-06-15 버텀시트에서 메뉴 실행시 화면전환 효과를 앱바에서 실행시키는것과 동일하게 수정하기
+        // TODO: 2021-06-15 버텀시트에서 메뉴 실행시 화면전환 효과를 앱바에서 실행시키는것과 동일하게 수정하기 (아예 중복되는 메뉴는 제거하는것도 괜찮은 생각같다!)
         return view
     }
 }

@@ -122,13 +122,6 @@ class MainActivity : AppCompatActivity() {
         binding.bottomAppBar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_search -> {
-
-                    currentNavigationFragment?.let {
-                        if (it is StorageListFragment) {
-                            it.exitTransition = null
-                            it.reenterTransition = null
-                        }
-                    }
                     navController.navigate(R.id.action_global_navSearch)
                 }
 //                R.id.action_settings -> setAppBarVisivle(false, false)
