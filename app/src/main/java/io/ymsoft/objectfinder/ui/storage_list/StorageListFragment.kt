@@ -85,6 +85,12 @@ class StorageListFragment : Fragment() {
             setAppBarVisible(top = true, bottom = true)
     }
 
+    override fun onResume() {
+        super.onResume()
+        exitTransition = null
+        reenterTransition = null
+    }
+
     /**뷰가 변경된 경우에는 딜레이를 주고 변경한다.
      * 이유: 공유요소 전환을 사용시 애니메이션이 끝난 뒤 리스트를 업데이트해야 애니메이션이 문제 없이 작동한다.*/
     private fun updateItems(models: List<StorageModel>?) {

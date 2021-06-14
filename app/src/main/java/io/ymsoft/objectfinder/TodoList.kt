@@ -10,6 +10,7 @@ interface TodoList {
     // TODO: 2020-05-17 포인터 애니메이션 효과 넣기
     // TODO: 2020-05-27 ChipGroup 대신 flex-box layout 적용해보기 https://github.com/google/flexbox-layout
 
+    // TODO: 2021-06-15 보관함 수정창에서 뒤로가기 누를경우 물건이 두배로 보이는 문제 해결
 
 
     /**참고사항

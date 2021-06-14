@@ -22,7 +22,7 @@ class BottomNavigationDrawerFragment : BottomSheetDialogFragment() {
         if (navController != null) {
             view.findViewById<NavigationView>(R.id.navView).setupWithNavController(navController)
         }
-
+        // TODO: 2021-06-15 버텀시트에서 메뉴 실행시 화면전환 효과를 앱바에서 실행시키는것과 동일하게 수정하기
         return view
     }
 }

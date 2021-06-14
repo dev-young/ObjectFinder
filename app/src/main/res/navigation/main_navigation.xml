@@ -41,7 +41,11 @@
             app:argType="io.ymsoft.objectfinder.data.StorageModel" />
         <action
             android:id="@+id/action_navStorageDetail_to_navAddStorage"
-            app:destination="@id/navAddStorage"/>
+            app:destination="@id/navAddStorage"
+            app:enterAnim="@anim/fade_in_anim"
+            app:exitAnim="@anim/fade_out_anim"
+            app:popEnterAnim="@anim/fade_in_anim"
+            app:popExitAnim="@anim/fade_out_anim"/>
         <argument
             android:name="hasSharedElement"
             app:argType="boolean"

@@ -89,19 +89,20 @@ class AddEditStorageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        enterTransition = MaterialContainerTransform().apply {
-            startView = requireActivity().findViewById(R.id.fab)
-            endView = binding.root
-            duration = resources.getInteger(R.integer.default_transition_duration).toLong()
-            scrimColor = Color.TRANSPARENT
-            containerColor = requireContext().themeColor(R.attr.colorSurface)
-            startContainerColor = requireContext().themeColor(R.attr.colorSecondary)
-            endContainerColor = requireContext().themeColor(R.attr.colorSurface)
-        }
-        returnTransition = Slide().apply {
-            duration = resources.getInteger(R.integer.default_transition_duration).toLong()
-            addTarget(binding.root)
+        if(args.storage == null) {
+            enterTransition = MaterialContainerTransform().apply {
+                startView = requireActivity().findViewById(R.id.fab)
+                endView = binding.root
+                duration = resources.getInteger(R.integer.default_transition_duration).toLong()
+                scrimColor = Color.TRANSPARENT
+                containerColor = requireContext().themeColor(R.attr.colorSurface)
+                startContainerColor = requireContext().themeColor(R.attr.colorSecondary)
+                endContainerColor = requireContext().themeColor(R.attr.colorSurface)
+            }
+            returnTransition = Slide().apply {
+                duration = resources.getInteger(R.integer.default_transition_duration).toLong()
+                addTarget(binding.root)
+            }
         }
     }
 
