@@ -57,7 +57,9 @@
             app:destination="@id/navStorageDetail"
             app:launchSingleTop="true"
             app:popUpTo="@id/navAddStorage"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/fade_in_anim"
+            app:exitAnim="@anim/fade_out_anim"/>
         <argument
             android:name="storage"
             android:defaultValue="@null"
