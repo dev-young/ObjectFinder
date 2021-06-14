@@ -24,6 +24,7 @@ import io.ymsoft.objectfinder.databinding.FragmentStorageDetailBinding
 import io.ymsoft.objectfinder.util.*
 import io.ymsoft.objectfinder.util.CheckableChipGroupHelper.OnCheckableChangeListener
 import io.ymsoft.objectfinder.util.CheckableChipGroupHelper.OnCheckedCounterChangeListener
+import timber.log.Timber
 
 class StorageDetailFragment : Fragment() {
 
@@ -73,12 +74,11 @@ class StorageDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (args.hasSharedElement) {
-            val transition = MaterialContainerTransform().apply {
-                fadeMode = MaterialContainerTransform.FADE_MODE_CROSS
-                scrimColor = Color.TRANSPARENT
+            sharedElementEnterTransition = MaterialContainerTransform().apply {
+                drawingViewId = R.id.nav_host_fragment
                 duration = resources.getInteger(R.integer.default_transition_duration).toLong()
+                scrimColor = Color.TRANSPARENT
             }
-            sharedElementEnterTransition = transition
         }
     }
 
@@ -141,6 +141,13 @@ class StorageDetailFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+//        postponeEnterTransition()
+//        view.doOnPreDraw { startPostponedEnterTransition() }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setAppBarVisible(top = true)
@@ -149,16 +156,16 @@ class StorageDetailFragment : Fragment() {
 
     private fun updateUI(model: StorageModel?) {
         if (model == null) return
-        SharedViewUtil.setTransitionName(binding, model)
+//        SharedViewUtil.setTransitionName(binding, model)
 
         if (model.imgUrl.isNullOrBlank()) {
             binding.imageLayout.visibility = View.GONE
-            startPostponedEnterTransition()
+//            binding.root.doOnPreDraw { startPostponedEnterTransition() }
         } else {
-            postponeEnterTransition()
+//            postponeEnterTransition()
             binding.imageLayout.visibility = View.VISIBLE
             binding.imgView.loadFilePath(model.imgUrl) {
-                startPostponedEnterTransition()
+//                startPostponedEnterTransition()
             }
         }
 
@@ -270,10 +277,10 @@ class StorageDetailFragment : Fragment() {
         inflater.inflate(R.menu.storage_detail_toolbar, menu)
     }
 
-    override fun postponeEnterTransition() {
-        if (args.hasSharedElement)
-            super.postponeEnterTransition()
-    }
+//    override fun postponeEnterTransition() {
+//        if (args.hasSharedElement)
+//            super.postponeEnterTransition()
+//    }
 
 
 }

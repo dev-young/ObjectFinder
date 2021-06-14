@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.navigation.NavigationView
 import io.ymsoft.objectfinder.R
-import kotlinx.android.synthetic.main.fragment_bottom_nav_drawer.view.*
 
 class BottomNavigationDrawerFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
@@ -20,7 +20,7 @@ class BottomNavigationDrawerFragment : BottomSheetDialogFragment() {
 
         val navController = activity?.findNavController(R.id.nav_host_fragment)
         if (navController != null) {
-            view.navView.setupWithNavController(navController)
+            view.findViewById<NavigationView>(R.id.navView).setupWithNavController(navController)
         }
 
         return view

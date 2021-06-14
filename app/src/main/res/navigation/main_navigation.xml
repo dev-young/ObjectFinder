@@ -27,11 +27,7 @@
         <action
             android:id="@+id/action_navSearch_to_navStorageDetail"
             app:destination="@id/navStorageDetail"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
             app:launchSingleTop="true"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit"
             app:popUpTo="@id/navStorageDetail" />
     </fragment>
 
@@ -45,11 +41,7 @@
             app:argType="io.ymsoft.objectfinder.data.StorageModel" />
         <action
             android:id="@+id/action_navStorageDetail_to_navAddStorage"
-            app:destination="@id/navAddStorage"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit" />
+            app:destination="@id/navAddStorage"/>
         <argument
             android:name="hasSharedElement"
             app:argType="boolean"
@@ -63,11 +55,7 @@
         <action
             android:id="@+id/action_navAddStorage_to_navStorageDetail"
             app:destination="@id/navStorageDetail"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
             app:launchSingleTop="true"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit"
             app:popUpTo="@id/navAddStorage"
             app:popUpToInclusive="true" />
         <argument
@@ -80,11 +68,7 @@
     <action
         android:id="@+id/action_global_navAddStorage"
         app:destination="@id/navAddStorage"
-        app:enterAnim="@anim/fragment_open_enter"
-        app:exitAnim="@anim/fragment_open_exit"
-        app:launchSingleTop="true"
-        app:popEnterAnim="@anim/fragment_fade_enter"
-        app:popExitAnim="@anim/fragment_fade_exit" />
+        app:launchSingleTop="true" />
 
     <action
         android:id="@+id/action_global_navSearch"
@@ -97,20 +81,12 @@
         tools:layout="@layout/fragment_settings" >
         <action
             android:id="@+id/action_navSettings_to_navDeleteUnusedImg"
-            app:destination="@id/navDeleteUnusedImg"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit" />
+            app:destination="@id/navDeleteUnusedImg"/>
     </fragment>
     <action
         android:id="@+id/action_global_navSettings"
         app:destination="@id/navSettings"
-        app:enterAnim="@anim/fragment_open_enter"
-        app:exitAnim="@anim/fragment_open_exit"
-        app:launchSingleTop="true"
-        app:popEnterAnim="@anim/fragment_fade_enter"
-        app:popExitAnim="@anim/fragment_fade_exit" />
+        app:launchSingleTop="true" />
     <fragment
         android:id="@+id/navDeleteUnusedImg"
         android:name="io.ymsoft.objectfinder.ui.settings.DeleteUnusedImgFragment"

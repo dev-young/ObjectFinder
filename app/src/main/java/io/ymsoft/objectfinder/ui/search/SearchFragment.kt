@@ -7,15 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.doOnPreDraw
-import androidx.core.view.postDelayed
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.data.StorageModel
 import io.ymsoft.objectfinder.databinding.FragmentSearchBinding
@@ -24,9 +20,7 @@ import io.ymsoft.objectfinder.ui.storage_list.StorageListAdapter
 import io.ymsoft.objectfinder.util.SharedViewUtil
 import io.ymsoft.objectfinder.util.setAppBarVisible
 import io.ymsoft.objectfinder.util.showKeyboard
-import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 
 class SearchFragment : Fragment() {
@@ -67,7 +61,7 @@ class SearchFragment : Fragment() {
         })
 
         if(activity is MainActivity){
-            val sv = (activity as MainActivity).searchView
+            val sv = (activity as MainActivity).binding.searchView
 
             sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -117,7 +111,9 @@ class SearchFragment : Fragment() {
         model?.let {
             loadCounter = 0
             val direction = SearchFragmentDirections.actionNavSearchToNavStorageDetail(it, true)
-            findNavController().navigate(direction, SharedViewUtil.makeStorageTransition(sharedViews))
+            try {
+                findNavController().navigate(direction, SharedViewUtil.makeStorageTransition(sharedViews))
+            } catch (e: Exception){}
         }
     }
 

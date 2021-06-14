@@ -3,75 +3,79 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_marginVertical="2dp"
-        app:cardCornerRadius="@dimen/default_item_radius"
-        app:cardUseCompatPadding="true">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/clickableLayout"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true" >
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginVertical="2dp"
+            app:cardCornerRadius="@dimen/default_item_radius">
 
-            <FrameLayout
-                android:id="@+id/photoLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="visible">
-
-                <ImageView
-                    android:id="@+id/imgView"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_menu_gallery" />
-
-                <ImageView
-                    android:id="@+id/pointer"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_focus_24"
-                    android:visibility="gone" />
-            </FrameLayout>
-
-            <io.ymsoft.objectfinder.view_custom.MaxHeightLinearLayout
-                android:id="@+id/textLayout"
+            <LinearLayout
+                android:id="@+id/clickableLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/default_item_spacing"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
 
-
-                <TextView
-                    android:id="@+id/title"
-                    style="@style/TextAppearance.AppCompat.Medium"
+                <FrameLayout
+                    android:id="@+id/photoLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:textColor="@color/colorAccent"
-                    android:paddingBottom="3dp"
-                    tools:text="123456123456123456123456123456123456123456123456123456123456123456123456123456" />
+                    android:visibility="visible">
 
-                <io.ymsoft.objectfinder.view_custom.AutoMaxLineTextView
-                    android:id="@+id/objects"
+                    <ImageView
+                        android:id="@+id/imgView"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_menu_gallery" />
+
+                    <ImageView
+                        android:id="@+id/pointer"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_focus_24"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <io.ymsoft.objectfinder.view_custom.MaxHeightLinearLayout
+                    android:id="@+id/textLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:lineSpacingExtra="4dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorPrimary"
-                    tools:text="1231231231231231231\n31231321212\n143212\n1432" />
+                    android:orientation="vertical"
+                    android:padding="@dimen/default_item_spacing">
 
 
-            </io.ymsoft.objectfinder.view_custom.MaxHeightLinearLayout>
+                    <TextView
+                        android:id="@+id/title"
+                        style="@style/TextAppearance.AppCompat.Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="3dp"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        tools:text="123456123456123456123456123456123456123456123456123456123456123456123456123456" />
 
-        </LinearLayout>
+                    <io.ymsoft.objectfinder.view_custom.AutoMaxLineTextView
+                        android:id="@+id/objects"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:lineSpacingExtra="4dp"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp"
+                        tools:text="1231231231231231231\n31231321212\n143212\n1432" />
 
-    </androidx.cardview.widget.CardView>
+
+                </io.ymsoft.objectfinder.view_custom.MaxHeightLinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
 </layout>

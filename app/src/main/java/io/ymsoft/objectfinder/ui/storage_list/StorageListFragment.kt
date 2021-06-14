@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.transition.MaterialElevationScale
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.common.OnItemLongClickListener
 import io.ymsoft.objectfinder.data.StorageModel
@@ -18,9 +20,7 @@ import io.ymsoft.objectfinder.util.SharedViewUtil
 import io.ymsoft.objectfinder.util.replaceBottomMenu
 import io.ymsoft.objectfinder.util.setAppBarVisible
 import io.ymsoft.objectfinder.util.showFabAnimation
-import kotlinx.android.synthetic.main.fragment_storage_list.*
 import timber.log.Timber
-import java.lang.Exception
 
 class StorageListFragment : Fragment() {
 
@@ -31,8 +31,13 @@ class StorageListFragment : Fragment() {
     private val storageListAdapter = StorageListAdapter()
         .apply {
             setClickListener { position, sharedViews ->
-
                 showDetailWithSharedElements(currentList[position], sharedViews)
+                exitTransition = MaterialElevationScale(false).apply {
+                    duration = resources.getInteger(R.integer.default_transition_duration).toLong()
+                }
+                reenterTransition = MaterialElevationScale(true).apply {
+                    duration = resources.getInteger(R.integer.default_transition_duration).toLong()
+                }
             }
 
             longClickListener = object : OnItemLongClickListener {
@@ -63,12 +68,15 @@ class StorageListFragment : Fragment() {
             }
         })
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
-        binding.recyclerView.doOnPreDraw {
+        view.doOnPreDraw {
             startPostponedEnterTransition()
         }
-
-        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -96,7 +104,10 @@ class StorageListFragment : Fragment() {
         model?.let {
             val direction = StorageListFragmentDirections.actionNavStorageListToNavStorageDetail(it, true)
             try {
-                findNavController().navigate(direction, SharedViewUtil.makeStorageTransition(sharedViews))
+//                val extras = SharedViewUtil.makeStorageTransition(sharedViews)
+                val extras = FragmentNavigatorExtras(sharedViews[0] to "test_123")
+                findNavController().navigate(direction, extras)
+//                findNavController().navigate(direction)
             } catch (e: Exception){}
         }
     }

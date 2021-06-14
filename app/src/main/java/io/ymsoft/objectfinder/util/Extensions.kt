@@ -20,6 +20,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.appcompat.widget.ActionMenuView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -31,10 +32,9 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.google.android.material.animation.AnimationUtils
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.ymsoft.objectfinder.R
 import io.ymsoft.objectfinder.ui.MainActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_storage_list.*
 import timber.log.Timber
 import java.io.File
 import java.util.Collections.rotate
@@ -57,12 +57,13 @@ fun View.animateFadeIn(startDelay: Long = 0){
 fun Fragment.showFabAnimation(animate: Boolean){
     activity?.let {
         if(it is MainActivity){
+            val fab =it.findViewById<FloatingActionButton>(R.id.fab)
             if(animate){
                 val animation = loadAnimation(it, R.anim.fab)
-                it.fab.animation = animation
+                fab.animation = animation
                 animation.start()
             } else {
-                it.fab.animation = null
+                fab.animation = null
             }
 
         }
@@ -231,7 +232,7 @@ fun Context.getUri(file: File): Uri {
 
 fun Activity?.startToolbarAnimation(){
     if (this is MainActivity){
-        this.toolbar.children.forEach {
+        this.findViewById<Toolbar>(R.id.toolbar).children.forEach {
             if(it is ActionMenuView){
                 it.children.forEachIndexed { index, view ->
                     if(view is ActionMenuItemView){

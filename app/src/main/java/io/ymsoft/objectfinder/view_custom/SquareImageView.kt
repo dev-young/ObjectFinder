@@ -4,9 +4,9 @@ import android.content.Context
 import android.util.AttributeSet
 
 class SquareImageView : androidx.appcompat.widget.AppCompatImageView {
-    constructor(context: Context?) : super(context)
+    constructor(context: Context?) : super(context!!)
     constructor(context: Context?, attrs: AttributeSet?) : super(
-        context,
+        context!!,
         attrs
     )
 
@@ -14,7 +14,7 @@ class SquareImageView : androidx.appcompat.widget.AppCompatImageView {
         context: Context?,
         attrs: AttributeSet?,
         defStyleAttr: Int
-    ) : super(context, attrs, defStyleAttr)
+    ) : super(context!!, attrs, defStyleAttr)
 
     private var measureListener : OnMeasureListener? = null
     fun setOnMeasureListener(measureListener: OnMeasureListener?){
